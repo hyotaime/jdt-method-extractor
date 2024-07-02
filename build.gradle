@@ -1,0 +1,32 @@
+plugins {
+    id 'java'
+}
+
+group = 'kr.ac.seoultech.selab'
+version = '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'com.google.code.gson:gson:2.8.6'
+    implementation 'org.eclipse.jdt:org.eclipse.jdt.core:3.20.0'
+    testImplementation platform('org.junit:junit-bom:5.10.0')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+}
+
+sourceCompatibility = '1.8'
+targetCompatibility = '1.8'
+
+task run(type: JavaExec) {
+    main = 'kr.ac.seoultech.selab.JDTMethodExtractor'
+    classpath = sourceSets.main.runtimeClasspath
+}
+tasks.withType(JavaCompile) {
+    options.compilerArgs << '-Xlint:deprecation'
+}
+
+test {
+    useJUnitPlatform()
+}
