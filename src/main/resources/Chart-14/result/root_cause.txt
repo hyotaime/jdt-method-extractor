@@ -1,0 +1,13 @@
+Fault Localization Results
+v_markers_761[markers] - xyplot1_line2529
+ caused by 
+v_markers_761[markers] - xyplot1_line2529
+v_markers_738[markers] - xyplot1_line2293
+ caused by 
+v_markers_738[markers] - xyplot1_line2293
+v_markers_276[markers] - category_plot1_line2448
+ caused by 
+v_markers_276[markers] - category_plot1_line2448
+v_markers_249[markers] - category_plot1_line2166
+ caused by 
+v_markers_249[markers] - category_plot1_line2166

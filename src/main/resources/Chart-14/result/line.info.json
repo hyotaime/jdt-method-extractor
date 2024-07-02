@@ -1,0 +1,1831 @@
+{"classes": [
+    {
+        "probe_ranges": [{
+            "endLine": 78,
+            "offset": 3,
+            "startLine": 75,
+            "orgLineEnd": 75,
+            "probedLineEnd": 78,
+            "orgLineStart": 75
+        }],
+        "classId": "sort_order1"
+    },
+    {
+        "probe_ranges": [
+            {
+                "endLine": 476,
+                "offset": 27,
+                "startLine": 473,
+                "orgLineEnd": 449,
+                "probedLineEnd": 476,
+                "orgLineStart": 449
+            },
+            {
+                "endLine": 494,
+                "offset": 31,
+                "startLine": 490,
+                "orgLineEnd": 463,
+                "probedLineEnd": 494,
+                "orgLineStart": 463
+            },
+            {
+                "endLine": 499,
+                "offset": 35,
+                "startLine": 495,
+                "orgLineEnd": 466,
+                "probedLineEnd": 501,
+                "orgLineStart": 464
+            },
+            {
+                "endLine": 508,
+                "offset": 38,
+                "startLine": 505,
+                "orgLineEnd": 470,
+                "probedLineEnd": 508,
+                "orgLineStart": 470
+            },
+            {
+                "endLine": 512,
+                "offset": 41,
+                "startLine": 509,
+                "orgLineEnd": 471,
+                "probedLineEnd": 512,
+                "orgLineStart": 471
+            },
+            {
+                "endLine": 518,
+                "offset": 45,
+                "startLine": 514,
+                "orgLineEnd": 473,
+                "probedLineEnd": 518,
+                "orgLineStart": 473
+            },
+            {
+                "endLine": 523,
+                "offset": 49,
+                "startLine": 519,
+                "orgLineEnd": 477,
+                "probedLineEnd": 526,
+                "orgLineStart": 474
+            },
+            {
+                "endLine": 532,
+                "offset": 53,
+                "startLine": 528,
+                "orgLineEnd": 479,
+                "probedLineEnd": 532,
+                "orgLineStart": 479
+            },
+            {
+                "endLine": 538,
+                "offset": 57,
+                "startLine": 534,
+                "orgLineEnd": 484,
+                "probedLineEnd": 541,
+                "orgLineStart": 481
+            },
+            {
+                "endLine": 548,
+                "offset": 61,
+                "startLine": 544,
+                "orgLineEnd": 487,
+                "probedLineEnd": 548,
+                "orgLineStart": 487
+            },
+            {
+                "endLine": 554,
+                "offset": 65,
+                "startLine": 550,
+                "orgLineEnd": 492,
+                "probedLineEnd": 557,
+                "orgLineStart": 489
+            },
+            {
+                "endLine": 565,
+                "offset": 68,
+                "startLine": 562,
+                "orgLineEnd": 497,
+                "probedLineEnd": 565,
+                "orgLineStart": 497
+            },
+            {
+                "endLine": 569,
+                "offset": 71,
+                "startLine": 566,
+                "orgLineEnd": 498,
+                "probedLineEnd": 569,
+                "orgLineStart": 498
+            },
+            {
+                "endLine": 573,
+                "offset": 74,
+                "startLine": 570,
+                "orgLineEnd": 499,
+                "probedLineEnd": 573,
+                "orgLineStart": 499
+            },
+            {
+                "endLine": 577,
+                "offset": 77,
+                "startLine": 574,
+                "orgLineEnd": 500,
+                "probedLineEnd": 577,
+                "orgLineStart": 500
+            },
+            {
+                "endLine": 582,
+                "offset": 80,
+                "startLine": 579,
+                "orgLineEnd": 502,
+                "probedLineEnd": 582,
+                "orgLineStart": 502
+            },
+            {
+                "endLine": 586,
+                "offset": 83,
+                "startLine": 583,
+                "orgLineEnd": 503,
+                "probedLineEnd": 586,
+                "orgLineStart": 503
+            },
+            {
+                "endLine": 590,
+                "offset": 86,
+                "startLine": 587,
+                "orgLineEnd": 504,
+                "probedLineEnd": 590,
+                "orgLineStart": 504
+            },
+            {
+                "endLine": 604,
+                "offset": 90,
+                "startLine": 600,
+                "orgLineEnd": 514,
+                "probedLineEnd": 604,
+                "orgLineStart": 514
+            },
+            {
+                "endLine": 611,
+                "offset": 93,
+                "startLine": 608,
+                "orgLineEnd": 518,
+                "probedLineEnd": 611,
+                "orgLineStart": 518
+            },
+            {
+                "endLine": 616,
+                "offset": 96,
+                "startLine": 613,
+                "orgLineEnd": 520,
+                "probedLineEnd": 616,
+                "orgLineStart": 520
+            },
+            {
+                "endLine": 620,
+                "offset": 99,
+                "startLine": 617,
+                "orgLineEnd": 521,
+                "probedLineEnd": 620,
+                "orgLineStart": 521
+            },
+            {
+                "endLine": 869,
+                "offset": 103,
+                "startLine": 865,
+                "orgLineEnd": 767,
+                "probedLineEnd": 870,
+                "orgLineStart": 767
+            },
+            {
+                "endLine": 914,
+                "offset": 114,
+                "startLine": 903,
+                "orgLineEnd": 803,
+                "probedLineEnd": 917,
+                "orgLineStart": 800
+            },
+            {
+                "endLine": 923,
+                "offset": 119,
+                "startLine": 918,
+                "orgLineEnd": 804,
+                "probedLineEnd": 923,
+                "orgLineStart": 804
+            },
+            {
+                "endLine": 927,
+                "offset": 122,
+                "startLine": 924,
+                "orgLineEnd": 807,
+                "probedLineEnd": 929,
+                "orgLineStart": 805
+            },
+            {
+                "endLine": 995,
+                "offset": 127,
+                "startLine": 990,
+                "orgLineEnd": 868,
+                "probedLineEnd": 995,
+                "orgLineStart": 868
+            },
+            {
+                "endLine": 1000,
+                "offset": 131,
+                "startLine": 996,
+                "orgLineEnd": 871,
+                "probedLineEnd": 1002,
+                "orgLineStart": 869
+            },
+            {
+                "endLine": 1032,
+                "offset": 142,
+                "startLine": 1026,
+                "orgLineEnd": 897,
+                "probedLineEnd": 1039,
+                "orgLineStart": 895
+            },
+            {
+                "endLine": 1038,
+                "offset": 142,
+                "startLine": 1033,
+                "orgLineEnd": 896,
+                "probedLineEnd": 1038,
+                "orgLineStart": 896
+            },
+            {
+                "endLine": 1044,
+                "offset": 153,
+                "startLine": 1040,
+                "orgLineEnd": 904,
+                "probedLineEnd": 1057,
+                "orgLineStart": 898
+            },
+            {
+                "endLine": 1048,
+                "offset": 149,
+                "startLine": 1045,
+                "orgLineEnd": 899,
+                "probedLineEnd": 1048,
+                "orgLineStart": 899
+            },
+            {
+                "endLine": 1053,
+                "offset": 153,
+                "startLine": 1049,
+                "orgLineEnd": 903,
+                "probedLineEnd": 1056,
+                "orgLineStart": 900
+            },
+            {
+                "endLine": 1061,
+                "offset": 156,
+                "startLine": 1058,
+                "orgLineEnd": 905,
+                "probedLineEnd": 1061,
+                "orgLineStart": 905
+            },
+            {
+                "endLine": 1211,
+                "offset": 160,
+                "startLine": 1207,
+                "orgLineEnd": 1051,
+                "probedLineEnd": 1211,
+                "orgLineStart": 1051
+            },
+            {
+                "endLine": 1252,
+                "offset": 171,
+                "startLine": 1241,
+                "orgLineEnd": 1084,
+                "probedLineEnd": 1255,
+                "orgLineStart": 1081
+            },
+            {
+                "endLine": 1261,
+                "offset": 176,
+                "startLine": 1256,
+                "orgLineEnd": 1085,
+                "probedLineEnd": 1261,
+                "orgLineStart": 1085
+            },
+            {
+                "endLine": 1265,
+                "offset": 179,
+                "startLine": 1262,
+                "orgLineEnd": 1088,
+                "probedLineEnd": 1267,
+                "orgLineStart": 1086
+            },
+            {
+                "endLine": 1330,
+                "offset": 184,
+                "startLine": 1325,
+                "orgLineEnd": 1146,
+                "probedLineEnd": 1330,
+                "orgLineStart": 1146
+            },
+            {
+                "endLine": 1335,
+                "offset": 188,
+                "startLine": 1331,
+                "orgLineEnd": 1149,
+                "probedLineEnd": 1337,
+                "orgLineStart": 1147
+            },
+            {
+                "endLine": 1369,
+                "offset": 199,
+                "startLine": 1363,
+                "orgLineEnd": 1177,
+                "probedLineEnd": 1376,
+                "orgLineStart": 1175
+            },
+            {
+                "endLine": 1375,
+                "offset": 199,
+                "startLine": 1370,
+                "orgLineEnd": 1176,
+                "probedLineEnd": 1375,
+                "orgLineStart": 1176
+            },
+            {
+                "endLine": 1380,
+                "offset": 202,
+                "startLine": 1377,
+                "orgLineEnd": 1178,
+                "probedLineEnd": 1380,
+                "orgLineStart": 1178
+            },
+            {
+                "endLine": 1448,
+                "offset": 207,
+                "startLine": 1443,
+                "orgLineEnd": 1241,
+                "probedLineEnd": 1448,
+                "orgLineStart": 1241
+            },
+            {
+                "endLine": 1453,
+                "offset": 211,
+                "startLine": 1449,
+                "orgLineEnd": 1243,
+                "probedLineEnd": 1454,
+                "orgLineStart": 1243
+            },
+            {
+                "endLine": 1490,
+                "offset": 216,
+                "startLine": 1485,
+                "orgLineEnd": 1274,
+                "probedLineEnd": 1490,
+                "orgLineStart": 1274
+            },
+            {
+                "endLine": 1495,
+                "offset": 220,
+                "startLine": 1491,
+                "orgLineEnd": 1276,
+                "probedLineEnd": 1496,
+                "orgLineStart": 1276
+            },
+            {
+                "endLine": 2079,
+                "offset": 224,
+                "startLine": 2075,
+                "orgLineEnd": 1855,
+                "probedLineEnd": 2079,
+                "orgLineStart": 1855
+            },
+            {
+                "endLine": 2085,
+                "offset": 228,
+                "startLine": 2081,
+                "orgLineEnd": 1857,
+                "probedLineEnd": 2085,
+                "orgLineStart": 1857
+            },
+            {
+                "endLine": 2090,
+                "offset": 232,
+                "startLine": 2086,
+                "orgLineEnd": 1860,
+                "probedLineEnd": 2092,
+                "orgLineStart": 1858
+            },
+            {
+                "endLine": 2098,
+                "offset": 243,
+                "startLine": 2094,
+                "orgLineEnd": 1869,
+                "probedLineEnd": 2112,
+                "orgLineStart": 1862
+            },
+            {
+                "endLine": 2107,
+                "offset": 240,
+                "startLine": 2103,
+                "orgLineEnd": 1867,
+                "probedLineEnd": 2107,
+                "orgLineStart": 1867
+            },
+            {
+                "endLine": 2111,
+                "offset": 243,
+                "startLine": 2108,
+                "orgLineEnd": 1868,
+                "probedLineEnd": 2111,
+                "orgLineStart": 1868
+            },
+            {
+                "endLine": 2355,
+                "offset": 249,
+                "startLine": 2349,
+                "orgLineEnd": 2106,
+                "probedLineEnd": 2355,
+                "orgLineStart": 2106
+            },
+            {
+                "endLine": 2376,
+                "offset": 254,
+                "startLine": 2371,
+                "orgLineEnd": 2122,
+                "probedLineEnd": 2376,
+                "orgLineStart": 2122
+            },
+            {
+                "endLine": 2400,
+                "offset": 261,
+                "startLine": 2393,
+                "orgLineEnd": 2139,
+                "probedLineEnd": 2400,
+                "orgLineStart": 2139
+            },
+            {
+                "endLine": 2424,
+                "offset": 269,
+                "startLine": 2419,
+                "orgLineEnd": 2165,
+                "probedLineEnd": 2434,
+                "orgLineStart": 2158
+            },
+            {
+                "endLine": 2429,
+                "offset": 269,
+                "startLine": 2425,
+                "orgLineEnd": 2160,
+                "probedLineEnd": 2429,
+                "orgLineStart": 2159
+            },
+            {
+                "endLine": 2440,
+                "offset": 274,
+                "startLine": 2435,
+                "orgLineEnd": 2166,
+                "probedLineEnd": 2440,
+                "orgLineStart": 2166
+            },
+            {
+                "endLine": 2478,
+                "offset": 278,
+                "startLine": 2474,
+                "orgLineEnd": 2200,
+                "probedLineEnd": 2478,
+                "orgLineStart": 2200
+            },
+            {
+                "endLine": 2500,
+                "offset": 283,
+                "startLine": 2495,
+                "orgLineEnd": 2217,
+                "probedLineEnd": 2500,
+                "orgLineStart": 2217
+            },
+            {
+                "endLine": 2527,
+                "offset": 293,
+                "startLine": 2522,
+                "orgLineEnd": 2256,
+                "probedLineEnd": 2549,
+                "orgLineStart": 2239
+            },
+            {
+                "endLine": 2541,
+                "offset": 292,
+                "startLine": 2536,
+                "orgLineEnd": 2256,
+                "probedLineEnd": 2548,
+                "orgLineStart": 2248
+            },
+            {
+                "endLine": 2553,
+                "offset": 296,
+                "startLine": 2550,
+                "orgLineEnd": 2257,
+                "probedLineEnd": 2553,
+                "orgLineStart": 2257
+            },
+            {
+                "endLine": 2557,
+                "offset": 299,
+                "startLine": 2554,
+                "orgLineEnd": 2260,
+                "probedLineEnd": 2559,
+                "orgLineStart": 2258
+            },
+            {
+                "endLine": 2683,
+                "offset": 305,
+                "startLine": 2677,
+                "orgLineEnd": 2378,
+                "probedLineEnd": 2683,
+                "orgLineStart": 2378
+            },
+            {
+                "endLine": 2706,
+                "offset": 310,
+                "startLine": 2701,
+                "orgLineEnd": 2396,
+                "probedLineEnd": 2706,
+                "orgLineStart": 2396
+            },
+            {
+                "endLine": 2732,
+                "offset": 317,
+                "startLine": 2725,
+                "orgLineEnd": 2415,
+                "probedLineEnd": 2732,
+                "orgLineStart": 2415
+            },
+            {
+                "endLine": 2757,
+                "offset": 321,
+                "startLine": 2753,
+                "orgLineEnd": 2438,
+                "probedLineEnd": 2759,
+                "orgLineStart": 2436
+            },
+            {
+                "endLine": 2766,
+                "offset": 329,
+                "startLine": 2761,
+                "orgLineEnd": 2447,
+                "probedLineEnd": 2776,
+                "orgLineStart": 2440
+            },
+            {
+                "endLine": 2771,
+                "offset": 329,
+                "startLine": 2767,
+                "orgLineEnd": 2442,
+                "probedLineEnd": 2771,
+                "orgLineStart": 2441
+            },
+            {
+                "endLine": 2782,
+                "offset": 334,
+                "startLine": 2777,
+                "orgLineEnd": 2448,
+                "probedLineEnd": 2782,
+                "orgLineStart": 2448
+            }
+        ],
+        "classId": "category_plot1"
+    },
+    {
+        "probe_ranges": [
+            {
+                "endLine": 105,
+                "offset": 9,
+                "startLine": 102,
+                "orgLineEnd": 96,
+                "probedLineEnd": 105,
+                "orgLineStart": 96
+            },
+            {
+                "endLine": 109,
+                "offset": 12,
+                "startLine": 106,
+                "orgLineEnd": 97,
+                "probedLineEnd": 109,
+                "orgLineStart": 97
+            },
+            {
+                "endLine": 133,
+                "offset": 28,
+                "startLine": 122,
+                "orgLineEnd": 112,
+                "probedLineEnd": 140,
+                "orgLineStart": 110
+            },
+            {
+                "endLine": 139,
+                "offset": 28,
+                "startLine": 134,
+                "orgLineEnd": 111,
+                "probedLineEnd": 139,
+                "orgLineStart": 111
+            },
+            {
+                "endLine": 144,
+                "offset": 31,
+                "startLine": 141,
+                "orgLineEnd": 113,
+                "probedLineEnd": 144,
+                "orgLineStart": 113
+            },
+            {
+                "endLine": 158,
+                "offset": 35,
+                "startLine": 154,
+                "orgLineEnd": 125,
+                "probedLineEnd": 160,
+                "orgLineStart": 123
+            },
+            {
+                "endLine": 167,
+                "offset": 41,
+                "startLine": 161,
+                "orgLineEnd": 130,
+                "probedLineEnd": 171,
+                "orgLineStart": 126
+            },
+            {
+                "endLine": 177,
+                "offset": 46,
+                "startLine": 172,
+                "orgLineEnd": 131,
+                "probedLineEnd": 177,
+                "orgLineStart": 131
+            },
+            {
+                "endLine": 185,
+                "offset": 53,
+                "startLine": 178,
+                "orgLineEnd": 132,
+                "probedLineEnd": 185,
+                "orgLineStart": 132
+            },
+            {
+                "endLine": 205,
+                "offset": 56,
+                "startLine": 202,
+                "orgLineEnd": 149,
+                "probedLineEnd": 205,
+                "orgLineStart": 149
+            }
+        ],
+        "classId": "abstract_object_list1"
+    },
+    {
+        "probe_ranges": [{
+            "endLine": 128,
+            "offset": 3,
+            "startLine": 125,
+            "orgLineEnd": 125,
+            "probedLineEnd": 128,
+            "orgLineStart": 125
+        }],
+        "classId": "text_anchor1"
+    },
+    {
+        "probe_ranges": [{
+            "endLine": 78,
+            "offset": 3,
+            "startLine": 75,
+            "orgLineEnd": 75,
+            "probedLineEnd": 78,
+            "orgLineStart": 75
+        }],
+        "classId": "chart_change_event_type1"
+    },
+    {
+        "probe_ranges": [{
+            "endLine": 79,
+            "offset": 3,
+            "startLine": 76,
+            "orgLineEnd": 76,
+            "probedLineEnd": 79,
+            "orgLineStart": 76
+        }],
+        "classId": "category_anchor1"
+    },
+    {
+        "probe_ranges": [{
+            "endLine": 88,
+            "offset": 3,
+            "startLine": 85,
+            "orgLineEnd": 85,
+            "probedLineEnd": 88,
+            "orgLineStart": 85
+        }],
+        "classId": "axis_location1"
+    },
+    {
+        "probe_ranges": [
+            {
+                "endLine": 537,
+                "offset": 15,
+                "startLine": 534,
+                "orgLineEnd": 522,
+                "probedLineEnd": 537,
+                "orgLineStart": 522
+            },
+            {
+                "endLine": 562,
+                "offset": 19,
+                "startLine": 558,
+                "orgLineEnd": 543,
+                "probedLineEnd": 562,
+                "orgLineStart": 543
+            },
+            {
+                "endLine": 567,
+                "offset": 23,
+                "startLine": 563,
+                "orgLineEnd": 546,
+                "probedLineEnd": 569,
+                "orgLineStart": 544
+            },
+            {
+                "endLine": 575,
+                "offset": 27,
+                "startLine": 571,
+                "orgLineEnd": 548,
+                "probedLineEnd": 575,
+                "orgLineStart": 548
+            },
+            {
+                "endLine": 580,
+                "offset": 31,
+                "startLine": 576,
+                "orgLineEnd": 552,
+                "probedLineEnd": 583,
+                "orgLineStart": 549
+            },
+            {
+                "endLine": 589,
+                "offset": 35,
+                "startLine": 585,
+                "orgLineEnd": 554,
+                "probedLineEnd": 589,
+                "orgLineStart": 554
+            },
+            {
+                "endLine": 595,
+                "offset": 39,
+                "startLine": 591,
+                "orgLineEnd": 559,
+                "probedLineEnd": 598,
+                "orgLineStart": 556
+            },
+            {
+                "endLine": 603,
+                "offset": 43,
+                "startLine": 599,
+                "orgLineEnd": 560,
+                "probedLineEnd": 603,
+                "orgLineStart": 560
+            },
+            {
+                "endLine": 609,
+                "offset": 47,
+                "startLine": 605,
+                "orgLineEnd": 562,
+                "probedLineEnd": 609,
+                "orgLineStart": 562
+            },
+            {
+                "endLine": 615,
+                "offset": 51,
+                "startLine": 611,
+                "orgLineEnd": 567,
+                "probedLineEnd": 618,
+                "orgLineStart": 564
+            },
+            {
+                "endLine": 623,
+                "offset": 55,
+                "startLine": 619,
+                "orgLineEnd": 568,
+                "probedLineEnd": 623,
+                "orgLineStart": 568
+            },
+            {
+                "endLine": 632,
+                "offset": 58,
+                "startLine": 629,
+                "orgLineEnd": 574,
+                "probedLineEnd": 632,
+                "orgLineStart": 574
+            },
+            {
+                "endLine": 636,
+                "offset": 61,
+                "startLine": 633,
+                "orgLineEnd": 575,
+                "probedLineEnd": 636,
+                "orgLineStart": 575
+            },
+            {
+                "endLine": 642,
+                "offset": 64,
+                "startLine": 639,
+                "orgLineEnd": 578,
+                "probedLineEnd": 642,
+                "orgLineStart": 578
+            },
+            {
+                "endLine": 649,
+                "offset": 67,
+                "startLine": 646,
+                "orgLineEnd": 582,
+                "probedLineEnd": 649,
+                "orgLineStart": 582
+            },
+            {
+                "endLine": 653,
+                "offset": 70,
+                "startLine": 650,
+                "orgLineEnd": 583,
+                "probedLineEnd": 653,
+                "orgLineStart": 583
+            },
+            {
+                "endLine": 659,
+                "offset": 73,
+                "startLine": 656,
+                "orgLineEnd": 586,
+                "probedLineEnd": 659,
+                "orgLineStart": 586
+            },
+            {
+                "endLine": 667,
+                "offset": 76,
+                "startLine": 664,
+                "orgLineEnd": 591,
+                "probedLineEnd": 667,
+                "orgLineStart": 591
+            },
+            {
+                "endLine": 671,
+                "offset": 79,
+                "startLine": 668,
+                "orgLineEnd": 592,
+                "probedLineEnd": 671,
+                "orgLineStart": 592
+            },
+            {
+                "endLine": 678,
+                "offset": 82,
+                "startLine": 675,
+                "orgLineEnd": 596,
+                "probedLineEnd": 678,
+                "orgLineStart": 596
+            },
+            {
+                "endLine": 682,
+                "offset": 85,
+                "startLine": 679,
+                "orgLineEnd": 597,
+                "probedLineEnd": 682,
+                "orgLineStart": 597
+            },
+            {
+                "endLine": 951,
+                "offset": 90,
+                "startLine": 946,
+                "orgLineEnd": 861,
+                "probedLineEnd": 951,
+                "orgLineStart": 861
+            },
+            {
+                "endLine": 956,
+                "offset": 94,
+                "startLine": 952,
+                "orgLineEnd": 864,
+                "probedLineEnd": 958,
+                "orgLineStart": 862
+            },
+            {
+                "endLine": 1260,
+                "offset": 99,
+                "startLine": 1255,
+                "orgLineEnd": 1161,
+                "probedLineEnd": 1260,
+                "orgLineStart": 1161
+            },
+            {
+                "endLine": 1265,
+                "offset": 103,
+                "startLine": 1261,
+                "orgLineEnd": 1164,
+                "probedLineEnd": 1267,
+                "orgLineStart": 1162
+            },
+            {
+                "endLine": 1383,
+                "offset": 114,
+                "startLine": 1377,
+                "orgLineEnd": 1276,
+                "probedLineEnd": 1390,
+                "orgLineStart": 1274
+            },
+            {
+                "endLine": 1389,
+                "offset": 114,
+                "startLine": 1384,
+                "orgLineEnd": 1275,
+                "probedLineEnd": 1389,
+                "orgLineStart": 1275
+            },
+            {
+                "endLine": 1394,
+                "offset": 117,
+                "startLine": 1391,
+                "orgLineEnd": 1277,
+                "probedLineEnd": 1394,
+                "orgLineStart": 1277
+            },
+            {
+                "endLine": 1475,
+                "offset": 121,
+                "startLine": 1471,
+                "orgLineEnd": 1355,
+                "probedLineEnd": 1476,
+                "orgLineStart": 1354
+            },
+            {
+                "endLine": 1481,
+                "offset": 125,
+                "startLine": 1477,
+                "orgLineEnd": 1357,
+                "probedLineEnd": 1482,
+                "orgLineStart": 1357
+            },
+            {
+                "endLine": 1499,
+                "offset": 129,
+                "startLine": 1495,
+                "orgLineEnd": 1371,
+                "probedLineEnd": 1500,
+                "orgLineStart": 1370
+            },
+            {
+                "endLine": 1505,
+                "offset": 133,
+                "startLine": 1501,
+                "orgLineEnd": 1373,
+                "probedLineEnd": 1506,
+                "orgLineStart": 1373
+            },
+            {
+                "endLine": 2370,
+                "offset": 138,
+                "startLine": 2365,
+                "orgLineEnd": 2232,
+                "probedLineEnd": 2370,
+                "orgLineStart": 2232
+            },
+            {
+                "endLine": 2391,
+                "offset": 143,
+                "startLine": 2386,
+                "orgLineEnd": 2248,
+                "probedLineEnd": 2391,
+                "orgLineStart": 2248
+            },
+            {
+                "endLine": 2415,
+                "offset": 150,
+                "startLine": 2408,
+                "orgLineEnd": 2265,
+                "probedLineEnd": 2415,
+                "orgLineStart": 2265
+            },
+            {
+                "endLine": 2440,
+                "offset": 158,
+                "startLine": 2435,
+                "orgLineEnd": 2292,
+                "probedLineEnd": 2450,
+                "orgLineStart": 2285
+            },
+            {
+                "endLine": 2445,
+                "offset": 158,
+                "startLine": 2441,
+                "orgLineEnd": 2287,
+                "probedLineEnd": 2445,
+                "orgLineStart": 2286
+            },
+            {
+                "endLine": 2456,
+                "offset": 163,
+                "startLine": 2451,
+                "orgLineEnd": 2293,
+                "probedLineEnd": 2456,
+                "orgLineStart": 2293
+            },
+            {
+                "endLine": 2633,
+                "offset": 168,
+                "startLine": 2628,
+                "orgLineEnd": 2465,
+                "probedLineEnd": 2633,
+                "orgLineStart": 2465
+            },
+            {
+                "endLine": 2654,
+                "offset": 173,
+                "startLine": 2649,
+                "orgLineEnd": 2481,
+                "probedLineEnd": 2654,
+                "orgLineStart": 2481
+            },
+            {
+                "endLine": 2678,
+                "offset": 180,
+                "startLine": 2671,
+                "orgLineEnd": 2498,
+                "probedLineEnd": 2678,
+                "orgLineStart": 2498
+            },
+            {
+                "endLine": 2701,
+                "offset": 184,
+                "startLine": 2697,
+                "orgLineEnd": 2519,
+                "probedLineEnd": 2703,
+                "orgLineStart": 2517
+            },
+            {
+                "endLine": 2710,
+                "offset": 192,
+                "startLine": 2705,
+                "orgLineEnd": 2528,
+                "probedLineEnd": 2720,
+                "orgLineStart": 2521
+            },
+            {
+                "endLine": 2715,
+                "offset": 192,
+                "startLine": 2711,
+                "orgLineEnd": 2523,
+                "probedLineEnd": 2715,
+                "orgLineStart": 2522
+            },
+            {
+                "endLine": 2726,
+                "offset": 197,
+                "startLine": 2721,
+                "orgLineEnd": 2529,
+                "probedLineEnd": 2726,
+                "orgLineStart": 2529
+            },
+            {
+                "endLine": 4236,
+                "offset": 208,
+                "startLine": 4232,
+                "orgLineEnd": 4042,
+                "probedLineEnd": 4250,
+                "orgLineStart": 4035
+            },
+            {
+                "endLine": 4245,
+                "offset": 205,
+                "startLine": 4241,
+                "orgLineEnd": 4040,
+                "probedLineEnd": 4245,
+                "orgLineStart": 4040
+            },
+            {
+                "endLine": 4249,
+                "offset": 208,
+                "startLine": 4246,
+                "orgLineEnd": 4041,
+                "probedLineEnd": 4249,
+                "orgLineStart": 4041
+            }
+        ],
+        "classId": "xyplot1"
+    },
+    {
+        "probe_ranges": [{
+            "endLine": 82,
+            "offset": 3,
+            "startLine": 79,
+            "orgLineEnd": 79,
+            "probedLineEnd": 82,
+            "orgLineStart": 79
+        }],
+        "classId": "series_rendering_order1"
+    },
+    {
+        "probe_ranges": [
+            {
+                "endLine": 121,
+                "offset": 4,
+                "startLine": 117,
+                "orgLineEnd": 119,
+                "probedLineEnd": 123,
+                "orgLineStart": 117
+            },
+            {
+                "endLine": 127,
+                "offset": 7,
+                "startLine": 124,
+                "orgLineEnd": 120,
+                "probedLineEnd": 127,
+                "orgLineStart": 120
+            },
+            {
+                "endLine": 131,
+                "offset": 10,
+                "startLine": 128,
+                "orgLineEnd": 121,
+                "probedLineEnd": 131,
+                "orgLineStart": 121
+            },
+            {
+                "endLine": 135,
+                "offset": 13,
+                "startLine": 132,
+                "orgLineEnd": 122,
+                "probedLineEnd": 135,
+                "orgLineStart": 122
+            },
+            {
+                "endLine": 139,
+                "offset": 16,
+                "startLine": 136,
+                "orgLineEnd": 123,
+                "probedLineEnd": 139,
+                "orgLineStart": 123
+            },
+            {
+                "endLine": 143,
+                "offset": 19,
+                "startLine": 140,
+                "orgLineEnd": 124,
+                "probedLineEnd": 143,
+                "orgLineStart": 124
+            }
+        ],
+        "classId": "rectangle_insets1"
+    },
+    {
+        "probe_ranges": [{
+            "endLine": 73,
+            "offset": 3,
+            "startLine": 70,
+            "orgLineEnd": 70,
+            "probedLineEnd": 73,
+            "orgLineStart": 70
+        }],
+        "classId": "layer1"
+    },
+    {
+        "probe_ranges": [{
+            "endLine": 69,
+            "offset": 3,
+            "startLine": 66,
+            "orgLineEnd": 66,
+            "probedLineEnd": 69,
+            "orgLineStart": 66
+        }],
+        "classId": "marker_change_event1"
+    },
+    {
+        "probe_ranges": [{
+            "endLine": 73,
+            "offset": 3,
+            "startLine": 70,
+            "orgLineEnd": 70,
+            "probedLineEnd": 73,
+            "orgLineStart": 70
+        }],
+        "classId": "unit_type1"
+    },
+    {
+        "probe_ranges": [{
+            "endLine": 80,
+            "offset": 3,
+            "startLine": 77,
+            "orgLineEnd": 77,
+            "probedLineEnd": 80,
+            "orgLineStart": 77
+        }],
+        "classId": "length_adjustment_type1"
+    },
+    {
+        "probe_ranges": [{
+            "endLine": 110,
+            "offset": 3,
+            "startLine": 107,
+            "orgLineEnd": 107,
+            "probedLineEnd": 110,
+            "orgLineStart": 107
+        }],
+        "classId": "rectangle_anchor1"
+    },
+    {
+        "probe_ranges": [
+            {
+                "endLine": 308,
+                "offset": 21,
+                "startLine": 305,
+                "orgLineEnd": 287,
+                "probedLineEnd": 308,
+                "orgLineStart": 287
+            },
+            {
+                "endLine": 312,
+                "offset": 24,
+                "startLine": 309,
+                "orgLineEnd": 288,
+                "probedLineEnd": 312,
+                "orgLineStart": 288
+            },
+            {
+                "endLine": 316,
+                "offset": 27,
+                "startLine": 313,
+                "orgLineEnd": 289,
+                "probedLineEnd": 316,
+                "orgLineStart": 289
+            },
+            {
+                "endLine": 322,
+                "offset": 30,
+                "startLine": 319,
+                "orgLineEnd": 292,
+                "probedLineEnd": 322,
+                "orgLineStart": 292
+            },
+            {
+                "endLine": 326,
+                "offset": 33,
+                "startLine": 323,
+                "orgLineEnd": 293,
+                "probedLineEnd": 326,
+                "orgLineStart": 293
+            },
+            {
+                "endLine": 330,
+                "offset": 36,
+                "startLine": 327,
+                "orgLineEnd": 294,
+                "probedLineEnd": 330,
+                "orgLineStart": 294
+            },
+            {
+                "endLine": 336,
+                "offset": 39,
+                "startLine": 333,
+                "orgLineEnd": 297,
+                "probedLineEnd": 336,
+                "orgLineStart": 297
+            },
+            {
+                "endLine": 340,
+                "offset": 42,
+                "startLine": 337,
+                "orgLineEnd": 298,
+                "probedLineEnd": 340,
+                "orgLineStart": 298
+            },
+            {
+                "endLine": 478,
+                "offset": 45,
+                "startLine": 475,
+                "orgLineEnd": 433,
+                "probedLineEnd": 478,
+                "orgLineStart": 433
+            },
+            {
+                "endLine": 937,
+                "offset": 49,
+                "startLine": 933,
+                "orgLineEnd": 888,
+                "probedLineEnd": 937,
+                "orgLineStart": 888
+            }
+        ],
+        "classId": "plot1"
+    },
+    {
+        "probe_ranges": [],
+        "classId": "chart_color1"
+    },
+    {
+        "probe_ranges": [
+            {
+                "endLine": 202,
+                "offset": 3,
+                "startLine": 199,
+                "orgLineEnd": 199,
+                "probedLineEnd": 202,
+                "orgLineStart": 199
+            },
+            {
+                "endLine": 206,
+                "offset": 6,
+                "startLine": 203,
+                "orgLineEnd": 200,
+                "probedLineEnd": 206,
+                "orgLineStart": 200
+            },
+            {
+                "endLine": 210,
+                "offset": 9,
+                "startLine": 207,
+                "orgLineEnd": 201,
+                "probedLineEnd": 210,
+                "orgLineStart": 201
+            },
+            {
+                "endLine": 214,
+                "offset": 12,
+                "startLine": 211,
+                "orgLineEnd": 202,
+                "probedLineEnd": 214,
+                "orgLineStart": 202
+            },
+            {
+                "endLine": 218,
+                "offset": 15,
+                "startLine": 215,
+                "orgLineEnd": 203,
+                "probedLineEnd": 218,
+                "orgLineStart": 203
+            },
+            {
+                "endLine": 222,
+                "offset": 18,
+                "startLine": 219,
+                "orgLineEnd": 204,
+                "probedLineEnd": 222,
+                "orgLineStart": 204
+            },
+            {
+                "endLine": 314,
+                "offset": 22,
+                "startLine": 310,
+                "orgLineEnd": 292,
+                "probedLineEnd": 314,
+                "orgLineStart": 292
+            },
+            {
+                "endLine": 325,
+                "offset": 29,
+                "startLine": 318,
+                "orgLineEnd": 297,
+                "probedLineEnd": 326,
+                "orgLineStart": 297
+            },
+            {
+                "endLine": 334,
+                "offset": 36,
+                "startLine": 327,
+                "orgLineEnd": 299,
+                "probedLineEnd": 335,
+                "orgLineStart": 299
+            },
+            {
+                "endLine": 343,
+                "offset": 42,
+                "startLine": 337,
+                "orgLineEnd": 302,
+                "probedLineEnd": 344,
+                "orgLineStart": 302
+            },
+            {
+                "endLine": 351,
+                "offset": 48,
+                "startLine": 345,
+                "orgLineEnd": 303,
+                "probedLineEnd": 351,
+                "orgLineStart": 303
+            },
+            {
+                "endLine": 357,
+                "offset": 53,
+                "startLine": 352,
+                "orgLineEnd": 304,
+                "probedLineEnd": 357,
+                "orgLineStart": 304
+            },
+            {
+                "endLine": 365,
+                "offset": 59,
+                "startLine": 359,
+                "orgLineEnd": 307,
+                "probedLineEnd": 366,
+                "orgLineStart": 307
+            },
+            {
+                "endLine": 373,
+                "offset": 65,
+                "startLine": 367,
+                "orgLineEnd": 308,
+                "probedLineEnd": 373,
+                "orgLineStart": 308
+            },
+            {
+                "endLine": 379,
+                "offset": 70,
+                "startLine": 374,
+                "orgLineEnd": 309,
+                "probedLineEnd": 379,
+                "orgLineStart": 309
+            },
+            {
+                "endLine": 390,
+                "offset": 79,
+                "startLine": 381,
+                "orgLineEnd": 312,
+                "probedLineEnd": 391,
+                "orgLineStart": 312
+            },
+            {
+                "endLine": 400,
+                "offset": 86,
+                "startLine": 393,
+                "orgLineEnd": 315,
+                "probedLineEnd": 401,
+                "orgLineStart": 315
+            },
+            {
+                "endLine": 409,
+                "offset": 93,
+                "startLine": 402,
+                "orgLineEnd": 316,
+                "probedLineEnd": 409,
+                "orgLineStart": 316
+            },
+            {
+                "endLine": 415,
+                "offset": 98,
+                "startLine": 410,
+                "orgLineEnd": 317,
+                "probedLineEnd": 415,
+                "orgLineStart": 317
+            },
+            {
+                "endLine": 426,
+                "offset": 107,
+                "startLine": 417,
+                "orgLineEnd": 320,
+                "probedLineEnd": 427,
+                "orgLineStart": 320
+            },
+            {
+                "endLine": 436,
+                "offset": 114,
+                "startLine": 429,
+                "orgLineEnd": 323,
+                "probedLineEnd": 437,
+                "orgLineStart": 323
+            },
+            {
+                "endLine": 444,
+                "offset": 120,
+                "startLine": 438,
+                "orgLineEnd": 324,
+                "probedLineEnd": 444,
+                "orgLineStart": 324
+            },
+            {
+                "endLine": 450,
+                "offset": 125,
+                "startLine": 445,
+                "orgLineEnd": 325,
+                "probedLineEnd": 450,
+                "orgLineStart": 325
+            },
+            {
+                "endLine": 461,
+                "offset": 134,
+                "startLine": 452,
+                "orgLineEnd": 328,
+                "probedLineEnd": 462,
+                "orgLineStart": 328
+            },
+            {
+                "endLine": 470,
+                "offset": 140,
+                "startLine": 464,
+                "orgLineEnd": 331,
+                "probedLineEnd": 471,
+                "orgLineStart": 331
+            },
+            {
+                "endLine": 479,
+                "offset": 147,
+                "startLine": 472,
+                "orgLineEnd": 332,
+                "probedLineEnd": 479,
+                "orgLineStart": 332
+            },
+            {
+                "endLine": 485,
+                "offset": 152,
+                "startLine": 480,
+                "orgLineEnd": 333,
+                "probedLineEnd": 485,
+                "orgLineStart": 333
+            },
+            {
+                "endLine": 490,
+                "offset": 155,
+                "startLine": 487,
+                "orgLineEnd": 335,
+                "probedLineEnd": 490,
+                "orgLineStart": 335
+            },
+            {
+                "endLine": 677,
+                "offset": 160,
+                "startLine": 672,
+                "orgLineEnd": 517,
+                "probedLineEnd": 677,
+                "orgLineStart": 517
+            },
+            {
+                "endLine": 698,
+                "offset": 166,
+                "startLine": 692,
+                "orgLineEnd": 532,
+                "probedLineEnd": 698,
+                "orgLineStart": 532
+            }
+        ],
+        "classId": "default_drawing_supplier1"
+    },
+    {
+        "probe_ranges": [
+            {
+                "endLine": 89,
+                "offset": 4,
+                "startLine": 85,
+                "orgLineEnd": 85,
+                "probedLineEnd": 89,
+                "orgLineStart": 85
+            },
+            {
+                "endLine": 103,
+                "offset": 8,
+                "startLine": 99,
+                "orgLineEnd": 95,
+                "probedLineEnd": 103,
+                "orgLineStart": 95
+            }
+        ],
+        "classId": "object_list1"
+    },
+    {
+        "probe_ranges": [
+            {
+                "endLine": 97,
+                "offset": 3,
+                "startLine": 94,
+                "orgLineEnd": 94,
+                "probedLineEnd": 97,
+                "orgLineStart": 94
+            },
+            {
+                "endLine": 101,
+                "offset": 6,
+                "startLine": 98,
+                "orgLineEnd": 95,
+                "probedLineEnd": 101,
+                "orgLineStart": 95
+            },
+            {
+                "endLine": 140,
+                "offset": 9,
+                "startLine": 137,
+                "orgLineEnd": 131,
+                "probedLineEnd": 140,
+                "orgLineStart": 131
+            }
+        ],
+        "classId": "chart_change_event1"
+    },
+    {
+        "probe_ranges": [{
+            "endLine": 68,
+            "offset": 3,
+            "startLine": 65,
+            "orgLineEnd": 65,
+            "probedLineEnd": 68,
+            "orgLineStart": 65
+        }],
+        "classId": "plot_change_event1"
+    },
+    {
+        "probe_ranges": [
+            {
+                "endLine": 179,
+                "offset": 4,
+                "startLine": 175,
+                "orgLineEnd": 177,
+                "probedLineEnd": 181,
+                "orgLineStart": 175
+            },
+            {
+                "endLine": 186,
+                "offset": 8,
+                "startLine": 182,
+                "orgLineEnd": 180,
+                "probedLineEnd": 188,
+                "orgLineStart": 178
+            },
+            {
+                "endLine": 198,
+                "offset": 17,
+                "startLine": 189,
+                "orgLineEnd": 183,
+                "probedLineEnd": 200,
+                "orgLineStart": 181
+            },
+            {
+                "endLine": 205,
+                "offset": 20,
+                "startLine": 202,
+                "orgLineEnd": 185,
+                "probedLineEnd": 205,
+                "orgLineStart": 185
+            },
+            {
+                "endLine": 209,
+                "offset": 23,
+                "startLine": 206,
+                "orgLineEnd": 186,
+                "probedLineEnd": 209,
+                "orgLineStart": 186
+            },
+            {
+                "endLine": 213,
+                "offset": 26,
+                "startLine": 210,
+                "orgLineEnd": 187,
+                "probedLineEnd": 213,
+                "orgLineStart": 187
+            },
+            {
+                "endLine": 217,
+                "offset": 29,
+                "startLine": 214,
+                "orgLineEnd": 188,
+                "probedLineEnd": 217,
+                "orgLineStart": 188
+            },
+            {
+                "endLine": 221,
+                "offset": 32,
+                "startLine": 218,
+                "orgLineEnd": 189,
+                "probedLineEnd": 221,
+                "orgLineStart": 189
+            },
+            {
+                "endLine": 226,
+                "offset": 35,
+                "startLine": 223,
+                "orgLineEnd": 191,
+                "probedLineEnd": 226,
+                "orgLineStart": 191
+            },
+            {
+                "endLine": 230,
+                "offset": 38,
+                "startLine": 227,
+                "orgLineEnd": 192,
+                "probedLineEnd": 230,
+                "orgLineStart": 192
+            },
+            {
+                "endLine": 234,
+                "offset": 41,
+                "startLine": 231,
+                "orgLineEnd": 193,
+                "probedLineEnd": 234,
+                "orgLineStart": 193
+            },
+            {
+                "endLine": 239,
+                "offset": 44,
+                "startLine": 236,
+                "orgLineEnd": 195,
+                "probedLineEnd": 239,
+                "orgLineStart": 195
+            },
+            {
+                "endLine": 243,
+                "offset": 47,
+                "startLine": 240,
+                "orgLineEnd": 196,
+                "probedLineEnd": 243,
+                "orgLineStart": 196
+            },
+            {
+                "endLine": 541,
+                "offset": 51,
+                "startLine": 537,
+                "orgLineEnd": 492,
+                "probedLineEnd": 543,
+                "orgLineStart": 490
+            },
+            {
+                "endLine": 547,
+                "offset": 54,
+                "startLine": 544,
+                "orgLineEnd": 493,
+                "probedLineEnd": 547,
+                "orgLineStart": 493
+            },
+            {
+                "endLine": 592,
+                "offset": 58,
+                "startLine": 588,
+                "orgLineEnd": 534,
+                "probedLineEnd": 592,
+                "orgLineStart": 534
+            },
+            {
+                "endLine": 621,
+                "offset": 62,
+                "startLine": 617,
+                "orgLineEnd": 559,
+                "probedLineEnd": 621,
+                "orgLineStart": 559
+            }
+        ],
+        "classId": "marker1"
+    },
+    {
+        "probe_ranges": [
+            {
+                "endLine": 111,
+                "offset": 3,
+                "startLine": 108,
+                "orgLineEnd": 108,
+                "probedLineEnd": 111,
+                "orgLineStart": 108
+            },
+            {
+                "endLine": 115,
+                "offset": 6,
+                "startLine": 112,
+                "orgLineEnd": 109,
+                "probedLineEnd": 115,
+                "orgLineStart": 109
+            }
+        ],
+        "classId": "category_marker1"
+    },
+    {
+        "probe_ranges": [{
+            "endLine": 76,
+            "offset": 3,
+            "startLine": 73,
+            "orgLineEnd": 73,
+            "probedLineEnd": 76,
+            "orgLineStart": 73
+        }],
+        "classId": "plot_orientation1"
+    },
+    {
+        "probe_ranges": [{
+            "endLine": 84,
+            "offset": 3,
+            "startLine": 81,
+            "orgLineEnd": 81,
+            "probedLineEnd": 84,
+            "orgLineStart": 81
+        }],
+        "classId": "dataset_rendering_order1"
+    },
+    {
+        "probe_ranges": [
+            {
+                "endLine": 72,
+                "offset": 3,
+                "startLine": 69,
+                "orgLineEnd": 69,
+                "probedLineEnd": 72,
+                "orgLineStart": 69
+            },
+            {
+                "endLine": 102,
+                "offset": 6,
+                "startLine": 99,
+                "orgLineEnd": 96,
+                "probedLineEnd": 102,
+                "orgLineStart": 96
+            }
+        ],
+        "classId": "value_marker1"
+    }
+]}

@@ -1,0 +1,36 @@
+diff -U 5 -r lang//lang_npe_1/buggy/src/main/java/org/apache/commons/lang3/ClassLoaderUtils.java lang//lang_npe_1/fixed/src/main/java/org/apache/commons/lang3/ClassLoaderUtils.java
+--- lang//lang_npe_1/buggy/src/main/java/org/apache/commons/lang3/ClassLoaderUtils.java	2023-11-03 11:51:56.147466440 +0900
++++ lang//lang_npe_1/fixed/src/main/java/org/apache/commons/lang3/ClassLoaderUtils.java	2023-11-03 11:52:52.996404429 +0900
+@@ -18,10 +18,11 @@
+ package org.apache.commons.lang3;
+ 
+ import java.net.URL;
+ import java.net.URLClassLoader;
+ import java.util.Arrays;
++import java.util.Objects;
+ 
+ /**
+  * Helps work with {@link ClassLoader}.
+  *
+  * @since 3.10
+@@ -62,18 +63,18 @@
+      */
+     public static String toString(final ClassLoader classLoader) {
+         if (classLoader instanceof URLClassLoader) {
+             return toString((URLClassLoader) classLoader);
+         }
+-        return classLoader.toString();
++        return Objects.toString(classLoader);
+     }
+ 
+     /**
+      * Converts the given URLClassLoader to a String in the format {@code "URLClassLoader.toString() + [URL1, URL2, ...]"}.
+      *
+      * @param classLoader to URLClassLoader to convert.
+      * @return the formatted string.
+      */
+     public static String toString(final URLClassLoader classLoader) {
+-        return classLoader + Arrays.toString(classLoader.getURLs());
++        return classLoader != null ? classLoader + Arrays.toString(classLoader.getURLs()) : "null";
+     }
+ }
