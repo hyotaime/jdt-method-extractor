@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.Map;
 
 public class JDTMethodExtractor {
@@ -26,29 +27,32 @@ public class JDTMethodExtractor {
         //System.out.println("Absolute Source Root Path: " + absoluteSourceRootPath);
 
         // JSON 파일을 파싱하여 타겟 메소드 정보를 가져옵니다.
-        Map<String, Map<String, Integer>> targetMethods = TraceParser.parseJson(jsonFilePath); //<methodName , <source, Line>>
+         List<TestDTO> targetTest = TraceParser.parseJson(jsonFilePath); //<methodName , <source, Line>>
 
-        targetMethods.forEach((className, methods) -> {
-
+        targetTest.forEach((testDTO) -> {
+            List<SourceDTO> targetSource = testDTO.getSource();
             // ClassLoader를 사용하여 소스 코드 루트 경로를 절대 경로로 변환합니다.
             ClassLoader classLoader = JDTMethodExtractor.class.getClassLoader();
-            File rootDir = (isMethodTest(className)) ?
-                    new File(classLoader.getResource(testRootPath).getFile()) : new File(classLoader.getResource(sourceRootPath).getFile());
+            targetSource.forEach((sourceDTO) -> {
+                File rootDir = (isContainTest(sourceDTO.getSourceClass())) ? //source Class 이름에 Test 있나?
+                        new File(classLoader.getResource(testRootPath).getFile()) : new File(classLoader.getResource(sourceRootPath).getFile()); //있으면 Test 경로로, 없으면 Source 경로로
 
-            System.out.println("rootDir: " + rootDir.getPath());
-            String absoluteSourceRootPath = rootDir.getAbsolutePath();
+                System.out.println("rootDir: " + rootDir.getPath());
+                String absoluteSourceRootPath = rootDir.getAbsolutePath();
 
-            String filePath = Paths.get(absoluteSourceRootPath, className.replace('.', File.separatorChar) + ".java").toString();
-            System.out.println("Processing file: " + filePath);
-            try {
-                String source = new String(Files.readAllBytes(Paths.get(filePath)));
-                methods.forEach((methodName, lineNumber) -> {
-                    extractMethodCode(source, className, methodName, lineNumber);
-                });
-            } catch (IOException e) {
-                System.err.println("파일을 읽는 동안 오류가 발생했습니다: " + filePath);
-                e.printStackTrace();
-            }
+                String filePath = Paths.get(absoluteSourceRootPath, sourceDTO.getSourceClass().replace('.', File.separatorChar) + ".java").toString();
+                System.out.println("Processing file: " + filePath);
+                try {
+                    String source = new String(Files.readAllBytes(Paths.get(filePath)));
+/*                    methods.forEach((methodName, lineNumber) -> {
+                        extractMethodCode(source, className, methodName, lineNumber);
+                    });*/
+                    extractMethodCode(source, sourceDTO.getSourceClass(), sourceDTO.getSourceMethod(), sourceDTO.getSourceLine().get(0));
+                } catch (IOException e) {
+                    System.err.println("파일을 읽는 동안 오류가 발생했습니다: " + filePath);
+                    e.printStackTrace();
+                }
+            });
         });
     }
 
@@ -74,7 +78,7 @@ public class JDTMethodExtractor {
         });
     }
 
-    private static boolean isMethodTest(String className){
-        return className.contains("Test");
+    public static boolean isContainTest(String str){
+        return str.contains("Test");
     }
 }

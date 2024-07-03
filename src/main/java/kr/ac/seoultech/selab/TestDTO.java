@@ -2,6 +2,7 @@ package kr.ac.seoultech.selab;
 
 import org.apache.commons.collections4.MultiValuedMap;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -10,12 +11,12 @@ public class TestDTO {
     private String testMethod; //이건 다 다르게 나옴
     private int testLine;
 
-    MultiValuedMap<String, List<SourceDTO>> source;
+    //MultiValuedMap<String, List<SourceDTO>> source;
+    List<SourceDTO> source = new ArrayList<>();
 
-    public TestDTO(String testClass, String testMethod, MultiValuedMap<String, List<SourceDTO>> source) {
+    public TestDTO(String testClass, String testMethod) {
         this.testClass = testClass;
         this.testMethod = testMethod;
-        this.source = source;
     }
 
     public String getTestClass() {
@@ -42,11 +43,30 @@ public class TestDTO {
         this.testLine = testLine;
     }
 
-    public MultiValuedMap<String, List<SourceDTO>> getSource() {
+    public List<SourceDTO> getSource() {
         return source;
     }
 
-    public void setSource(MultiValuedMap<String, List<SourceDTO>> source) {
+    public void setSource(List<SourceDTO> source) {
         this.source = source;
     }
+
+    public boolean isDuplicate(String className , String methodName){
+        for(SourceDTO temp : source){
+            if(temp.getSourceClass().equals(className) && temp.getSourceMethod().equals(methodName)){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public SourceDTO findSourceDTO(String className, String methodName){
+        for(SourceDTO temp : source){
+            if(temp.getSourceClass().equals(className) && temp.getSourceMethod().equals(methodName)) {
+                return temp;
+            }
+        }
+        return null;
+    }
+
 }
