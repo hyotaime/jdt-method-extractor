@@ -56,7 +56,8 @@ public class TraceParser {
                             if(testDTO.isDuplicate(className, methodName)){
                                 //있다면 SourceDTO 안의 sourceLine 리스트에 해당 라인값만 추가
                                 SourceDTO sourceDTO = testDTO.findSourceDTO(className, methodName);
-                                sourceDTO.getSourceLine().get(lineNumber);
+                                //sourceDTO.getSourceLine().get(lineNumber);
+                                sourceDTO.addSourceLine(lineNumber);
                             }
                             else{
                                 //없다면 source 필드에 list.add(new SourceDTO(class,method,line))
