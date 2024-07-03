@@ -12,9 +12,18 @@ import java.util.Map;
 public class JDTMethodExtractor {
 
     public static void main(String[] args) {
+
+        /* lang_npe_1 */
         String jsonFilePath = "lang_npe_1/npe.traces.json"; // JSON 파일 경로
         String sourceRootPath = "lang_npe_1/buggy/src/main/java"; // Java 소스 코드 루트 경로
-        String testRootPath = "lang_npe_1/fixed/src/test/java"; // Java 테스트 코드 루트 경로
+        String testRootPath = "lang_npe_1/fixed/src/test/java"; // Java 테스트 코드 루트 경로*/
+
+
+        /* Chart-14
+        String jsonFilePath = "Chart-14/npe.traces.json"; // JSON 파일 경로
+        String sourceRootPath = "Chart-14/buggy/source"; // Java 소스 코드 루트 경로
+        String testRootPath = "Chart-14/fixed/tests"; // Java 테스트 코드 루트 경로
+        */
 
 
 /*        // ClassLoader를 사용하여 소스 코드 루트 경로를 절대 경로로 변환합니다.
