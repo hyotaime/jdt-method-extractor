@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.Map;
 
 public class JDTMethodExtractor {
@@ -13,30 +14,45 @@ public class JDTMethodExtractor {
     public static void main(String[] args) {
         String jsonFilePath = "lang_npe_1/npe.traces.json"; // JSON 파일 경로
         String sourceRootPath = "lang_npe_1/buggy/src/main/java"; // Java 소스 코드 루트 경로
+        String testRootPath = "lang_npe_1/fixed/src/test/java"; // Java 테스트 코드 루트 경로
 
-        // ClassLoader를 사용하여 소스 코드 루트 경로를 절대 경로로 변환합니다.
+
+/*        // ClassLoader를 사용하여 소스 코드 루트 경로를 절대 경로로 변환합니다.
         ClassLoader classLoader = JDTMethodExtractor.class.getClassLoader();
-        File sourceRootDir = new File(classLoader.getResource(sourceRootPath).getFile());
-        String absoluteSourceRootPath = sourceRootDir.getAbsolutePath();
+        File sourceRootDir = new File(classLoader.getResource(sourceRootPath).getFile()); //"src/main/resources/lang_npe_1/buggy/src/main/java"
+        System.out.println("sourceRootDir: "+ sourceRootDir.getPath());
+        String absoluteSourceRootPath = sourceRootDir.getAbsolutePath();*/
 
         // 절대 경로 확인을 위해 출력합니다.
-        System.out.println("Absolute Source Root Path: " + absoluteSourceRootPath);
+        //System.out.println("Absolute Source Root Path: " + absoluteSourceRootPath);
 
         // JSON 파일을 파싱하여 타겟 메소드 정보를 가져옵니다.
-        Map<String, Map<String, Integer>> targetMethods = TraceParser.parseJson(jsonFilePath);
+         List<TestDTO> targetTest = TraceParser.parseJson(jsonFilePath); //<methodName , <source, Line>>
 
-        targetMethods.forEach((className, methods) -> {
-            String filePath = absoluteSourceRootPath + "/" + className.replace('.', '/') + ".java";
-            System.out.println("Processing file: " + filePath);
-            try {
-                String source = new String(Files.readAllBytes(Paths.get(filePath)));
-                methods.forEach((methodName, lineNumber) -> {
-                    extractMethodCode(source, className, methodName, lineNumber);
-                });
-            } catch (IOException e) {
-                System.err.println("파일을 읽는 동안 오류가 발생했습니다: " + filePath);
-                e.printStackTrace();
-            }
+        targetTest.forEach((testDTO) -> {
+            List<SourceDTO> targetSource = testDTO.getSource();
+            // ClassLoader를 사용하여 소스 코드 루트 경로를 절대 경로로 변환합니다.
+            ClassLoader classLoader = JDTMethodExtractor.class.getClassLoader();
+            targetSource.forEach((sourceDTO) -> {
+                File rootDir = (isContainTest(sourceDTO.getSourceClass())) ? //source Class 이름에 Test 있나?
+                        new File(classLoader.getResource(testRootPath).getFile()) : new File(classLoader.getResource(sourceRootPath).getFile()); //있으면 Test 경로로, 없으면 Source 경로로
+
+                System.out.println("rootDir: " + rootDir.getPath());
+                String absoluteSourceRootPath = rootDir.getAbsolutePath();
+
+                String filePath = Paths.get(absoluteSourceRootPath, sourceDTO.getSourceClass().replace('.', File.separatorChar) + ".java").toString();
+                System.out.println("Processing file: " + filePath);
+                try {
+                    String source = new String(Files.readAllBytes(Paths.get(filePath)));
+/*                    methods.forEach((methodName, lineNumber) -> {
+                        extractMethodCode(source, className, methodName, lineNumber);
+                    });*/
+                    extractMethodCode(source, sourceDTO.getSourceClass(), sourceDTO.getSourceMethod(), sourceDTO.getSourceLine().get(0));
+                } catch (IOException e) {
+                    System.err.println("파일을 읽는 동안 오류가 발생했습니다: " + filePath);
+                    e.printStackTrace();
+                }
+            });
         });
     }
 
@@ -60,5 +76,9 @@ public class JDTMethodExtractor {
                 return super.visit(node);
             }
         });
+    }
+
+    public static boolean isContainTest(String str){
+        return str.contains("Test");
     }
 }
