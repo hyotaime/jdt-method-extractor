@@ -1,0 +1,460 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+<title>Source code</title>
+<link rel="stylesheet" type="text/css" href="../../../../../../../stylesheet.css" title="Style">
+</head>
+<body>
+<main role="main">
+<div class="sourceContainer">
+<pre><span class="sourceLineNo">001</span><a id="line.1">/*</a>
+<span class="sourceLineNo">002</span><a id="line.2"> * Licensed to the Apache Software Foundation (ASF) under one or more</a>
+<span class="sourceLineNo">003</span><a id="line.3"> * contributor license agreements.  See the NOTICE file distributed with</a>
+<span class="sourceLineNo">004</span><a id="line.4"> * this work for additional information regarding copyright ownership.</a>
+<span class="sourceLineNo">005</span><a id="line.5"> * The ASF licenses this file to You under the Apache License, Version 2.0</a>
+<span class="sourceLineNo">006</span><a id="line.6"> * (the "License"); you may not use this file except in compliance with</a>
+<span class="sourceLineNo">007</span><a id="line.7"> * the License.  You may obtain a copy of the License at</a>
+<span class="sourceLineNo">008</span><a id="line.8"> *</a>
+<span class="sourceLineNo">009</span><a id="line.9"> *      http://www.apache.org/licenses/LICENSE-2.0</a>
+<span class="sourceLineNo">010</span><a id="line.10"> *</a>
+<span class="sourceLineNo">011</span><a id="line.11"> * Unless required by applicable law or agreed to in writing, software</a>
+<span class="sourceLineNo">012</span><a id="line.12"> * distributed under the License is distributed on an "AS IS" BASIS,</a>
+<span class="sourceLineNo">013</span><a id="line.13"> * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</a>
+<span class="sourceLineNo">014</span><a id="line.14"> * See the License for the specific language governing permissions and</a>
+<span class="sourceLineNo">015</span><a id="line.15"> * limitations under the License.</a>
+<span class="sourceLineNo">016</span><a id="line.16"> */</a>
+<span class="sourceLineNo">017</span><a id="line.17">package org.apache.commons.lang3.concurrent.locks;</a>
+<span class="sourceLineNo">018</span><a id="line.18"></a>
+<span class="sourceLineNo">019</span><a id="line.19">import java.util.Objects;</a>
+<span class="sourceLineNo">020</span><a id="line.20">import java.util.concurrent.locks.Lock;</a>
+<span class="sourceLineNo">021</span><a id="line.21">import java.util.concurrent.locks.ReadWriteLock;</a>
+<span class="sourceLineNo">022</span><a id="line.22">import java.util.concurrent.locks.ReentrantReadWriteLock;</a>
+<span class="sourceLineNo">023</span><a id="line.23">import java.util.concurrent.locks.StampedLock;</a>
+<span class="sourceLineNo">024</span><a id="line.24">import java.util.function.Supplier;</a>
+<span class="sourceLineNo">025</span><a id="line.25"></a>
+<span class="sourceLineNo">026</span><a id="line.26">import org.apache.commons.lang3.function.Failable;</a>
+<span class="sourceLineNo">027</span><a id="line.27">import org.apache.commons.lang3.function.FailableConsumer;</a>
+<span class="sourceLineNo">028</span><a id="line.28">import org.apache.commons.lang3.function.FailableFunction;</a>
+<span class="sourceLineNo">029</span><a id="line.29"></a>
+<span class="sourceLineNo">030</span><a id="line.30">/**</a>
+<span class="sourceLineNo">031</span><a id="line.31"> * Combines the monitor and visitor pattern to work with {@link java.util.concurrent.locks.Lock locked objects}. Locked</a>
+<span class="sourceLineNo">032</span><a id="line.32"> * objects are an alternative to synchronization. This, on Wikipedia, is known as the Visitor pattern</a>
+<span class="sourceLineNo">033</span><a id="line.33"> * (https://en.wikipedia.org/wiki/Visitor_pattern), and from the "Gang of Four" "Design Patterns" book's Visitor pattern</a>
+<span class="sourceLineNo">034</span><a id="line.34"> * [Gamma, E., Helm, R., &amp;amp; Johnson, R. (1998). Visitor. In Design patterns elements of reusable object oriented software (pp. 331-344). Reading: Addison Wesley.].</a>
+<span class="sourceLineNo">035</span><a id="line.35"> *</a>
+<span class="sourceLineNo">036</span><a id="line.36"> * &lt;p&gt;</a>
+<span class="sourceLineNo">037</span><a id="line.37"> * Locking is preferable, if there is a distinction between read access (multiple threads may have read access</a>
+<span class="sourceLineNo">038</span><a id="line.38"> * concurrently), and write access (only one thread may have write access at any given time). In comparison,</a>
+<span class="sourceLineNo">039</span><a id="line.39"> * synchronization doesn't support read access, because synchronized access is exclusive.</a>
+<span class="sourceLineNo">040</span><a id="line.40"> * &lt;/p&gt;</a>
+<span class="sourceLineNo">041</span><a id="line.41"> * &lt;p&gt;</a>
+<span class="sourceLineNo">042</span><a id="line.42"> * Using this class is fairly straightforward:</a>
+<span class="sourceLineNo">043</span><a id="line.43"> * &lt;/p&gt;</a>
+<span class="sourceLineNo">044</span><a id="line.44"> * &lt;ol&gt;</a>
+<span class="sourceLineNo">045</span><a id="line.45"> * &lt;li&gt;While still in single thread mode, create an instance of {@link LockingVisitors.StampedLockVisitor} by calling</a>
+<span class="sourceLineNo">046</span><a id="line.46"> * {@link #stampedLockVisitor(Object)}, passing the object which needs to be locked. Discard all references to the</a>
+<span class="sourceLineNo">047</span><a id="line.47"> * locked object. Instead, use references to the lock.&lt;/li&gt;</a>
+<span class="sourceLineNo">048</span><a id="line.48"> * &lt;li&gt;If you want to access the locked object, create a {@link FailableConsumer}. The consumer will receive the locked</a>
+<span class="sourceLineNo">049</span><a id="line.49"> * object as a parameter. For convenience, the consumer may be implemented as a Lambda. Then invoke</a>
+<span class="sourceLineNo">050</span><a id="line.50"> * {@link LockingVisitors.StampedLockVisitor#acceptReadLocked(FailableConsumer)}, or</a>
+<span class="sourceLineNo">051</span><a id="line.51"> * {@link LockingVisitors.StampedLockVisitor#acceptWriteLocked(FailableConsumer)}, passing the consumer.&lt;/li&gt;</a>
+<span class="sourceLineNo">052</span><a id="line.52"> * &lt;li&gt;As an alternative, if you need to produce a result object, you may use a {@link FailableFunction}. This function</a>
+<span class="sourceLineNo">053</span><a id="line.53"> * may also be implemented as a Lambda. To have the function executed, invoke</a>
+<span class="sourceLineNo">054</span><a id="line.54"> * {@link LockingVisitors.StampedLockVisitor#applyReadLocked(FailableFunction)}, or</a>
+<span class="sourceLineNo">055</span><a id="line.55"> * {@link LockingVisitors.StampedLockVisitor#applyWriteLocked(FailableFunction)}.&lt;/li&gt;</a>
+<span class="sourceLineNo">056</span><a id="line.56"> * &lt;/ol&gt;</a>
+<span class="sourceLineNo">057</span><a id="line.57"> * &lt;p&gt;</a>
+<span class="sourceLineNo">058</span><a id="line.58"> * Example: A thread safe logger class.</a>
+<span class="sourceLineNo">059</span><a id="line.59"> * &lt;/p&gt;</a>
+<span class="sourceLineNo">060</span><a id="line.60"> *</a>
+<span class="sourceLineNo">061</span><a id="line.61"> * &lt;pre&gt;</a>
+<span class="sourceLineNo">062</span><a id="line.62"> *   public class SimpleLogger {</a>
+<span class="sourceLineNo">063</span><a id="line.63"> *</a>
+<span class="sourceLineNo">064</span><a id="line.64"> *     private final StampedLockVisitor&amp;lt;PrintStream&amp;gt; lock;</a>
+<span class="sourceLineNo">065</span><a id="line.65"> *</a>
+<span class="sourceLineNo">066</span><a id="line.66"> *     public SimpleLogger(OutputStream out) {</a>
+<span class="sourceLineNo">067</span><a id="line.67"> *         lock = LockingVisitors.stampedLockVisitor(new PrintStream(out));</a>
+<span class="sourceLineNo">068</span><a id="line.68"> *     }</a>
+<span class="sourceLineNo">069</span><a id="line.69"> *</a>
+<span class="sourceLineNo">070</span><a id="line.70"> *     public void log(String message) {</a>
+<span class="sourceLineNo">071</span><a id="line.71"> *         lock.acceptWriteLocked((ps) -&amp;gt; ps.println(message));</a>
+<span class="sourceLineNo">072</span><a id="line.72"> *     }</a>
+<span class="sourceLineNo">073</span><a id="line.73"> *</a>
+<span class="sourceLineNo">074</span><a id="line.74"> *     public void log(byte[] buffer) {</a>
+<span class="sourceLineNo">075</span><a id="line.75"> *         lock.acceptWriteLocked((ps) -&amp;gt; { ps.write(buffer); ps.println(); });</a>
+<span class="sourceLineNo">076</span><a id="line.76"> *     }</a>
+<span class="sourceLineNo">077</span><a id="line.77"> * &lt;/pre&gt;</a>
+<span class="sourceLineNo">078</span><a id="line.78"> *</a>
+<span class="sourceLineNo">079</span><a id="line.79"> * @since 3.11</a>
+<span class="sourceLineNo">080</span><a id="line.80"> */</a>
+<span class="sourceLineNo">081</span><a id="line.81">public class LockingVisitors {</a>
+<span class="sourceLineNo">082</span><a id="line.82"></a>
+<span class="sourceLineNo">083</span><a id="line.83">    /**</a>
+<span class="sourceLineNo">084</span><a id="line.84">     * Wraps a domain object and a lock for access by lambdas.</a>
+<span class="sourceLineNo">085</span><a id="line.85">     *</a>
+<span class="sourceLineNo">086</span><a id="line.86">     * @param &lt;O&gt; the wrapped object type.</a>
+<span class="sourceLineNo">087</span><a id="line.87">     * @param &lt;L&gt; the wrapped lock type.</a>
+<span class="sourceLineNo">088</span><a id="line.88">     */</a>
+<span class="sourceLineNo">089</span><a id="line.89">    public static class LockVisitor&lt;O, L&gt; {</a>
+<span class="sourceLineNo">090</span><a id="line.90"></a>
+<span class="sourceLineNo">091</span><a id="line.91">        /**</a>
+<span class="sourceLineNo">092</span><a id="line.92">         * The lock object, untyped, since, for example {@link StampedLock} does not implement a locking interface in</a>
+<span class="sourceLineNo">093</span><a id="line.93">         * Java 8.</a>
+<span class="sourceLineNo">094</span><a id="line.94">         */</a>
+<span class="sourceLineNo">095</span><a id="line.95">        private final L lock;</a>
+<span class="sourceLineNo">096</span><a id="line.96"></a>
+<span class="sourceLineNo">097</span><a id="line.97">        /**</a>
+<span class="sourceLineNo">098</span><a id="line.98">         * The guarded object.</a>
+<span class="sourceLineNo">099</span><a id="line.99">         */</a>
+<span class="sourceLineNo">100</span><a id="line.100">        private final O object;</a>
+<span class="sourceLineNo">101</span><a id="line.101"></a>
+<span class="sourceLineNo">102</span><a id="line.102">        /**</a>
+<span class="sourceLineNo">103</span><a id="line.103">         * Supplies the read lock, usually from the lock object.</a>
+<span class="sourceLineNo">104</span><a id="line.104">         */</a>
+<span class="sourceLineNo">105</span><a id="line.105">        private final Supplier&lt;Lock&gt; readLockSupplier;</a>
+<span class="sourceLineNo">106</span><a id="line.106"></a>
+<span class="sourceLineNo">107</span><a id="line.107">        /**</a>
+<span class="sourceLineNo">108</span><a id="line.108">         * Supplies the write lock, usually from the lock object.</a>
+<span class="sourceLineNo">109</span><a id="line.109">         */</a>
+<span class="sourceLineNo">110</span><a id="line.110">        private final Supplier&lt;Lock&gt; writeLockSupplier;</a>
+<span class="sourceLineNo">111</span><a id="line.111"></a>
+<span class="sourceLineNo">112</span><a id="line.112">        /**</a>
+<span class="sourceLineNo">113</span><a id="line.113">         * Constructs an instance.</a>
+<span class="sourceLineNo">114</span><a id="line.114">         *</a>
+<span class="sourceLineNo">115</span><a id="line.115">         * @param object The object to guard.</a>
+<span class="sourceLineNo">116</span><a id="line.116">         * @param lock The locking object.</a>
+<span class="sourceLineNo">117</span><a id="line.117">         * @param readLockSupplier Supplies the read lock, usually from the lock object.</a>
+<span class="sourceLineNo">118</span><a id="line.118">         * @param writeLockSupplier Supplies the write lock, usually from the lock object.</a>
+<span class="sourceLineNo">119</span><a id="line.119">         */</a>
+<span class="sourceLineNo">120</span><a id="line.120">        protected LockVisitor(final O object, final L lock, final Supplier&lt;Lock&gt; readLockSupplier, final Supplier&lt;Lock&gt; writeLockSupplier) {</a>
+<span class="sourceLineNo">121</span><a id="line.121">            this.object = Objects.requireNonNull(object, "object");</a>
+<span class="sourceLineNo">122</span><a id="line.122">            this.lock = Objects.requireNonNull(lock, "lock");</a>
+<span class="sourceLineNo">123</span><a id="line.123">            this.readLockSupplier = Objects.requireNonNull(readLockSupplier, "readLockSupplier");</a>
+<span class="sourceLineNo">124</span><a id="line.124">            this.writeLockSupplier = Objects.requireNonNull(writeLockSupplier, "writeLockSupplier");</a>
+<span class="sourceLineNo">125</span><a id="line.125">        }</a>
+<span class="sourceLineNo">126</span><a id="line.126"></a>
+<span class="sourceLineNo">127</span><a id="line.127">        /**</a>
+<span class="sourceLineNo">128</span><a id="line.128">         * Provides read (shared, non-exclusive) access to the locked (hidden) object. More precisely, what the method</a>
+<span class="sourceLineNo">129</span><a id="line.129">         * will do (in the given order):</a>
+<span class="sourceLineNo">130</span><a id="line.130">         *</a>
+<span class="sourceLineNo">131</span><a id="line.131">         * &lt;ol&gt;</a>
+<span class="sourceLineNo">132</span><a id="line.132">         * &lt;li&gt;Obtain a read (shared) lock on the locked (hidden) object. The current thread may block, until such a</a>
+<span class="sourceLineNo">133</span><a id="line.133">         * lock is granted.&lt;/li&gt;</a>
+<span class="sourceLineNo">134</span><a id="line.134">         * &lt;li&gt;Invokes the given {@link FailableConsumer consumer}, passing the locked object as the parameter.&lt;/li&gt;</a>
+<span class="sourceLineNo">135</span><a id="line.135">         * &lt;li&gt;Release the lock, as soon as the consumers invocation is done. If the invocation results in an error, the</a>
+<span class="sourceLineNo">136</span><a id="line.136">         * lock will be released anyways.&lt;/li&gt;</a>
+<span class="sourceLineNo">137</span><a id="line.137">         * &lt;/ol&gt;</a>
+<span class="sourceLineNo">138</span><a id="line.138">         *</a>
+<span class="sourceLineNo">139</span><a id="line.139">         * @param consumer The consumer, which is being invoked to use the hidden object, which will be passed as the</a>
+<span class="sourceLineNo">140</span><a id="line.140">         *        consumers parameter.</a>
+<span class="sourceLineNo">141</span><a id="line.141">         * @see #acceptWriteLocked(FailableConsumer)</a>
+<span class="sourceLineNo">142</span><a id="line.142">         * @see #applyReadLocked(FailableFunction)</a>
+<span class="sourceLineNo">143</span><a id="line.143">         */</a>
+<span class="sourceLineNo">144</span><a id="line.144">        public void acceptReadLocked(final FailableConsumer&lt;O, ?&gt; consumer) {</a>
+<span class="sourceLineNo">145</span><a id="line.145">            lockAcceptUnlock(readLockSupplier, consumer);</a>
+<span class="sourceLineNo">146</span><a id="line.146">        }</a>
+<span class="sourceLineNo">147</span><a id="line.147"></a>
+<span class="sourceLineNo">148</span><a id="line.148">        /**</a>
+<span class="sourceLineNo">149</span><a id="line.149">         * Provides write (exclusive) access to the locked (hidden) object. More precisely, what the method will do (in</a>
+<span class="sourceLineNo">150</span><a id="line.150">         * the given order):</a>
+<span class="sourceLineNo">151</span><a id="line.151">         *</a>
+<span class="sourceLineNo">152</span><a id="line.152">         * &lt;ol&gt;</a>
+<span class="sourceLineNo">153</span><a id="line.153">         * &lt;li&gt;Obtain a write (shared) lock on the locked (hidden) object. The current thread may block, until such a</a>
+<span class="sourceLineNo">154</span><a id="line.154">         * lock is granted.&lt;/li&gt;</a>
+<span class="sourceLineNo">155</span><a id="line.155">         * &lt;li&gt;Invokes the given {@link FailableConsumer consumer}, passing the locked object as the parameter.&lt;/li&gt;</a>
+<span class="sourceLineNo">156</span><a id="line.156">         * &lt;li&gt;Release the lock, as soon as the consumers invocation is done. If the invocation results in an error, the</a>
+<span class="sourceLineNo">157</span><a id="line.157">         * lock will be released anyways.&lt;/li&gt;</a>
+<span class="sourceLineNo">158</span><a id="line.158">         * &lt;/ol&gt;</a>
+<span class="sourceLineNo">159</span><a id="line.159">         *</a>
+<span class="sourceLineNo">160</span><a id="line.160">         * @param consumer The consumer, which is being invoked to use the hidden object, which will be passed as the</a>
+<span class="sourceLineNo">161</span><a id="line.161">         *        consumers parameter.</a>
+<span class="sourceLineNo">162</span><a id="line.162">         * @see #acceptReadLocked(FailableConsumer)</a>
+<span class="sourceLineNo">163</span><a id="line.163">         * @see #applyWriteLocked(FailableFunction)</a>
+<span class="sourceLineNo">164</span><a id="line.164">         */</a>
+<span class="sourceLineNo">165</span><a id="line.165">        public void acceptWriteLocked(final FailableConsumer&lt;O, ?&gt; consumer) {</a>
+<span class="sourceLineNo">166</span><a id="line.166">            lockAcceptUnlock(writeLockSupplier, consumer);</a>
+<span class="sourceLineNo">167</span><a id="line.167">        }</a>
+<span class="sourceLineNo">168</span><a id="line.168"></a>
+<span class="sourceLineNo">169</span><a id="line.169">        /**</a>
+<span class="sourceLineNo">170</span><a id="line.170">         * Provides read (shared, non-exclusive) access to the locked (hidden) object for the purpose of computing a</a>
+<span class="sourceLineNo">171</span><a id="line.171">         * result object. More precisely, what the method will do (in the given order):</a>
+<span class="sourceLineNo">172</span><a id="line.172">         *</a>
+<span class="sourceLineNo">173</span><a id="line.173">         * &lt;ol&gt;</a>
+<span class="sourceLineNo">174</span><a id="line.174">         * &lt;li&gt;Obtain a read (shared) lock on the locked (hidden) object. The current thread may block, until such a</a>
+<span class="sourceLineNo">175</span><a id="line.175">         * lock is granted.&lt;/li&gt;</a>
+<span class="sourceLineNo">176</span><a id="line.176">         * &lt;li&gt;Invokes the given {@link FailableFunction function}, passing the locked object as the parameter,</a>
+<span class="sourceLineNo">177</span><a id="line.177">         * receiving the functions result.&lt;/li&gt;</a>
+<span class="sourceLineNo">178</span><a id="line.178">         * &lt;li&gt;Release the lock, as soon as the consumers invocation is done. If the invocation results in an error, the</a>
+<span class="sourceLineNo">179</span><a id="line.179">         * lock will be released anyways.&lt;/li&gt;</a>
+<span class="sourceLineNo">180</span><a id="line.180">         * &lt;li&gt;Return the result object, that has been received from the functions invocation.&lt;/li&gt;</a>
+<span class="sourceLineNo">181</span><a id="line.181">         * &lt;/ol&gt;</a>
+<span class="sourceLineNo">182</span><a id="line.182">         * &lt;p&gt;</a>
+<span class="sourceLineNo">183</span><a id="line.183">         * &lt;em&gt;Example:&lt;/em&gt; Consider that the hidden object is a list, and we wish to know the current size of the</a>
+<span class="sourceLineNo">184</span><a id="line.184">         * list. This might be achieved with the following:</a>
+<span class="sourceLineNo">185</span><a id="line.185">         * &lt;/p&gt;</a>
+<span class="sourceLineNo">186</span><a id="line.186">         * &lt;pre&gt;</a>
+<span class="sourceLineNo">187</span><a id="line.187">         * private Lock&amp;lt;List&amp;lt;Object&amp;gt;&amp;gt; listLock;</a>
+<span class="sourceLineNo">188</span><a id="line.188">         *</a>
+<span class="sourceLineNo">189</span><a id="line.189">         * public int getCurrentListSize() {</a>
+<span class="sourceLineNo">190</span><a id="line.190">         *     final Integer sizeInteger = listLock.applyReadLocked((list) -&amp;gt; Integer.valueOf(list.size));</a>
+<span class="sourceLineNo">191</span><a id="line.191">         *     return sizeInteger.intValue();</a>
+<span class="sourceLineNo">192</span><a id="line.192">         * }</a>
+<span class="sourceLineNo">193</span><a id="line.193">         * &lt;/pre&gt;</a>
+<span class="sourceLineNo">194</span><a id="line.194">         *</a>
+<span class="sourceLineNo">195</span><a id="line.195">         * @param &lt;T&gt; The result type (both the functions, and this method's.)</a>
+<span class="sourceLineNo">196</span><a id="line.196">         * @param function The function, which is being invoked to compute the result. The function will receive the</a>
+<span class="sourceLineNo">197</span><a id="line.197">         *        hidden object.</a>
+<span class="sourceLineNo">198</span><a id="line.198">         * @return The result object, which has been returned by the functions invocation.</a>
+<span class="sourceLineNo">199</span><a id="line.199">         * @throws IllegalStateException The result object would be, in fact, the hidden object. This would extend</a>
+<span class="sourceLineNo">200</span><a id="line.200">         *         access to the hidden object beyond this methods lifetime and will therefore be prevented.</a>
+<span class="sourceLineNo">201</span><a id="line.201">         * @see #acceptReadLocked(FailableConsumer)</a>
+<span class="sourceLineNo">202</span><a id="line.202">         * @see #applyWriteLocked(FailableFunction)</a>
+<span class="sourceLineNo">203</span><a id="line.203">         */</a>
+<span class="sourceLineNo">204</span><a id="line.204">        public &lt;T&gt; T applyReadLocked(final FailableFunction&lt;O, T, ?&gt; function) {</a>
+<span class="sourceLineNo">205</span><a id="line.205">            return lockApplyUnlock(readLockSupplier, function);</a>
+<span class="sourceLineNo">206</span><a id="line.206">        }</a>
+<span class="sourceLineNo">207</span><a id="line.207"></a>
+<span class="sourceLineNo">208</span><a id="line.208">        /**</a>
+<span class="sourceLineNo">209</span><a id="line.209">         * Provides write (exclusive) access to the locked (hidden) object for the purpose of computing a result object.</a>
+<span class="sourceLineNo">210</span><a id="line.210">         * More precisely, what the method will do (in the given order):</a>
+<span class="sourceLineNo">211</span><a id="line.211">         *</a>
+<span class="sourceLineNo">212</span><a id="line.212">         * &lt;ol&gt;</a>
+<span class="sourceLineNo">213</span><a id="line.213">         * &lt;li&gt;Obtain a read (shared) lock on the locked (hidden) object. The current thread may block, until such a</a>
+<span class="sourceLineNo">214</span><a id="line.214">         * lock is granted.&lt;/li&gt;</a>
+<span class="sourceLineNo">215</span><a id="line.215">         * &lt;li&gt;Invokes the given {@link FailableFunction function}, passing the locked object as the parameter,</a>
+<span class="sourceLineNo">216</span><a id="line.216">         * receiving the functions result.&lt;/li&gt;</a>
+<span class="sourceLineNo">217</span><a id="line.217">         * &lt;li&gt;Release the lock, as soon as the consumers invocation is done. If the invocation results in an error, the</a>
+<span class="sourceLineNo">218</span><a id="line.218">         * lock will be released anyways.&lt;/li&gt;</a>
+<span class="sourceLineNo">219</span><a id="line.219">         * &lt;li&gt;Return the result object, that has been received from the functions invocation.&lt;/li&gt;</a>
+<span class="sourceLineNo">220</span><a id="line.220">         * &lt;/ol&gt;</a>
+<span class="sourceLineNo">221</span><a id="line.221">         *</a>
+<span class="sourceLineNo">222</span><a id="line.222">         * @param &lt;T&gt; The result type (both the functions, and this method's.)</a>
+<span class="sourceLineNo">223</span><a id="line.223">         * @param function The function, which is being invoked to compute the result. The function will receive the</a>
+<span class="sourceLineNo">224</span><a id="line.224">         *        hidden object.</a>
+<span class="sourceLineNo">225</span><a id="line.225">         * @return The result object, which has been returned by the functions invocation.</a>
+<span class="sourceLineNo">226</span><a id="line.226">         * @throws IllegalStateException The result object would be, in fact, the hidden object. This would extend</a>
+<span class="sourceLineNo">227</span><a id="line.227">         *         access to the hidden object beyond this methods lifetime and will therefore be prevented.</a>
+<span class="sourceLineNo">228</span><a id="line.228">         * @see #acceptReadLocked(FailableConsumer)</a>
+<span class="sourceLineNo">229</span><a id="line.229">         * @see #applyWriteLocked(FailableFunction)</a>
+<span class="sourceLineNo">230</span><a id="line.230">         */</a>
+<span class="sourceLineNo">231</span><a id="line.231">        public &lt;T&gt; T applyWriteLocked(final FailableFunction&lt;O, T, ?&gt; function) {</a>
+<span class="sourceLineNo">232</span><a id="line.232">            return lockApplyUnlock(writeLockSupplier, function);</a>
+<span class="sourceLineNo">233</span><a id="line.233">        }</a>
+<span class="sourceLineNo">234</span><a id="line.234"></a>
+<span class="sourceLineNo">235</span><a id="line.235">        /**</a>
+<span class="sourceLineNo">236</span><a id="line.236">         * Gets the lock.</a>
+<span class="sourceLineNo">237</span><a id="line.237">         *</a>
+<span class="sourceLineNo">238</span><a id="line.238">         * @return the lock.</a>
+<span class="sourceLineNo">239</span><a id="line.239">         */</a>
+<span class="sourceLineNo">240</span><a id="line.240">        public L getLock() {</a>
+<span class="sourceLineNo">241</span><a id="line.241">            return lock;</a>
+<span class="sourceLineNo">242</span><a id="line.242">        }</a>
+<span class="sourceLineNo">243</span><a id="line.243"></a>
+<span class="sourceLineNo">244</span><a id="line.244">        /**</a>
+<span class="sourceLineNo">245</span><a id="line.245">         * Gets the guarded object.</a>
+<span class="sourceLineNo">246</span><a id="line.246">         *</a>
+<span class="sourceLineNo">247</span><a id="line.247">         * @return the object.</a>
+<span class="sourceLineNo">248</span><a id="line.248">         */</a>
+<span class="sourceLineNo">249</span><a id="line.249">        public O getObject() {</a>
+<span class="sourceLineNo">250</span><a id="line.250">            return object;</a>
+<span class="sourceLineNo">251</span><a id="line.251">        }</a>
+<span class="sourceLineNo">252</span><a id="line.252"></a>
+<span class="sourceLineNo">253</span><a id="line.253">        /**</a>
+<span class="sourceLineNo">254</span><a id="line.254">         * This method provides the default implementation for {@link #acceptReadLocked(FailableConsumer)}, and</a>
+<span class="sourceLineNo">255</span><a id="line.255">         * {@link #acceptWriteLocked(FailableConsumer)}.</a>
+<span class="sourceLineNo">256</span><a id="line.256">         *</a>
+<span class="sourceLineNo">257</span><a id="line.257">         * @param lockSupplier A supplier for the lock. (This provides, in fact, a long, because a {@link StampedLock} is used</a>
+<span class="sourceLineNo">258</span><a id="line.258">         *        internally.)</a>
+<span class="sourceLineNo">259</span><a id="line.259">         * @param consumer The consumer, which is to be given access to the locked (hidden) object, which will be passed</a>
+<span class="sourceLineNo">260</span><a id="line.260">         *        as a parameter.</a>
+<span class="sourceLineNo">261</span><a id="line.261">         * @see #acceptReadLocked(FailableConsumer)</a>
+<span class="sourceLineNo">262</span><a id="line.262">         * @see #acceptWriteLocked(FailableConsumer)</a>
+<span class="sourceLineNo">263</span><a id="line.263">         */</a>
+<span class="sourceLineNo">264</span><a id="line.264">        protected void lockAcceptUnlock(final Supplier&lt;Lock&gt; lockSupplier, final FailableConsumer&lt;O, ?&gt; consumer) {</a>
+<span class="sourceLineNo">265</span><a id="line.265">            final Lock lock = lockSupplier.get();</a>
+<span class="sourceLineNo">266</span><a id="line.266">            lock.lock();</a>
+<span class="sourceLineNo">267</span><a id="line.267">            try {</a>
+<span class="sourceLineNo">268</span><a id="line.268">                consumer.accept(object);</a>
+<span class="sourceLineNo">269</span><a id="line.269">            } catch (final Throwable t) {</a>
+<span class="sourceLineNo">270</span><a id="line.270">                throw Failable.rethrow(t);</a>
+<span class="sourceLineNo">271</span><a id="line.271">            } finally {</a>
+<span class="sourceLineNo">272</span><a id="line.272">                lock.unlock();</a>
+<span class="sourceLineNo">273</span><a id="line.273">            }</a>
+<span class="sourceLineNo">274</span><a id="line.274">        }</a>
+<span class="sourceLineNo">275</span><a id="line.275"></a>
+<span class="sourceLineNo">276</span><a id="line.276">        /**</a>
+<span class="sourceLineNo">277</span><a id="line.277">         * This method provides the actual implementation for {@link #applyReadLocked(FailableFunction)}, and</a>
+<span class="sourceLineNo">278</span><a id="line.278">         * {@link #applyWriteLocked(FailableFunction)}.</a>
+<span class="sourceLineNo">279</span><a id="line.279">         *</a>
+<span class="sourceLineNo">280</span><a id="line.280">         * @param &lt;T&gt; The result type (both the functions, and this method's.)</a>
+<span class="sourceLineNo">281</span><a id="line.281">         * @param lockSupplier A supplier for the lock. (This provides, in fact, a long, because a {@link StampedLock} is used</a>
+<span class="sourceLineNo">282</span><a id="line.282">         *        internally.)</a>
+<span class="sourceLineNo">283</span><a id="line.283">         * @param function The function, which is being invoked to compute the result object. This function will receive</a>
+<span class="sourceLineNo">284</span><a id="line.284">         *        the locked (hidden) object as a parameter.</a>
+<span class="sourceLineNo">285</span><a id="line.285">         * @return The result object, which has been returned by the functions invocation.</a>
+<span class="sourceLineNo">286</span><a id="line.286">         * @throws IllegalStateException The result object would be, in fact, the hidden object. This would extend</a>
+<span class="sourceLineNo">287</span><a id="line.287">         *         access to the hidden object beyond this methods lifetime and will therefore be prevented.</a>
+<span class="sourceLineNo">288</span><a id="line.288">         * @see #applyReadLocked(FailableFunction)</a>
+<span class="sourceLineNo">289</span><a id="line.289">         * @see #applyWriteLocked(FailableFunction)</a>
+<span class="sourceLineNo">290</span><a id="line.290">         */</a>
+<span class="sourceLineNo">291</span><a id="line.291">        protected &lt;T&gt; T lockApplyUnlock(final Supplier&lt;Lock&gt; lockSupplier, final FailableFunction&lt;O, T, ?&gt; function) {</a>
+<span class="sourceLineNo">292</span><a id="line.292">            final Lock lock = lockSupplier.get();</a>
+<span class="sourceLineNo">293</span><a id="line.293">            lock.lock();</a>
+<span class="sourceLineNo">294</span><a id="line.294">            try {</a>
+<span class="sourceLineNo">295</span><a id="line.295">                return function.apply(object);</a>
+<span class="sourceLineNo">296</span><a id="line.296">            } catch (final Throwable t) {</a>
+<span class="sourceLineNo">297</span><a id="line.297">                throw Failable.rethrow(t);</a>
+<span class="sourceLineNo">298</span><a id="line.298">            } finally {</a>
+<span class="sourceLineNo">299</span><a id="line.299">                lock.unlock();</a>
+<span class="sourceLineNo">300</span><a id="line.300">            }</a>
+<span class="sourceLineNo">301</span><a id="line.301">        }</a>
+<span class="sourceLineNo">302</span><a id="line.302"></a>
+<span class="sourceLineNo">303</span><a id="line.303">    }</a>
+<span class="sourceLineNo">304</span><a id="line.304"></a>
+<span class="sourceLineNo">305</span><a id="line.305">    /**</a>
+<span class="sourceLineNo">306</span><a id="line.306">     * This class implements a wrapper for a locked (hidden) object, and provides the means to access it. The basic</a>
+<span class="sourceLineNo">307</span><a id="line.307">     * idea, is that the user code forsakes all references to the locked object, using only the wrapper object, and the</a>
+<span class="sourceLineNo">308</span><a id="line.308">     * accessor methods {@link #acceptReadLocked(FailableConsumer)}, {@link #acceptWriteLocked(FailableConsumer)},</a>
+<span class="sourceLineNo">309</span><a id="line.309">     * {@link #applyReadLocked(FailableFunction)}, and {@link #applyWriteLocked(FailableFunction)}. By doing so, the</a>
+<span class="sourceLineNo">310</span><a id="line.310">     * necessary protections are guaranteed.</a>
+<span class="sourceLineNo">311</span><a id="line.311">     *</a>
+<span class="sourceLineNo">312</span><a id="line.312">     * @param &lt;O&gt; The locked (hidden) objects type.</a>
+<span class="sourceLineNo">313</span><a id="line.313">     */</a>
+<span class="sourceLineNo">314</span><a id="line.314">    public static class ReadWriteLockVisitor&lt;O&gt; extends LockVisitor&lt;O, ReadWriteLock&gt; {</a>
+<span class="sourceLineNo">315</span><a id="line.315"></a>
+<span class="sourceLineNo">316</span><a id="line.316">        /**</a>
+<span class="sourceLineNo">317</span><a id="line.317">         * Creates a new instance with the given locked object. This constructor is supposed to be used for subclassing</a>
+<span class="sourceLineNo">318</span><a id="line.318">         * only. In general, it is suggested to use {@link LockingVisitors#stampedLockVisitor(Object)} instead.</a>
+<span class="sourceLineNo">319</span><a id="line.319">         *</a>
+<span class="sourceLineNo">320</span><a id="line.320">         * @param object The locked (hidden) object. The caller is supposed to drop all references to the locked object.</a>
+<span class="sourceLineNo">321</span><a id="line.321">         * @param readWriteLock the lock to use.</a>
+<span class="sourceLineNo">322</span><a id="line.322">         */</a>
+<span class="sourceLineNo">323</span><a id="line.323">        protected ReadWriteLockVisitor(final O object, final ReadWriteLock readWriteLock) {</a>
+<span class="sourceLineNo">324</span><a id="line.324">            super(object, readWriteLock, readWriteLock::readLock, readWriteLock::writeLock);</a>
+<span class="sourceLineNo">325</span><a id="line.325">        }</a>
+<span class="sourceLineNo">326</span><a id="line.326">    }</a>
+<span class="sourceLineNo">327</span><a id="line.327"></a>
+<span class="sourceLineNo">328</span><a id="line.328">    /**</a>
+<span class="sourceLineNo">329</span><a id="line.329">     * This class implements a wrapper for a locked (hidden) object, and provides the means to access it. The basic</a>
+<span class="sourceLineNo">330</span><a id="line.330">     * idea is that the user code forsakes all references to the locked object, using only the wrapper object, and the</a>
+<span class="sourceLineNo">331</span><a id="line.331">     * accessor methods {@link #acceptReadLocked(FailableConsumer)}, {@link #acceptWriteLocked(FailableConsumer)},</a>
+<span class="sourceLineNo">332</span><a id="line.332">     * {@link #applyReadLocked(FailableFunction)}, and {@link #applyWriteLocked(FailableFunction)}. By doing so, the</a>
+<span class="sourceLineNo">333</span><a id="line.333">     * necessary protections are guaranteed.</a>
+<span class="sourceLineNo">334</span><a id="line.334">     *</a>
+<span class="sourceLineNo">335</span><a id="line.335">     * @param &lt;O&gt; The locked (hidden) objects type.</a>
+<span class="sourceLineNo">336</span><a id="line.336">     */</a>
+<span class="sourceLineNo">337</span><a id="line.337">    public static class StampedLockVisitor&lt;O&gt; extends LockVisitor&lt;O, StampedLock&gt; {</a>
+<span class="sourceLineNo">338</span><a id="line.338"></a>
+<span class="sourceLineNo">339</span><a id="line.339">        /**</a>
+<span class="sourceLineNo">340</span><a id="line.340">         * Creates a new instance with the given locked object. This constructor is supposed to be used for subclassing</a>
+<span class="sourceLineNo">341</span><a id="line.341">         * only. In general, it is suggested to use {@link LockingVisitors#stampedLockVisitor(Object)} instead.</a>
+<span class="sourceLineNo">342</span><a id="line.342">         *</a>
+<span class="sourceLineNo">343</span><a id="line.343">         * @param object The locked (hidden) object. The caller is supposed to drop all references to the locked object.</a>
+<span class="sourceLineNo">344</span><a id="line.344">         * @param stampedLock the lock to use.</a>
+<span class="sourceLineNo">345</span><a id="line.345">         */</a>
+<span class="sourceLineNo">346</span><a id="line.346">        protected StampedLockVisitor(final O object, final StampedLock stampedLock) {</a>
+<span class="sourceLineNo">347</span><a id="line.347">            super(object, stampedLock, stampedLock::asReadLock, stampedLock::asWriteLock);</a>
+<span class="sourceLineNo">348</span><a id="line.348">        }</a>
+<span class="sourceLineNo">349</span><a id="line.349">    }</a>
+<span class="sourceLineNo">350</span><a id="line.350"></a>
+<span class="sourceLineNo">351</span><a id="line.351">    /**</a>
+<span class="sourceLineNo">352</span><a id="line.352">     * Creates a new instance of {@link ReadWriteLockVisitor} with the given (hidden) object and lock.</a>
+<span class="sourceLineNo">353</span><a id="line.353">     *</a>
+<span class="sourceLineNo">354</span><a id="line.354">     * @param &lt;O&gt; The locked objects type.</a>
+<span class="sourceLineNo">355</span><a id="line.355">     * @param object The locked (hidden) object.</a>
+<span class="sourceLineNo">356</span><a id="line.356">     * @param readWriteLock The lock to use.</a>
+<span class="sourceLineNo">357</span><a id="line.357">     * @return The created instance, a {@link StampedLockVisitor lock} for the given object.</a>
+<span class="sourceLineNo">358</span><a id="line.358">     * @since 3.13.0</a>
+<span class="sourceLineNo">359</span><a id="line.359">     */</a>
+<span class="sourceLineNo">360</span><a id="line.360">    public static &lt;O&gt; ReadWriteLockVisitor&lt;O&gt; create(final O object, final ReadWriteLock readWriteLock) {</a>
+<span class="sourceLineNo">361</span><a id="line.361">        return new LockingVisitors.ReadWriteLockVisitor&lt;&gt;(object, readWriteLock);</a>
+<span class="sourceLineNo">362</span><a id="line.362">    }</a>
+<span class="sourceLineNo">363</span><a id="line.363"></a>
+<span class="sourceLineNo">364</span><a id="line.364">    /**</a>
+<span class="sourceLineNo">365</span><a id="line.365">     * Creates a new instance of {@link ReadWriteLockVisitor} with the given (hidden) object.</a>
+<span class="sourceLineNo">366</span><a id="line.366">     *</a>
+<span class="sourceLineNo">367</span><a id="line.367">     * @param &lt;O&gt; The locked objects type.</a>
+<span class="sourceLineNo">368</span><a id="line.368">     * @param object The locked (hidden) object.</a>
+<span class="sourceLineNo">369</span><a id="line.369">     * @return The created instance, a {@link StampedLockVisitor lock} for the given object.</a>
+<span class="sourceLineNo">370</span><a id="line.370">     */</a>
+<span class="sourceLineNo">371</span><a id="line.371">    public static &lt;O&gt; ReadWriteLockVisitor&lt;O&gt; reentrantReadWriteLockVisitor(final O object) {</a>
+<span class="sourceLineNo">372</span><a id="line.372">        return create(object, new ReentrantReadWriteLock());</a>
+<span class="sourceLineNo">373</span><a id="line.373">    }</a>
+<span class="sourceLineNo">374</span><a id="line.374"></a>
+<span class="sourceLineNo">375</span><a id="line.375">    /**</a>
+<span class="sourceLineNo">376</span><a id="line.376">     * Creates a new instance of {@link StampedLockVisitor} with the given (hidden) object.</a>
+<span class="sourceLineNo">377</span><a id="line.377">     *</a>
+<span class="sourceLineNo">378</span><a id="line.378">     * @param &lt;O&gt; The locked objects type.</a>
+<span class="sourceLineNo">379</span><a id="line.379">     * @param object The locked (hidden) object.</a>
+<span class="sourceLineNo">380</span><a id="line.380">     * @return The created instance, a {@link StampedLockVisitor lock} for the given object.</a>
+<span class="sourceLineNo">381</span><a id="line.381">     */</a>
+<span class="sourceLineNo">382</span><a id="line.382">    public static &lt;O&gt; StampedLockVisitor&lt;O&gt; stampedLockVisitor(final O object) {</a>
+<span class="sourceLineNo">383</span><a id="line.383">        return new LockingVisitors.StampedLockVisitor&lt;&gt;(object, new StampedLock());</a>
+<span class="sourceLineNo">384</span><a id="line.384">    }</a>
+<span class="sourceLineNo">385</span><a id="line.385"></a>
+<span class="sourceLineNo">386</span><a id="line.386">}</a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</pre>
+</div>
+</main>
+</body>
+</html>

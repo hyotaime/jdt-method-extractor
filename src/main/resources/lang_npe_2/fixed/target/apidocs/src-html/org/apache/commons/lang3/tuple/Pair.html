@@ -1,0 +1,335 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+<title>Source code</title>
+<link rel="stylesheet" type="text/css" href="../../../../../../stylesheet.css" title="Style">
+</head>
+<body>
+<main role="main">
+<div class="sourceContainer">
+<pre><span class="sourceLineNo">001</span><a id="line.1">/*</a>
+<span class="sourceLineNo">002</span><a id="line.2"> * Licensed to the Apache Software Foundation (ASF) under one or more</a>
+<span class="sourceLineNo">003</span><a id="line.3"> * contributor license agreements.  See the NOTICE file distributed with</a>
+<span class="sourceLineNo">004</span><a id="line.4"> * this work for additional information regarding copyright ownership.</a>
+<span class="sourceLineNo">005</span><a id="line.5"> * The ASF licenses this file to You under the Apache License, Version 2.0</a>
+<span class="sourceLineNo">006</span><a id="line.6"> * (the "License"); you may not use this file except in compliance with</a>
+<span class="sourceLineNo">007</span><a id="line.7"> * the License.  You may obtain a copy of the License at</a>
+<span class="sourceLineNo">008</span><a id="line.8"> *</a>
+<span class="sourceLineNo">009</span><a id="line.9"> *      http://www.apache.org/licenses/LICENSE-2.0</a>
+<span class="sourceLineNo">010</span><a id="line.10"> *</a>
+<span class="sourceLineNo">011</span><a id="line.11"> * Unless required by applicable law or agreed to in writing, software</a>
+<span class="sourceLineNo">012</span><a id="line.12"> * distributed under the License is distributed on an "AS IS" BASIS,</a>
+<span class="sourceLineNo">013</span><a id="line.13"> * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</a>
+<span class="sourceLineNo">014</span><a id="line.14"> * See the License for the specific language governing permissions and</a>
+<span class="sourceLineNo">015</span><a id="line.15"> * limitations under the License.</a>
+<span class="sourceLineNo">016</span><a id="line.16"> */</a>
+<span class="sourceLineNo">017</span><a id="line.17">package org.apache.commons.lang3.tuple;</a>
+<span class="sourceLineNo">018</span><a id="line.18"></a>
+<span class="sourceLineNo">019</span><a id="line.19">import java.io.Serializable;</a>
+<span class="sourceLineNo">020</span><a id="line.20">import java.util.Map;</a>
+<span class="sourceLineNo">021</span><a id="line.21">import java.util.Objects;</a>
+<span class="sourceLineNo">022</span><a id="line.22"></a>
+<span class="sourceLineNo">023</span><a id="line.23">import org.apache.commons.lang3.builder.CompareToBuilder;</a>
+<span class="sourceLineNo">024</span><a id="line.24">import org.apache.commons.lang3.function.FailableBiConsumer;</a>
+<span class="sourceLineNo">025</span><a id="line.25">import org.apache.commons.lang3.function.FailableBiFunction;</a>
+<span class="sourceLineNo">026</span><a id="line.26"></a>
+<span class="sourceLineNo">027</span><a id="line.27">/**</a>
+<span class="sourceLineNo">028</span><a id="line.28"> * A pair consisting of two elements.</a>
+<span class="sourceLineNo">029</span><a id="line.29"> *</a>
+<span class="sourceLineNo">030</span><a id="line.30"> * &lt;p&gt;This class is an abstract implementation defining the basic API.</a>
+<span class="sourceLineNo">031</span><a id="line.31"> * It refers to the elements as 'left' and 'right'. It also implements the</a>
+<span class="sourceLineNo">032</span><a id="line.32"> * {@code Map.Entry} interface where the key is 'left' and the value is 'right'.&lt;/p&gt;</a>
+<span class="sourceLineNo">033</span><a id="line.33"> *</a>
+<span class="sourceLineNo">034</span><a id="line.34"> * &lt;p&gt;Subclass implementations may be mutable or immutable.</a>
+<span class="sourceLineNo">035</span><a id="line.35"> * However, there is no restriction on the type of the stored objects that may be stored.</a>
+<span class="sourceLineNo">036</span><a id="line.36"> * If mutable objects are stored in the pair, then the pair itself effectively becomes mutable.&lt;/p&gt;</a>
+<span class="sourceLineNo">037</span><a id="line.37"> *</a>
+<span class="sourceLineNo">038</span><a id="line.38"> * @param &lt;L&gt; the left element type</a>
+<span class="sourceLineNo">039</span><a id="line.39"> * @param &lt;R&gt; the right element type</a>
+<span class="sourceLineNo">040</span><a id="line.40"> *</a>
+<span class="sourceLineNo">041</span><a id="line.41"> * @since 3.0</a>
+<span class="sourceLineNo">042</span><a id="line.42"> */</a>
+<span class="sourceLineNo">043</span><a id="line.43">public abstract class Pair&lt;L, R&gt; implements Map.Entry&lt;L, R&gt;, Comparable&lt;Pair&lt;L, R&gt;&gt;, Serializable {</a>
+<span class="sourceLineNo">044</span><a id="line.44"></a>
+<span class="sourceLineNo">045</span><a id="line.45">    /** Serialization version */</a>
+<span class="sourceLineNo">046</span><a id="line.46">    private static final long serialVersionUID = 4954918890077093841L;</a>
+<span class="sourceLineNo">047</span><a id="line.47"></a>
+<span class="sourceLineNo">048</span><a id="line.48">    /**</a>
+<span class="sourceLineNo">049</span><a id="line.49">     * An empty array.</a>
+<span class="sourceLineNo">050</span><a id="line.50">     * &lt;p&gt;</a>
+<span class="sourceLineNo">051</span><a id="line.51">     * Consider using {@link #emptyArray()} to avoid generics warnings.</a>
+<span class="sourceLineNo">052</span><a id="line.52">     * &lt;/p&gt;</a>
+<span class="sourceLineNo">053</span><a id="line.53">     *</a>
+<span class="sourceLineNo">054</span><a id="line.54">     * @since 3.10.</a>
+<span class="sourceLineNo">055</span><a id="line.55">     */</a>
+<span class="sourceLineNo">056</span><a id="line.56">    public static final Pair&lt;?, ?&gt;[] EMPTY_ARRAY = {};</a>
+<span class="sourceLineNo">057</span><a id="line.57"></a>
+<span class="sourceLineNo">058</span><a id="line.58">    /**</a>
+<span class="sourceLineNo">059</span><a id="line.59">     * Returns the empty array singleton that can be assigned without compiler warning.</a>
+<span class="sourceLineNo">060</span><a id="line.60">     *</a>
+<span class="sourceLineNo">061</span><a id="line.61">     * @param &lt;L&gt; the left element type</a>
+<span class="sourceLineNo">062</span><a id="line.62">     * @param &lt;R&gt; the right element type</a>
+<span class="sourceLineNo">063</span><a id="line.63">     * @return the empty array singleton that can be assigned without compiler warning.</a>
+<span class="sourceLineNo">064</span><a id="line.64">     *</a>
+<span class="sourceLineNo">065</span><a id="line.65">     * @since 3.10.</a>
+<span class="sourceLineNo">066</span><a id="line.66">     */</a>
+<span class="sourceLineNo">067</span><a id="line.67">    @SuppressWarnings("unchecked")</a>
+<span class="sourceLineNo">068</span><a id="line.68">    public static &lt;L, R&gt; Pair&lt;L, R&gt;[] emptyArray() {</a>
+<span class="sourceLineNo">069</span><a id="line.69">        return (Pair&lt;L, R&gt;[]) EMPTY_ARRAY;</a>
+<span class="sourceLineNo">070</span><a id="line.70">    }</a>
+<span class="sourceLineNo">071</span><a id="line.71"></a>
+<span class="sourceLineNo">072</span><a id="line.72">    /**</a>
+<span class="sourceLineNo">073</span><a id="line.73">     * Creates an immutable pair of two objects inferring the generic types.</a>
+<span class="sourceLineNo">074</span><a id="line.74">     *</a>
+<span class="sourceLineNo">075</span><a id="line.75">     * &lt;p&gt;This factory allows the pair to be created using inference to</a>
+<span class="sourceLineNo">076</span><a id="line.76">     * obtain the generic types.&lt;/p&gt;</a>
+<span class="sourceLineNo">077</span><a id="line.77">     *</a>
+<span class="sourceLineNo">078</span><a id="line.78">     * @param &lt;L&gt; the left element type</a>
+<span class="sourceLineNo">079</span><a id="line.79">     * @param &lt;R&gt; the right element type</a>
+<span class="sourceLineNo">080</span><a id="line.80">     * @param left  the left element, may be null</a>
+<span class="sourceLineNo">081</span><a id="line.81">     * @param right  the right element, may be null</a>
+<span class="sourceLineNo">082</span><a id="line.82">     * @return a pair formed from the two parameters, not null</a>
+<span class="sourceLineNo">083</span><a id="line.83">     */</a>
+<span class="sourceLineNo">084</span><a id="line.84">    public static &lt;L, R&gt; Pair&lt;L, R&gt; of(final L left, final R right) {</a>
+<span class="sourceLineNo">085</span><a id="line.85">        return ImmutablePair.of(left, right);</a>
+<span class="sourceLineNo">086</span><a id="line.86">    }</a>
+<span class="sourceLineNo">087</span><a id="line.87"></a>
+<span class="sourceLineNo">088</span><a id="line.88">    /**</a>
+<span class="sourceLineNo">089</span><a id="line.89">     * Creates an immutable pair from a map entry.</a>
+<span class="sourceLineNo">090</span><a id="line.90">     *</a>
+<span class="sourceLineNo">091</span><a id="line.91">     * &lt;p&gt;This factory allows the pair to be created using inference to</a>
+<span class="sourceLineNo">092</span><a id="line.92">     * obtain the generic types.&lt;/p&gt;</a>
+<span class="sourceLineNo">093</span><a id="line.93">     *</a>
+<span class="sourceLineNo">094</span><a id="line.94">     * @param &lt;L&gt; the left element type</a>
+<span class="sourceLineNo">095</span><a id="line.95">     * @param &lt;R&gt; the right element type</a>
+<span class="sourceLineNo">096</span><a id="line.96">     * @param pair the map entry.</a>
+<span class="sourceLineNo">097</span><a id="line.97">     * @return a pair formed from the map entry</a>
+<span class="sourceLineNo">098</span><a id="line.98">     * @since 3.10</a>
+<span class="sourceLineNo">099</span><a id="line.99">     */</a>
+<span class="sourceLineNo">100</span><a id="line.100">    public static &lt;L, R&gt; Pair&lt;L, R&gt; of(final Map.Entry&lt;L, R&gt; pair) {</a>
+<span class="sourceLineNo">101</span><a id="line.101">        return ImmutablePair.of(pair);</a>
+<span class="sourceLineNo">102</span><a id="line.102">    }</a>
+<span class="sourceLineNo">103</span><a id="line.103"></a>
+<span class="sourceLineNo">104</span><a id="line.104">    /**</a>
+<span class="sourceLineNo">105</span><a id="line.105">     * Creates an immutable pair of two non-null objects inferring the generic types.</a>
+<span class="sourceLineNo">106</span><a id="line.106">     *</a>
+<span class="sourceLineNo">107</span><a id="line.107">     * &lt;p&gt;This factory allows the pair to be created using inference to</a>
+<span class="sourceLineNo">108</span><a id="line.108">     * obtain the generic types.&lt;/p&gt;</a>
+<span class="sourceLineNo">109</span><a id="line.109">     *</a>
+<span class="sourceLineNo">110</span><a id="line.110">     * @param &lt;L&gt; the left element type</a>
+<span class="sourceLineNo">111</span><a id="line.111">     * @param &lt;R&gt; the right element type</a>
+<span class="sourceLineNo">112</span><a id="line.112">     * @param left  the left element, may not be null</a>
+<span class="sourceLineNo">113</span><a id="line.113">     * @param right  the right element, may not  be null</a>
+<span class="sourceLineNo">114</span><a id="line.114">     * @return a pair formed from the two parameters, not null</a>
+<span class="sourceLineNo">115</span><a id="line.115">     * @throws NullPointerException if any input is null</a>
+<span class="sourceLineNo">116</span><a id="line.116">     * @since 3.13.0</a>
+<span class="sourceLineNo">117</span><a id="line.117">     */</a>
+<span class="sourceLineNo">118</span><a id="line.118">    public static &lt;L, R&gt; Pair&lt;L, R&gt; ofNonNull(final L left, final R right) {</a>
+<span class="sourceLineNo">119</span><a id="line.119">        return ImmutablePair.ofNonNull(left, right);</a>
+<span class="sourceLineNo">120</span><a id="line.120">    }</a>
+<span class="sourceLineNo">121</span><a id="line.121"></a>
+<span class="sourceLineNo">122</span><a id="line.122">    /**</a>
+<span class="sourceLineNo">123</span><a id="line.123">     * Accepts this key and value as arguments to the given consumer.</a>
+<span class="sourceLineNo">124</span><a id="line.124">     *</a>
+<span class="sourceLineNo">125</span><a id="line.125">     * @param &lt;E&gt; The kind of thrown exception or error.</a>
+<span class="sourceLineNo">126</span><a id="line.126">     * @param consumer the consumer to call.</a>
+<span class="sourceLineNo">127</span><a id="line.127">     * @throws E Thrown when the consumer fails.</a>
+<span class="sourceLineNo">128</span><a id="line.128">     * @since 3.13.0</a>
+<span class="sourceLineNo">129</span><a id="line.129">     */</a>
+<span class="sourceLineNo">130</span><a id="line.130">    public &lt;E extends Throwable&gt; void accept(final FailableBiConsumer&lt;L, R, E&gt; consumer) throws E {</a>
+<span class="sourceLineNo">131</span><a id="line.131">        consumer.accept(getKey(), getValue());</a>
+<span class="sourceLineNo">132</span><a id="line.132">    }</a>
+<span class="sourceLineNo">133</span><a id="line.133"></a>
+<span class="sourceLineNo">134</span><a id="line.134">    /**</a>
+<span class="sourceLineNo">135</span><a id="line.135">     * Applies this key and value as arguments to the given function.</a>
+<span class="sourceLineNo">136</span><a id="line.136">     *</a>
+<span class="sourceLineNo">137</span><a id="line.137">     * @param &lt;V&gt; The function return type.</a>
+<span class="sourceLineNo">138</span><a id="line.138">     * @param &lt;E&gt; The kind of thrown exception or error.</a>
+<span class="sourceLineNo">139</span><a id="line.139">     * @param function the consumer to call.</a>
+<span class="sourceLineNo">140</span><a id="line.140">     * @return the function's return value.</a>
+<span class="sourceLineNo">141</span><a id="line.141">     * @throws E Thrown when the consumer fails.</a>
+<span class="sourceLineNo">142</span><a id="line.142">     * @since 3.13.0</a>
+<span class="sourceLineNo">143</span><a id="line.143">     */</a>
+<span class="sourceLineNo">144</span><a id="line.144">    public &lt;V, E extends Throwable&gt; V apply(final FailableBiFunction&lt;L, R, V, E&gt; function) throws E {</a>
+<span class="sourceLineNo">145</span><a id="line.145">        return function.apply(getKey(), getValue());</a>
+<span class="sourceLineNo">146</span><a id="line.146">    }</a>
+<span class="sourceLineNo">147</span><a id="line.147"></a>
+<span class="sourceLineNo">148</span><a id="line.148">    /**</a>
+<span class="sourceLineNo">149</span><a id="line.149">     * Compares the pair based on the left element followed by the right element.</a>
+<span class="sourceLineNo">150</span><a id="line.150">     * The types must be {@link Comparable}.</a>
+<span class="sourceLineNo">151</span><a id="line.151">     *</a>
+<span class="sourceLineNo">152</span><a id="line.152">     * @param other  the other pair, not null</a>
+<span class="sourceLineNo">153</span><a id="line.153">     * @return negative if this is less, zero if equal, positive if greater</a>
+<span class="sourceLineNo">154</span><a id="line.154">     */</a>
+<span class="sourceLineNo">155</span><a id="line.155">    @Override</a>
+<span class="sourceLineNo">156</span><a id="line.156">    public int compareTo(final Pair&lt;L, R&gt; other) {</a>
+<span class="sourceLineNo">157</span><a id="line.157">      return new CompareToBuilder().append(getLeft(), other.getLeft())</a>
+<span class="sourceLineNo">158</span><a id="line.158">              .append(getRight(), other.getRight()).toComparison();</a>
+<span class="sourceLineNo">159</span><a id="line.159">    }</a>
+<span class="sourceLineNo">160</span><a id="line.160"></a>
+<span class="sourceLineNo">161</span><a id="line.161">    /**</a>
+<span class="sourceLineNo">162</span><a id="line.162">     * Compares this pair to another based on the two elements.</a>
+<span class="sourceLineNo">163</span><a id="line.163">     *</a>
+<span class="sourceLineNo">164</span><a id="line.164">     * @param obj  the object to compare to, null returns false</a>
+<span class="sourceLineNo">165</span><a id="line.165">     * @return true if the elements of the pair are equal</a>
+<span class="sourceLineNo">166</span><a id="line.166">     */</a>
+<span class="sourceLineNo">167</span><a id="line.167">    @Override</a>
+<span class="sourceLineNo">168</span><a id="line.168">    public boolean equals(final Object obj) {</a>
+<span class="sourceLineNo">169</span><a id="line.169">        if (obj == this) {</a>
+<span class="sourceLineNo">170</span><a id="line.170">            return true;</a>
+<span class="sourceLineNo">171</span><a id="line.171">        }</a>
+<span class="sourceLineNo">172</span><a id="line.172">        if (obj instanceof Map.Entry&lt;?, ?&gt;) {</a>
+<span class="sourceLineNo">173</span><a id="line.173">            final Map.Entry&lt;?, ?&gt; other = (Map.Entry&lt;?, ?&gt;) obj;</a>
+<span class="sourceLineNo">174</span><a id="line.174">            return Objects.equals(getKey(), other.getKey())</a>
+<span class="sourceLineNo">175</span><a id="line.175">                    &amp;&amp; Objects.equals(getValue(), other.getValue());</a>
+<span class="sourceLineNo">176</span><a id="line.176">        }</a>
+<span class="sourceLineNo">177</span><a id="line.177">        return false;</a>
+<span class="sourceLineNo">178</span><a id="line.178">    }</a>
+<span class="sourceLineNo">179</span><a id="line.179"></a>
+<span class="sourceLineNo">180</span><a id="line.180">    /**</a>
+<span class="sourceLineNo">181</span><a id="line.181">     * Gets the key from this pair.</a>
+<span class="sourceLineNo">182</span><a id="line.182">     *</a>
+<span class="sourceLineNo">183</span><a id="line.183">     * &lt;p&gt;This method implements the {@code Map.Entry} interface returning the</a>
+<span class="sourceLineNo">184</span><a id="line.184">     * left element as the key.&lt;/p&gt;</a>
+<span class="sourceLineNo">185</span><a id="line.185">     *</a>
+<span class="sourceLineNo">186</span><a id="line.186">     * @return the left element as the key, may be null</a>
+<span class="sourceLineNo">187</span><a id="line.187">     */</a>
+<span class="sourceLineNo">188</span><a id="line.188">    @Override</a>
+<span class="sourceLineNo">189</span><a id="line.189">    public final L getKey() {</a>
+<span class="sourceLineNo">190</span><a id="line.190">        return getLeft();</a>
+<span class="sourceLineNo">191</span><a id="line.191">    }</a>
+<span class="sourceLineNo">192</span><a id="line.192"></a>
+<span class="sourceLineNo">193</span><a id="line.193">    /**</a>
+<span class="sourceLineNo">194</span><a id="line.194">     * Gets the left element from this pair.</a>
+<span class="sourceLineNo">195</span><a id="line.195">     *</a>
+<span class="sourceLineNo">196</span><a id="line.196">     * &lt;p&gt;When treated as a key-value pair, this is the key.&lt;/p&gt;</a>
+<span class="sourceLineNo">197</span><a id="line.197">     *</a>
+<span class="sourceLineNo">198</span><a id="line.198">     * @return the left element, may be null</a>
+<span class="sourceLineNo">199</span><a id="line.199">     */</a>
+<span class="sourceLineNo">200</span><a id="line.200">    public abstract L getLeft();</a>
+<span class="sourceLineNo">201</span><a id="line.201"></a>
+<span class="sourceLineNo">202</span><a id="line.202">    /**</a>
+<span class="sourceLineNo">203</span><a id="line.203">     * Gets the right element from this pair.</a>
+<span class="sourceLineNo">204</span><a id="line.204">     *</a>
+<span class="sourceLineNo">205</span><a id="line.205">     * &lt;p&gt;When treated as a key-value pair, this is the value.&lt;/p&gt;</a>
+<span class="sourceLineNo">206</span><a id="line.206">     *</a>
+<span class="sourceLineNo">207</span><a id="line.207">     * @return the right element, may be null</a>
+<span class="sourceLineNo">208</span><a id="line.208">     */</a>
+<span class="sourceLineNo">209</span><a id="line.209">    public abstract R getRight();</a>
+<span class="sourceLineNo">210</span><a id="line.210"></a>
+<span class="sourceLineNo">211</span><a id="line.211">    /**</a>
+<span class="sourceLineNo">212</span><a id="line.212">     * Gets the value from this pair.</a>
+<span class="sourceLineNo">213</span><a id="line.213">     *</a>
+<span class="sourceLineNo">214</span><a id="line.214">     * &lt;p&gt;This method implements the {@code Map.Entry} interface returning the</a>
+<span class="sourceLineNo">215</span><a id="line.215">     * right element as the value.&lt;/p&gt;</a>
+<span class="sourceLineNo">216</span><a id="line.216">     *</a>
+<span class="sourceLineNo">217</span><a id="line.217">     * @return the right element as the value, may be null</a>
+<span class="sourceLineNo">218</span><a id="line.218">     */</a>
+<span class="sourceLineNo">219</span><a id="line.219">    @Override</a>
+<span class="sourceLineNo">220</span><a id="line.220">    public R getValue() {</a>
+<span class="sourceLineNo">221</span><a id="line.221">        return getRight();</a>
+<span class="sourceLineNo">222</span><a id="line.222">    }</a>
+<span class="sourceLineNo">223</span><a id="line.223"></a>
+<span class="sourceLineNo">224</span><a id="line.224">    /**</a>
+<span class="sourceLineNo">225</span><a id="line.225">     * Returns a suitable hash code.</a>
+<span class="sourceLineNo">226</span><a id="line.226">     * The hash code follows the definition in {@code Map.Entry}.</a>
+<span class="sourceLineNo">227</span><a id="line.227">     *</a>
+<span class="sourceLineNo">228</span><a id="line.228">     * @return the hash code</a>
+<span class="sourceLineNo">229</span><a id="line.229">     */</a>
+<span class="sourceLineNo">230</span><a id="line.230">    @Override</a>
+<span class="sourceLineNo">231</span><a id="line.231">    public int hashCode() {</a>
+<span class="sourceLineNo">232</span><a id="line.232">        // see Map.Entry API specification</a>
+<span class="sourceLineNo">233</span><a id="line.233">        return Objects.hashCode(getKey()) ^ Objects.hashCode(getValue());</a>
+<span class="sourceLineNo">234</span><a id="line.234">    }</a>
+<span class="sourceLineNo">235</span><a id="line.235"></a>
+<span class="sourceLineNo">236</span><a id="line.236">    /**</a>
+<span class="sourceLineNo">237</span><a id="line.237">     * Returns a String representation of this pair using the format {@code ($left,$right)}.</a>
+<span class="sourceLineNo">238</span><a id="line.238">     *</a>
+<span class="sourceLineNo">239</span><a id="line.239">     * @return a string describing this object, not null</a>
+<span class="sourceLineNo">240</span><a id="line.240">     */</a>
+<span class="sourceLineNo">241</span><a id="line.241">    @Override</a>
+<span class="sourceLineNo">242</span><a id="line.242">    public String toString() {</a>
+<span class="sourceLineNo">243</span><a id="line.243">        return "(" + getLeft() + ',' + getRight() + ')';</a>
+<span class="sourceLineNo">244</span><a id="line.244">    }</a>
+<span class="sourceLineNo">245</span><a id="line.245"></a>
+<span class="sourceLineNo">246</span><a id="line.246">    /**</a>
+<span class="sourceLineNo">247</span><a id="line.247">     * Formats the receiver using the given format.</a>
+<span class="sourceLineNo">248</span><a id="line.248">     *</a>
+<span class="sourceLineNo">249</span><a id="line.249">     * &lt;p&gt;This uses {@link java.util.Formattable} to perform the formatting. Two variables may</a>
+<span class="sourceLineNo">250</span><a id="line.250">     * be used to embed the left and right elements. Use {@code %1$s} for the left</a>
+<span class="sourceLineNo">251</span><a id="line.251">     * element (key) and {@code %2$s} for the right element (value).</a>
+<span class="sourceLineNo">252</span><a id="line.252">     * The default format used by {@code toString()} is {@code (%1$s,%2$s)}.&lt;/p&gt;</a>
+<span class="sourceLineNo">253</span><a id="line.253">     *</a>
+<span class="sourceLineNo">254</span><a id="line.254">     * @param format  the format string, optionally containing {@code %1$s} and {@code %2$s}, not null</a>
+<span class="sourceLineNo">255</span><a id="line.255">     * @return the formatted string, not null</a>
+<span class="sourceLineNo">256</span><a id="line.256">     */</a>
+<span class="sourceLineNo">257</span><a id="line.257">    public String toString(final String format) {</a>
+<span class="sourceLineNo">258</span><a id="line.258">        return String.format(format, getLeft(), getRight());</a>
+<span class="sourceLineNo">259</span><a id="line.259">    }</a>
+<span class="sourceLineNo">260</span><a id="line.260"></a>
+<span class="sourceLineNo">261</span><a id="line.261">}</a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</pre>
+</div>
+</main>
+</body>
+</html>

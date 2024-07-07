@@ -1,0 +1,29 @@
+Faulty Code:
+```
+%s
+```
+Task Description:
+```
+%s
+```
+
+Test Results:
+The provided code is producing incorrect results. For examples:
+- Running the function as follows %s  generate a `NullPointerException` in line %s
+```
+%s
+```
+
+
+Stack Traces Fault Localization Techniques Results:
+We have used Stack Traces to identify potentially faulty lines. Here are the results of Stack Traces suspicious lines sorted in descending order of the score:
+```
+%s
+```, StackTraces
+...
+Analyze the provided code and utilize task description, test results, and StackTraces techniques results to help in identifying potentially faulty lines. Provide the results following this JSON template:
+```json
+{{
+  "faultLoc": [    {{      "faultyLine": (indicating the line number of the suspicious code),      "code": (displaying the actual code),      "explanation": (step by step reasoning on why this location is considered potentially faulty)    }},    ...  ]
+}}
+```
