@@ -1,0 +1,178 @@
+{
+  "classes" : [ {
+    "classId" : "localized_formats1",
+    "probe_ranges" : [ {
+      "startLine" : 359,
+      "endLine" : 362,
+      "orgLineStart" : 359,
+      "orgLineEnd" : 359,
+      "probedLineEnd" : 362,
+      "offset" : 3
+    } ]
+  }, {
+    "classId" : "math_illegal_argument_exception1",
+    "probe_ranges" : [ {
+      "startLine" : 46,
+      "endLine" : 51,
+      "orgLineStart" : 46,
+      "orgLineEnd" : 46,
+      "probedLineEnd" : 51,
+      "offset" : 5
+    } ]
+  }, {
+    "classId" : "math_illegal_number_exception1",
+    "probe_ranges" : [ {
+      "startLine" : 47,
+      "endLine" : 50,
+      "orgLineStart" : 47,
+      "orgLineEnd" : 47,
+      "probedLineEnd" : 50,
+      "offset" : 3
+    } ]
+  }, {
+    "classId" : "arg_utils1",
+    "probe_ranges" : [ {
+      "startLine" : 43,
+      "endLine" : 47,
+      "orgLineStart" : 43,
+      "orgLineEnd" : 53,
+      "probedLineEnd" : 76,
+      "offset" : 23
+    }, {
+      "startLine" : 48,
+      "endLine" : 51,
+      "orgLineStart" : 44,
+      "orgLineEnd" : 52,
+      "probedLineEnd" : 75,
+      "offset" : 23
+    }, {
+      "startLine" : 52,
+      "endLine" : 56,
+      "orgLineStart" : 45,
+      "orgLineEnd" : 51,
+      "probedLineEnd" : 74,
+      "offset" : 23
+    }, {
+      "startLine" : 57,
+      "endLine" : 61,
+      "orgLineStart" : 46,
+      "orgLineEnd" : 48,
+      "probedLineEnd" : 67,
+      "offset" : 19
+    }, {
+      "startLine" : 62,
+      "endLine" : 66,
+      "orgLineStart" : 47,
+      "orgLineEnd" : 47,
+      "probedLineEnd" : 66,
+      "offset" : 19
+    }, {
+      "startLine" : 69,
+      "endLine" : 73,
+      "orgLineStart" : 50,
+      "orgLineEnd" : 50,
+      "probedLineEnd" : 73,
+      "offset" : 23
+    }, {
+      "startLine" : 77,
+      "endLine" : 81,
+      "orgLineStart" : 54,
+      "orgLineEnd" : 54,
+      "probedLineEnd" : 81,
+      "offset" : 27
+    } ]
+  }, {
+    "classId" : "dimension_mismatch_exception1",
+    "probe_ranges" : [ {
+      "startLine" : 45,
+      "endLine" : 48,
+      "orgLineStart" : 45,
+      "orgLineEnd" : 45,
+      "probedLineEnd" : 48,
+      "offset" : 3
+    } ]
+  }, {
+    "classId" : "exception_context1",
+    "probe_ranges" : [ {
+      "startLine" : 65,
+      "endLine" : 68,
+      "orgLineStart" : 65,
+      "orgLineEnd" : 65,
+      "probedLineEnd" : 68,
+      "offset" : 3
+    }, {
+      "startLine" : 90,
+      "endLine" : 94,
+      "orgLineStart" : 87,
+      "orgLineEnd" : 87,
+      "probedLineEnd" : 94,
+      "offset" : 7
+    }, {
+      "startLine" : 95,
+      "endLine" : 100,
+      "orgLineStart" : 88,
+      "orgLineEnd" : 88,
+      "probedLineEnd" : 100,
+      "offset" : 12
+    } ]
+  }, {
+    "classId" : "math_utils1",
+    "probe_ranges" : [ {
+      "startLine" : 2294,
+      "endLine" : 2299,
+      "orgLineStart" : 2294,
+      "orgLineEnd" : 2294,
+      "probedLineEnd" : 2299,
+      "offset" : 5
+    }, {
+      "startLine" : 2315,
+      "endLine" : 2320,
+      "orgLineStart" : 2310,
+      "orgLineEnd" : 2313,
+      "probedLineEnd" : 2322,
+      "offset" : 9
+    }, {
+      "startLine" : 2324,
+      "endLine" : 2328,
+      "orgLineStart" : 2315,
+      "orgLineEnd" : 2315,
+      "probedLineEnd" : 2328,
+      "offset" : 13
+    }, {
+      "startLine" : 2332,
+      "endLine" : 2336,
+      "orgLineStart" : 2319,
+      "orgLineEnd" : 2319,
+      "probedLineEnd" : 2336,
+      "offset" : 17
+    }, {
+      "startLine" : 2338,
+      "endLine" : 2341,
+      "orgLineStart" : 2321,
+      "orgLineEnd" : 2321,
+      "probedLineEnd" : 2341,
+      "offset" : 20
+    }, {
+      "startLine" : 2343,
+      "endLine" : 2348,
+      "orgLineStart" : 2323,
+      "orgLineEnd" : 2323,
+      "probedLineEnd" : 2348,
+      "offset" : 25
+    }, {
+      "startLine" : 2349,
+      "endLine" : 2355,
+      "orgLineStart" : 2324,
+      "orgLineEnd" : 2326,
+      "probedLineEnd" : 2362,
+      "offset" : 36
+    }, {
+      "startLine" : 2356,
+      "endLine" : 2361,
+      "orgLineStart" : 2325,
+      "orgLineEnd" : 2325,
+      "probedLineEnd" : 2361,
+      "offset" : 36
+    } ]
+  } ]
+}

@@ -1,0 +1,132 @@
+{
+  "npe.traces" : [ {
+    "test.class" : "org.apache.commons.math.util.MathUtilsTest",
+    "test.method" : "testSortInPlaceFaliures",
+    "traces" : [ {
+      "class" : "org.apache.commons.math.util.MathUtils",
+      "method" : "sortInPlace",
+      "line" : 2324,
+      "is_target" : true
+    }, {
+      "class" : "org.apache.commons.math.util.MathUtils",
+      "method" : "sortInPlace",
+      "line" : 2294,
+      "is_target" : true
+    }, {
+      "class" : "org.apache.commons.math.util.MathUtilsTest",
+      "method" : "testSortInPlaceFaliures",
+      "line" : 1806,
+      "is_target" : true
+    }, {
+      "class" : "jdk.internal.reflect.NativeMethodAccessorImpl",
+      "method" : "invoke0",
+      "line" : -2,
+      "is_target" : false
+    }, {
+      "class" : "jdk.internal.reflect.NativeMethodAccessorImpl",
+      "method" : "invoke",
+      "line" : 77,
+      "is_target" : false
+    }, {
+      "class" : "jdk.internal.reflect.DelegatingMethodAccessorImpl",
+      "method" : "invoke",
+      "line" : 43,
+      "is_target" : false
+    }, {
+      "class" : "java.lang.reflect.Method",
+      "method" : "invoke",
+      "line" : 568,
+      "is_target" : false
+    }, {
+      "class" : "org.junit.runners.model.FrameworkMethod$1",
+      "method" : "runReflectiveCall",
+      "line" : 59,
+      "is_target" : false
+    }, {
+      "class" : "org.junit.internal.runners.model.ReflectiveCallable",
+      "method" : "run",
+      "line" : 12,
+      "is_target" : false
+    }, {
+      "class" : "org.junit.runners.model.FrameworkMethod",
+      "method" : "invokeExplosively",
+      "line" : 56,
+      "is_target" : false
+    }, {
+      "class" : "org.junit.internal.runners.statements.InvokeMethod",
+      "method" : "evaluate",
+      "line" : 17,
+      "is_target" : false
+    }, {
+      "class" : "org.junit.runners.ParentRunner$3",
+      "method" : "evaluate",
+      "line" : 306,
+      "is_target" : false
+    }, {
+      "class" : "org.junit.runners.BlockJUnit4ClassRunner$1",
+      "method" : "evaluate",
+      "line" : 100,
+      "is_target" : false
+    }, {
+      "class" : "org.junit.runners.ParentRunner",
+      "method" : "runLeaf",
+      "line" : 366,
+      "is_target" : false
+    }, {
+      "class" : "org.junit.runners.BlockJUnit4ClassRunner",
+      "method" : "runChild",
+      "line" : 103,
+      "is_target" : false
+    }, {
+      "class" : "org.junit.runners.BlockJUnit4ClassRunner",
+      "method" : "runChild",
+      "line" : 63,
+      "is_target" : false
+    }, {
+      "class" : "org.junit.runners.ParentRunner$4",
+      "method" : "run",
+      "line" : 331,
+      "is_target" : false
+    }, {
+      "class" : "org.junit.runners.ParentRunner$1",
+      "method" : "schedule",
+      "line" : 79,
+      "is_target" : false
+    }, {
+      "class" : "org.junit.runners.ParentRunner",
+      "method" : "runChildren",
+      "line" : 329,
+      "is_target" : false
+    }, {
+      "class" : "org.junit.runners.ParentRunner",
+      "method" : "access$100",
+      "line" : 66,
+      "is_target" : false
+    }, {
+      "class" : "org.junit.runners.ParentRunner$2",
+      "method" : "evaluate",
+      "line" : 293,
+      "is_target" : false
+    }, {
+      "class" : "org.junit.runners.ParentRunner$3",
+      "method" : "evaluate",
+      "line" : 306,
+      "is_target" : false
+    }, {
+      "class" : "org.junit.runners.ParentRunner",
+      "method" : "run",
+      "line" : 413,
+      "is_target" : false
+    }, {
+      "class" : "org.junit.runner.JUnitCore",
+      "method" : "run",
+      "line" : 137,
+      "is_target" : false
+    }, {
+      "class" : "kr.ac.seoultech.selab.logicfl.coverage.JUnit4TestRunner",
+      "method" : "main",
+      "line" : 33,
+      "is_target" : false
+    } ]
+  } ]
+}

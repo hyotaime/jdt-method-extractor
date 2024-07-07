@@ -1,0 +1,11 @@
+<project name="maven-antrun-" default="main"  >
+<target name="main">
+ <copy todir="/home/jwsong/LogicFL/repos/commons-math/target/apidocs/META-INF">
+  <fileset dir="/home/jwsong/LogicFL/repos/commons-math">
+   <include name="LICENSE.txt"/>
+   <include name="NOTICE.txt"/>
+  </fileset>
+ </copy>
+</target>
+
+</project>
