@@ -1,0 +1,14 @@
+[
+    {
+        "snippet": "/** \n * Converts the given URLClassLoader to a String in the format  {@code \"URLClassLoader.toString() + [URL1, URL2, ...]\"}.\n * @param classLoader to URLClassLoader to convert.\n * @return the formatted string.\n */\npublic static String toString(final URLClassLoader classLoader){\n  return classLoader + Arrays.toString(classLoader.getURLs());\n}\n",
+        "method": "toString",
+        "line": 77,
+        "class": "org.apache.commons.lang3.ClassLoaderUtils"
+    },
+    {
+        "snippet": "/** \n * Converts the given class loader to a String calling  {@link #toString(URLClassLoader)}.\n * @param classLoader to URLClassLoader to convert.\n * @return the formatted string.\n */\npublic static String toString(final ClassLoader classLoader){\n  if (classLoader instanceof URLClassLoader) {\n    return toString((URLClassLoader)classLoader);\n  }\n  return classLoader.toString();\n}\n",
+        "method": "toString",
+        "line": 67,
+        "class": "org.apache.commons.lang3.ClassLoaderUtils"
+    }
+]

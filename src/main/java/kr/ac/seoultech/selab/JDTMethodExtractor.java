@@ -1,19 +1,27 @@
 package kr.ac.seoultech.selab;
 
 import org.eclipse.jdt.core.dom.*;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import java.nio.file.StandardOpenOption;
+
 
 public class JDTMethodExtractor {
 
+    private static String bugName = "";
+
     public static void main(String[] args) {
 
+        bugName = "math_npe_1";
+
         /* ConfigReader를 사용하여 설정 파일을 읽음 */
-        String bugName = "Chart-14";
         ConfigReader configReader = new ConfigReader(bugName + "/config.properties");
         String baseDir = configReader.getProperty("base.dir");
 //        서버가 아닌 로컬에서 실행하기때문에 base.dir를 현재 테스트에 사용 불가
@@ -92,7 +100,41 @@ public class JDTMethodExtractor {
                     int endLine = cu.getLineNumber(node.getStartPosition() + node.getLength());
                     if (startLine <= lineNumber && lineNumber <= endLine) {
                         System.out.println("Class: " + className + ", Method: " + methodName + ", Line: " + lineNumber);
-                        System.out.println(node.toString());
+                        System.out.println(node);
+                        // JSON 객체 생성
+                        JSONObject jsonObject = new JSONObject();
+                        jsonObject.put("class", className);
+                        jsonObject.put("method", methodName);
+                        jsonObject.put("line", lineNumber);
+                        jsonObject.put("snippet", node.toString());
+                        // 파일 경로 설정
+                        String dirPath = "rst";
+                        String filePath = dirPath + "/" + bugName + ".json";
+                        Path path = Paths.get(filePath);
+                        JSONArray jsonArray = new JSONArray();
+                        // 디렉토리 생성
+                        try {
+                            Files.createDirectories(Paths.get(dirPath));
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        // 파일이 존재하는 경우 기존 내용을 읽어들임
+                        if (Files.exists(path)) {
+                            try {
+                                String content = new String(Files.readAllBytes(path));
+                                jsonArray = new JSONArray(content);
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        // 새로운 JSON 객체를 배열에 추가
+                        jsonArray.put(jsonObject);
+                        // JSON 배열을 파일에 기록
+                        try {
+                            Files.write(path, jsonArray.toString(4).getBytes(), StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                     }
                 }
                 return super.visit(node);
