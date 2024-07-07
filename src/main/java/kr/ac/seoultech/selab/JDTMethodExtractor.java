@@ -4,6 +4,7 @@ import org.eclipse.jdt.core.dom.*;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.text.MessageFormat;
@@ -17,7 +18,7 @@ public class JDTMethodExtractor {
         PathAssembler pathAssembler = new PathAssembler();
         ClassLoader classLoader = JDTMethodExtractor.class.getClassLoader();
 
-        for (String path : pathAssembler.googleSheet) { //여기만 바꿔끼우기
+        for (String path : pathAssembler.defects4j) { //여기만 바꿔끼우기
             List<StringBuilder> templateArgsList = new ArrayList<>();
             Map<String, String> pathMap = pathAssembler.assembler(path);
             String jsonFilePath = pathMap.get("jsonFilePath");
@@ -104,10 +105,10 @@ public class JDTMethodExtractor {
         System.out.println("Processing file: " + filePath);
         try {
             String source = new String(Files.readAllBytes(Paths.get(filePath)));
-            if(index==1) {
+            if(index==0) {
                 return extractMethodCode(source, testDTO.getTestClass(), testDTO.getTestMethod(), testDTO.getTestLine());
             }
-            else if(index==2){
+            else if(index==1){
                 return extractMethodJavadoc(source, testDTO.getTestClass(), testDTO.getTestMethod(), testDTO.getTestLine());
             }
             else{
@@ -146,32 +147,6 @@ public class JDTMethodExtractor {
         return methodCode.toString();
     }
 
-/*    public static String extractMethodLine(String source, String className, String methodName, int lineNumber) {
-        StringBuilder methodLine = new StringBuilder();
-        ASTParser parser = ASTParser.newParser(AST.JLS8);
-        parser.setSource(source.toCharArray());
-        parser.setKind(ASTParser.K_COMPILATION_UNIT);
-
-        CompilationUnit cu = (CompilationUnit) parser.createAST(null);
-        cu.accept(new ASTVisitor() {
-            @Override
-            public boolean visit(MethodDeclaration node) {
-                if (node.getName().getIdentifier().equals(methodName)) {
-                    int startLine = cu.getLineNumber(node.getStartPosition());
-                    int endLine = cu.getLineNumber(node.getStartPosition() + node.getLength());
-                    if (startLine <= lineNumber && lineNumber <= endLine) {
-                        // Get the specific line from the source code
-                        int lineStartPosition = cu.getPosition(lineNumber, 0);
-                        int lineEndPosition = cu.getPosition(lineNumber, source.length());
-                        methodLine.append(source, lineStartPosition, lineEndPosition).append("\n");
-                    }
-                }
-                return super.visit(node);
-            }
-        });
-
-        return methodLine.toString();
-    }*/
 
     public static String extractMethodLine(String source, String className, String methodName, int lineNumber) {
         StringBuilder methodLine = new StringBuilder();
@@ -241,10 +216,17 @@ public class JDTMethodExtractor {
     }
 
     public static String readStackTraces(ClassLoader classLoader, String path) throws IOException {
-        File rootDir = new File(classLoader.getResource(path).getFile());
-        String absoluteStackTracesRootPath = rootDir.getAbsolutePath();
-        String stackTraces = new String(Files.readAllBytes(Paths.get(absoluteStackTracesRootPath)));
-        return stackTraces;
+        URL resource = classLoader.getResource(path); //defect4J에서 Stack Traces 저장 파일 없어서 파일 없을때 예외처리
+        if(resource!=null){
+            File rootDir = new File(resource.getFile());
+            String absoluteStackTracesRootPath = rootDir.getAbsolutePath();
+            String stackTraces = new String(Files.readAllBytes(Paths.get(absoluteStackTracesRootPath)));
+            return stackTraces;
+        }
+        else{
+            return "Stack Traces Path Wrong";
+        }
+
     }
 
 
