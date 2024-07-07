@@ -1,0 +1,357 @@
+{
+  "npe.traces" : [ {
+    "test.class" : "org.apache.commons.lang3.mutable.MutableObjectTest",
+    "test.method" : "testEquals",
+    "traces" : [ {
+      "class" : "org.apache.commons.lang3.mutable.MutableObject",
+      "method" : "equals",
+      "line" : 96,
+      "is_target" : true
+    }, {
+      "class" : "org.junit.jupiter.api.AssertionUtils",
+      "method" : "objectsAreEqual",
+      "line" : 110,
+      "is_target" : false
+    }, {
+      "class" : "org.junit.jupiter.api.AssertEquals",
+      "method" : "assertEquals",
+      "line" : 181,
+      "is_target" : false
+    }, {
+      "class" : "org.junit.jupiter.api.AssertEquals",
+      "method" : "assertEquals",
+      "line" : 177,
+      "is_target" : false
+    }, {
+      "class" : "org.junit.jupiter.api.Assertions",
+      "method" : "assertEquals",
+      "line" : 1142,
+      "is_target" : false
+    }, {
+      "class" : "org.apache.commons.lang3.mutable.MutableObjectTest",
+      "method" : "testEquals",
+      "line" : 62,
+      "is_target" : true
+    }, {
+      "class" : "jdk.internal.reflect.NativeMethodAccessorImpl",
+      "method" : "invoke0",
+      "line" : -2,
+      "is_target" : false
+    }, {
+      "class" : "jdk.internal.reflect.NativeMethodAccessorImpl",
+      "method" : "invoke",
+      "line" : 77,
+      "is_target" : false
+    }, {
+      "class" : "jdk.internal.reflect.DelegatingMethodAccessorImpl",
+      "method" : "invoke",
+      "line" : 43,
+      "is_target" : false
+    }, {
+      "class" : "java.lang.reflect.Method",
+      "method" : "invoke",
+      "line" : 568,
+      "is_target" : false
+    }, {
+      "class" : "org.junit.platform.commons.util.ReflectionUtils",
+      "method" : "invokeMethod",
+      "line" : 727,
+      "is_target" : false
+    }, {
+      "class" : "org.junit.jupiter.engine.execution.MethodInvocation",
+      "method" : "proceed",
+      "line" : 60,
+      "is_target" : false
+    }, {
+      "class" : "org.junit.jupiter.engine.execution.InvocationInterceptorChain$ValidatingInvocation",
+      "method" : "proceed",
+      "line" : 131,
+      "is_target" : false
+    }, {
+      "class" : "org.junit.jupiter.engine.extension.TimeoutExtension",
+      "method" : "intercept",
+      "line" : 156,
+      "is_target" : false
+    }, {
+      "class" : "org.junit.jupiter.engine.extension.TimeoutExtension",
+      "method" : "interceptTestableMethod",
+      "line" : 147,
+      "is_target" : false
+    }, {
+      "class" : "org.junit.jupiter.engine.extension.TimeoutExtension",
+      "method" : "interceptTestMethod",
+      "line" : 86,
+      "is_target" : false
+    }, {
+      "class" : "org.junit.jupiter.engine.execution.InterceptingExecutableInvoker$ReflectiveInterceptorCall",
+      "method" : "lambda$ofVoidMethod$0",
+      "line" : 103,
+      "is_target" : false
+    }, {
+      "class" : "org.junit.jupiter.engine.execution.InterceptingExecutableInvoker",
+      "method" : "lambda$invoke$0",
+      "line" : 93,
+      "is_target" : false
+    }, {
+      "class" : "org.junit.jupiter.engine.execution.InvocationInterceptorChain$InterceptedInvocation",
+      "method" : "proceed",
+      "line" : 106,
+      "is_target" : false
+    }, {
+      "class" : "org.junit.jupiter.engine.execution.InvocationInterceptorChain",
+      "method" : "proceed",
+      "line" : 64,
+      "is_target" : false
+    }, {
+      "class" : "org.junit.jupiter.engine.execution.InvocationInterceptorChain",
+      "method" : "chainAndInvoke",
+      "line" : 45,
+      "is_target" : false
+    }, {
+      "class" : "org.junit.jupiter.engine.execution.InvocationInterceptorChain",
+      "method" : "invoke",
+      "line" : 37,
+      "is_target" : false
+    }, {
+      "class" : "org.junit.jupiter.engine.execution.InterceptingExecutableInvoker",
+      "method" : "invoke",
+      "line" : 92,
+      "is_target" : false
+    }, {
+      "class" : "org.junit.jupiter.engine.execution.InterceptingExecutableInvoker",
+      "method" : "invoke",
+      "line" : 86,
+      "is_target" : false
+    }, {
+      "class" : "org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor",
+      "method" : "lambda$invokeTestMethod$7",
+      "line" : 217,
+      "is_target" : false
+    }, {
+      "class" : "org.junit.platform.engine.support.hierarchical.ThrowableCollector",
+      "method" : "execute",
+      "line" : 73,
+      "is_target" : false
+    }, {
+      "class" : "org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor",
+      "method" : "invokeTestMethod",
+      "line" : 213,
+      "is_target" : false
+    }, {
+      "class" : "org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor",
+      "method" : "execute",
+      "line" : 138,
+      "is_target" : false
+    }, {
+      "class" : "org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor",
+      "method" : "execute",
+      "line" : 68,
+      "is_target" : false
+    }, {
+      "class" : "org.junit.platform.engine.support.hierarchical.NodeTestTask",
+      "method" : "lambda$executeRecursively$6",
+      "line" : 151,
+      "is_target" : false
+    }, {
+      "class" : "org.junit.platform.engine.support.hierarchical.ThrowableCollector",
+      "method" : "execute",
+      "line" : 73,
+      "is_target" : false
+    }, {
+      "class" : "org.junit.platform.engine.support.hierarchical.NodeTestTask",
+      "method" : "lambda$executeRecursively$8",
+      "line" : 141,
+      "is_target" : false
+    }, {
+      "class" : "org.junit.platform.engine.support.hierarchical.Node",
+      "method" : "around",
+      "line" : 137,
+      "is_target" : false
+    }, {
+      "class" : "org.junit.platform.engine.support.hierarchical.NodeTestTask",
+      "method" : "lambda$executeRecursively$9",
+      "line" : 139,
+      "is_target" : false
+    }, {
+      "class" : "org.junit.platform.engine.support.hierarchical.ThrowableCollector",
+      "method" : "execute",
+      "line" : 73,
+      "is_target" : false
+    }, {
+      "class" : "org.junit.platform.engine.support.hierarchical.NodeTestTask",
+      "method" : "executeRecursively",
+      "line" : 138,
+      "is_target" : false
+    }, {
+      "class" : "org.junit.platform.engine.support.hierarchical.NodeTestTask",
+      "method" : "execute",
+      "line" : 95,
+      "is_target" : false
+    }, {
+      "class" : "java.util.ArrayList",
+      "method" : "forEach",
+      "line" : 1511,
+      "is_target" : false
+    }, {
+      "class" : "org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService",
+      "method" : "invokeAll",
+      "line" : 41,
+      "is_target" : false
+    }, {
+      "class" : "org.junit.platform.engine.support.hierarchical.NodeTestTask",
+      "method" : "lambda$executeRecursively$6",
+      "line" : 155,
+      "is_target" : false
+    }, {
+      "class" : "org.junit.platform.engine.support.hierarchical.ThrowableCollector",
+      "method" : "execute",
+      "line" : 73,
+      "is_target" : false
+    }, {
+      "class" : "org.junit.platform.engine.support.hierarchical.NodeTestTask",
+      "method" : "lambda$executeRecursively$8",
+      "line" : 141,
+      "is_target" : false
+    }, {
+      "class" : "org.junit.platform.engine.support.hierarchical.Node",
+      "method" : "around",
+      "line" : 137,
+      "is_target" : false
+    }, {
+      "class" : "org.junit.platform.engine.support.hierarchical.NodeTestTask",
+      "method" : "lambda$executeRecursively$9",
+      "line" : 139,
+      "is_target" : false
+    }, {
+      "class" : "org.junit.platform.engine.support.hierarchical.ThrowableCollector",
+      "method" : "execute",
+      "line" : 73,
+      "is_target" : false
+    }, {
+      "class" : "org.junit.platform.engine.support.hierarchical.NodeTestTask",
+      "method" : "executeRecursively",
+      "line" : 138,
+      "is_target" : false
+    }, {
+      "class" : "org.junit.platform.engine.support.hierarchical.NodeTestTask",
+      "method" : "execute",
+      "line" : 95,
+      "is_target" : false
+    }, {
+      "class" : "java.util.ArrayList",
+      "method" : "forEach",
+      "line" : 1511,
+      "is_target" : false
+    }, {
+      "class" : "org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService",
+      "method" : "invokeAll",
+      "line" : 41,
+      "is_target" : false
+    }, {
+      "class" : "org.junit.platform.engine.support.hierarchical.NodeTestTask",
+      "method" : "lambda$executeRecursively$6",
+      "line" : 155,
+      "is_target" : false
+    }, {
+      "class" : "org.junit.platform.engine.support.hierarchical.ThrowableCollector",
+      "method" : "execute",
+      "line" : 73,
+      "is_target" : false
+    }, {
+      "class" : "org.junit.platform.engine.support.hierarchical.NodeTestTask",
+      "method" : "lambda$executeRecursively$8",
+      "line" : 141,
+      "is_target" : false
+    }, {
+      "class" : "org.junit.platform.engine.support.hierarchical.Node",
+      "method" : "around",
+      "line" : 137,
+      "is_target" : false
+    }, {
+      "class" : "org.junit.platform.engine.support.hierarchical.NodeTestTask",
+      "method" : "lambda$executeRecursively$9",
+      "line" : 139,
+      "is_target" : false
+    }, {
+      "class" : "org.junit.platform.engine.support.hierarchical.ThrowableCollector",
+      "method" : "execute",
+      "line" : 73,
+      "is_target" : false
+    }, {
+      "class" : "org.junit.platform.engine.support.hierarchical.NodeTestTask",
+      "method" : "executeRecursively",
+      "line" : 138,
+      "is_target" : false
+    }, {
+      "class" : "org.junit.platform.engine.support.hierarchical.NodeTestTask",
+      "method" : "execute",
+      "line" : 95,
+      "is_target" : false
+    }, {
+      "class" : "org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService",
+      "method" : "submit",
+      "line" : 35,
+      "is_target" : false
+    }, {
+      "class" : "org.junit.platform.engine.support.hierarchical.HierarchicalTestExecutor",
+      "method" : "execute",
+      "line" : 57,
+      "is_target" : false
+    }, {
+      "class" : "org.junit.platform.engine.support.hierarchical.HierarchicalTestEngine",
+      "method" : "execute",
+      "line" : 54,
+      "is_target" : false
+    }, {
+      "class" : "org.junit.platform.launcher.core.EngineExecutionOrchestrator",
+      "method" : "execute",
+      "line" : 147,
+      "is_target" : false
+    }, {
+      "class" : "org.junit.platform.launcher.core.EngineExecutionOrchestrator",
+      "method" : "execute",
+      "line" : 127,
+      "is_target" : false
+    }, {
+      "class" : "org.junit.platform.launcher.core.EngineExecutionOrchestrator",
+      "method" : "execute",
+      "line" : 90,
+      "is_target" : false
+    }, {
+      "class" : "org.junit.platform.launcher.core.EngineExecutionOrchestrator",
+      "method" : "lambda$execute$0",
+      "line" : 55,
+      "is_target" : false
+    }, {
+      "class" : "org.junit.platform.launcher.core.EngineExecutionOrchestrator",
+      "method" : "withInterceptedStreams",
+      "line" : 102,
+      "is_target" : false
+    }, {
+      "class" : "org.junit.platform.launcher.core.EngineExecutionOrchestrator",
+      "method" : "execute",
+      "line" : 54,
+      "is_target" : false
+    }, {
+      "class" : "org.junit.platform.launcher.core.DefaultLauncher",
+      "method" : "execute",
+      "line" : 114,
+      "is_target" : false
+    }, {
+      "class" : "org.junit.platform.launcher.core.DefaultLauncher",
+      "method" : "execute",
+      "line" : 86,
+      "is_target" : false
+    }, {
+      "class" : "org.junit.platform.launcher.core.DefaultLauncherSession$DelegatingLauncher",
+      "method" : "execute",
+      "line" : 86,
+      "is_target" : false
+    }, {
+      "class" : "kr.ac.seoultech.selab.logicfl.coverage.JUnit5TestRunner",
+      "method" : "main",
+      "line" : 36,
+      "is_target" : false
+    } ]
+  } ]
+}

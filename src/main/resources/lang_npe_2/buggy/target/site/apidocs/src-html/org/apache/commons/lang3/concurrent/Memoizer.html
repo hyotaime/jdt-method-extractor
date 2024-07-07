@@ -1,0 +1,224 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+<title>Source code</title>
+<link rel="stylesheet" type="text/css" href="../../../../../../stylesheet.css" title="Style">
+</head>
+<body>
+<main role="main">
+<div class="sourceContainer">
+<pre><span class="sourceLineNo">001</span><a id="line.1">/*</a>
+<span class="sourceLineNo">002</span><a id="line.2"> * Licensed to the Apache Software Foundation (ASF) under one or more</a>
+<span class="sourceLineNo">003</span><a id="line.3"> * contributor license agreements.  See the NOTICE file distributed with</a>
+<span class="sourceLineNo">004</span><a id="line.4"> * this work for additional information regarding copyright ownership.</a>
+<span class="sourceLineNo">005</span><a id="line.5"> * The ASF licenses this file to You under the Apache License, Version 2.0</a>
+<span class="sourceLineNo">006</span><a id="line.6"> * (the "License"); you may not use this file except in compliance with</a>
+<span class="sourceLineNo">007</span><a id="line.7"> * the License.  You may obtain a copy of the License at</a>
+<span class="sourceLineNo">008</span><a id="line.8"> *</a>
+<span class="sourceLineNo">009</span><a id="line.9"> *      http://www.apache.org/licenses/LICENSE-2.0</a>
+<span class="sourceLineNo">010</span><a id="line.10"> *</a>
+<span class="sourceLineNo">011</span><a id="line.11"> * Unless required by applicable law or agreed to in writing, software</a>
+<span class="sourceLineNo">012</span><a id="line.12"> * distributed under the License is distributed on an "AS IS" BASIS,</a>
+<span class="sourceLineNo">013</span><a id="line.13"> * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</a>
+<span class="sourceLineNo">014</span><a id="line.14"> * See the License for the specific language governing permissions and</a>
+<span class="sourceLineNo">015</span><a id="line.15"> * limitations under the License.</a>
+<span class="sourceLineNo">016</span><a id="line.16"> */</a>
+<span class="sourceLineNo">017</span><a id="line.17">package org.apache.commons.lang3.concurrent;</a>
+<span class="sourceLineNo">018</span><a id="line.18"></a>
+<span class="sourceLineNo">019</span><a id="line.19">import java.util.concurrent.CancellationException;</a>
+<span class="sourceLineNo">020</span><a id="line.20">import java.util.concurrent.ConcurrentHashMap;</a>
+<span class="sourceLineNo">021</span><a id="line.21">import java.util.concurrent.ConcurrentMap;</a>
+<span class="sourceLineNo">022</span><a id="line.22">import java.util.concurrent.ExecutionException;</a>
+<span class="sourceLineNo">023</span><a id="line.23">import java.util.concurrent.Future;</a>
+<span class="sourceLineNo">024</span><a id="line.24">import java.util.function.Function;</a>
+<span class="sourceLineNo">025</span><a id="line.25"></a>
+<span class="sourceLineNo">026</span><a id="line.26">import org.apache.commons.lang3.exception.ExceptionUtils;</a>
+<span class="sourceLineNo">027</span><a id="line.27"></a>
+<span class="sourceLineNo">028</span><a id="line.28">/**</a>
+<span class="sourceLineNo">029</span><a id="line.29"> * Definition of an interface for a wrapper around a calculation that takes a single parameter and returns a result. The</a>
+<span class="sourceLineNo">030</span><a id="line.30"> * results for the calculation will be cached for future requests.</a>
+<span class="sourceLineNo">031</span><a id="line.31"> *</a>
+<span class="sourceLineNo">032</span><a id="line.32"> * &lt;p&gt;</a>
+<span class="sourceLineNo">033</span><a id="line.33"> * This is not a fully functional cache, there is no way of limiting or removing results once they have been generated.</a>
+<span class="sourceLineNo">034</span><a id="line.34"> * However, it is possible to get the implementation to regenerate the result for a given parameter, if an error was</a>
+<span class="sourceLineNo">035</span><a id="line.35"> * thrown during the previous calculation, by setting the option during the construction of the class. If this is not</a>
+<span class="sourceLineNo">036</span><a id="line.36"> * set the class will return the cached exception.</a>
+<span class="sourceLineNo">037</span><a id="line.37"> * &lt;/p&gt;</a>
+<span class="sourceLineNo">038</span><a id="line.38"> * &lt;p&gt;</a>
+<span class="sourceLineNo">039</span><a id="line.39"> * Thanks should go to Brian Goetz, Tim Peierls and the members of JCP JSR-166 Expert Group for coming up with the</a>
+<span class="sourceLineNo">040</span><a id="line.40"> * original implementation of the class. It was also published within Java Concurrency in Practice as a sample.</a>
+<span class="sourceLineNo">041</span><a id="line.41"> * &lt;/p&gt;</a>
+<span class="sourceLineNo">042</span><a id="line.42"> *</a>
+<span class="sourceLineNo">043</span><a id="line.43"> * @param &lt;I&gt; the type of the input to the calculation</a>
+<span class="sourceLineNo">044</span><a id="line.44"> * @param &lt;O&gt; the type of the output of the calculation</a>
+<span class="sourceLineNo">045</span><a id="line.45"> *</a>
+<span class="sourceLineNo">046</span><a id="line.46"> * @since 3.6</a>
+<span class="sourceLineNo">047</span><a id="line.47"> */</a>
+<span class="sourceLineNo">048</span><a id="line.48">public class Memoizer&lt;I, O&gt; implements Computable&lt;I, O&gt; {</a>
+<span class="sourceLineNo">049</span><a id="line.49"></a>
+<span class="sourceLineNo">050</span><a id="line.50">    private final ConcurrentMap&lt;I, Future&lt;O&gt;&gt; cache = new ConcurrentHashMap&lt;&gt;();</a>
+<span class="sourceLineNo">051</span><a id="line.51">    private final Function&lt;? super I, ? extends Future&lt;O&gt;&gt; mappingFunction;</a>
+<span class="sourceLineNo">052</span><a id="line.52">    private final boolean recalculate;</a>
+<span class="sourceLineNo">053</span><a id="line.53"></a>
+<span class="sourceLineNo">054</span><a id="line.54">    /**</a>
+<span class="sourceLineNo">055</span><a id="line.55">     * Constructs a Memoizer for the provided Computable calculation.</a>
+<span class="sourceLineNo">056</span><a id="line.56">     *</a>
+<span class="sourceLineNo">057</span><a id="line.57">     * &lt;p&gt;</a>
+<span class="sourceLineNo">058</span><a id="line.58">     * If a calculation throws an exception for any reason, this exception will be cached and returned for all future</a>
+<span class="sourceLineNo">059</span><a id="line.59">     * calls with the provided parameter.</a>
+<span class="sourceLineNo">060</span><a id="line.60">     * &lt;/p&gt;</a>
+<span class="sourceLineNo">061</span><a id="line.61">     *</a>
+<span class="sourceLineNo">062</span><a id="line.62">     * @param computable the computation whose results should be memorized</a>
+<span class="sourceLineNo">063</span><a id="line.63">     */</a>
+<span class="sourceLineNo">064</span><a id="line.64">    public Memoizer(final Computable&lt;I, O&gt; computable) {</a>
+<span class="sourceLineNo">065</span><a id="line.65">        this(computable, false);</a>
+<span class="sourceLineNo">066</span><a id="line.66">    }</a>
+<span class="sourceLineNo">067</span><a id="line.67"></a>
+<span class="sourceLineNo">068</span><a id="line.68">    /**</a>
+<span class="sourceLineNo">069</span><a id="line.69">     * Constructs a Memoizer for the provided Computable calculation, with the option of whether a Computation that</a>
+<span class="sourceLineNo">070</span><a id="line.70">     * experiences an error should recalculate on subsequent calls or return the same cached exception.</a>
+<span class="sourceLineNo">071</span><a id="line.71">     *</a>
+<span class="sourceLineNo">072</span><a id="line.72">     * @param computable the computation whose results should be memorized</a>
+<span class="sourceLineNo">073</span><a id="line.73">     * @param recalculate determines whether the computation should be recalculated on subsequent calls if the previous call</a>
+<span class="sourceLineNo">074</span><a id="line.74">     *        failed</a>
+<span class="sourceLineNo">075</span><a id="line.75">     */</a>
+<span class="sourceLineNo">076</span><a id="line.76">    public Memoizer(final Computable&lt;I, O&gt; computable, final boolean recalculate) {</a>
+<span class="sourceLineNo">077</span><a id="line.77">        this.recalculate = recalculate;</a>
+<span class="sourceLineNo">078</span><a id="line.78">        this.mappingFunction = k -&gt; FutureTasks.run(() -&gt; computable.compute(k));</a>
+<span class="sourceLineNo">079</span><a id="line.79">    }</a>
+<span class="sourceLineNo">080</span><a id="line.80"></a>
+<span class="sourceLineNo">081</span><a id="line.81">    /**</a>
+<span class="sourceLineNo">082</span><a id="line.82">     * Constructs a Memoizer for the provided Function calculation.</a>
+<span class="sourceLineNo">083</span><a id="line.83">     *</a>
+<span class="sourceLineNo">084</span><a id="line.84">     * &lt;p&gt;</a>
+<span class="sourceLineNo">085</span><a id="line.85">     * If a calculation throws an exception for any reason, this exception will be cached and returned for all future</a>
+<span class="sourceLineNo">086</span><a id="line.86">     * calls with the provided parameter.</a>
+<span class="sourceLineNo">087</span><a id="line.87">     * &lt;/p&gt;</a>
+<span class="sourceLineNo">088</span><a id="line.88">     *</a>
+<span class="sourceLineNo">089</span><a id="line.89">     * @param function the function whose results should be memorized</a>
+<span class="sourceLineNo">090</span><a id="line.90">     * @since 2.13.0</a>
+<span class="sourceLineNo">091</span><a id="line.91">     */</a>
+<span class="sourceLineNo">092</span><a id="line.92">    public Memoizer(final Function&lt;I, O&gt; function) {</a>
+<span class="sourceLineNo">093</span><a id="line.93">        this(function, false);</a>
+<span class="sourceLineNo">094</span><a id="line.94">    }</a>
+<span class="sourceLineNo">095</span><a id="line.95"></a>
+<span class="sourceLineNo">096</span><a id="line.96">    /**</a>
+<span class="sourceLineNo">097</span><a id="line.97">     * Constructs a Memoizer for the provided Function calculation, with the option of whether a Function that</a>
+<span class="sourceLineNo">098</span><a id="line.98">     * experiences an error should recalculate on subsequent calls or return the same cached exception.</a>
+<span class="sourceLineNo">099</span><a id="line.99">     *</a>
+<span class="sourceLineNo">100</span><a id="line.100">     * @param function the computation whose results should be memorized</a>
+<span class="sourceLineNo">101</span><a id="line.101">     * @param recalculate determines whether the computation should be recalculated on subsequent calls if the previous call</a>
+<span class="sourceLineNo">102</span><a id="line.102">     *        failed</a>
+<span class="sourceLineNo">103</span><a id="line.103">     * @since 2.13.0</a>
+<span class="sourceLineNo">104</span><a id="line.104">     */</a>
+<span class="sourceLineNo">105</span><a id="line.105">     public Memoizer(final Function&lt;I, O&gt; function, final boolean recalculate) {</a>
+<span class="sourceLineNo">106</span><a id="line.106">        this.recalculate = recalculate;</a>
+<span class="sourceLineNo">107</span><a id="line.107">        this.mappingFunction = k -&gt; FutureTasks.run(() -&gt; function.apply(k));</a>
+<span class="sourceLineNo">108</span><a id="line.108">    }</a>
+<span class="sourceLineNo">109</span><a id="line.109"></a>
+<span class="sourceLineNo">110</span><a id="line.110">    /**</a>
+<span class="sourceLineNo">111</span><a id="line.111">     * This method will return the result of the calculation and cache it, if it has not previously been calculated.</a>
+<span class="sourceLineNo">112</span><a id="line.112">     *</a>
+<span class="sourceLineNo">113</span><a id="line.113">     * &lt;p&gt;</a>
+<span class="sourceLineNo">114</span><a id="line.114">     * This cache will also cache exceptions that occur during the computation if the {@code recalculate} parameter in the</a>
+<span class="sourceLineNo">115</span><a id="line.115">     * constructor was set to {@code false}, or not set. Otherwise, if an exception happened on the previous calculation,</a>
+<span class="sourceLineNo">116</span><a id="line.116">     * the method will attempt again to generate a value.</a>
+<span class="sourceLineNo">117</span><a id="line.117">     * &lt;/p&gt;</a>
+<span class="sourceLineNo">118</span><a id="line.118">     *</a>
+<span class="sourceLineNo">119</span><a id="line.119">     * @param arg the argument for the calculation</a>
+<span class="sourceLineNo">120</span><a id="line.120">     * @return the result of the calculation</a>
+<span class="sourceLineNo">121</span><a id="line.121">     * @throws InterruptedException thrown if the calculation is interrupted</a>
+<span class="sourceLineNo">122</span><a id="line.122">     */</a>
+<span class="sourceLineNo">123</span><a id="line.123">    @Override</a>
+<span class="sourceLineNo">124</span><a id="line.124">    public O compute(final I arg) throws InterruptedException {</a>
+<span class="sourceLineNo">125</span><a id="line.125">        while (true) {</a>
+<span class="sourceLineNo">126</span><a id="line.126">            final Future&lt;O&gt; future = cache.computeIfAbsent(arg, mappingFunction);</a>
+<span class="sourceLineNo">127</span><a id="line.127">            try {</a>
+<span class="sourceLineNo">128</span><a id="line.128">                return future.get();</a>
+<span class="sourceLineNo">129</span><a id="line.129">            } catch (final CancellationException e) {</a>
+<span class="sourceLineNo">130</span><a id="line.130">                cache.remove(arg, future);</a>
+<span class="sourceLineNo">131</span><a id="line.131">            } catch (final ExecutionException e) {</a>
+<span class="sourceLineNo">132</span><a id="line.132">                if (recalculate) {</a>
+<span class="sourceLineNo">133</span><a id="line.133">                    cache.remove(arg, future);</a>
+<span class="sourceLineNo">134</span><a id="line.134">                }</a>
+<span class="sourceLineNo">135</span><a id="line.135">                throw launderException(e.getCause());</a>
+<span class="sourceLineNo">136</span><a id="line.136">            }</a>
+<span class="sourceLineNo">137</span><a id="line.137">        }</a>
+<span class="sourceLineNo">138</span><a id="line.138">    }</a>
+<span class="sourceLineNo">139</span><a id="line.139"></a>
+<span class="sourceLineNo">140</span><a id="line.140">    /**</a>
+<span class="sourceLineNo">141</span><a id="line.141">     * This method launders a Throwable to either a RuntimeException, Error or any other Exception wrapped in an</a>
+<span class="sourceLineNo">142</span><a id="line.142">     * IllegalStateException.</a>
+<span class="sourceLineNo">143</span><a id="line.143">     *</a>
+<span class="sourceLineNo">144</span><a id="line.144">     * @param throwable the throwable to laundered</a>
+<span class="sourceLineNo">145</span><a id="line.145">     * @return a RuntimeException, Error or an IllegalStateException</a>
+<span class="sourceLineNo">146</span><a id="line.146">     */</a>
+<span class="sourceLineNo">147</span><a id="line.147">    private RuntimeException launderException(final Throwable throwable) {</a>
+<span class="sourceLineNo">148</span><a id="line.148">        throw new IllegalStateException("Unchecked exception", ExceptionUtils.throwUnchecked(throwable));</a>
+<span class="sourceLineNo">149</span><a id="line.149">    }</a>
+<span class="sourceLineNo">150</span><a id="line.150">}</a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</pre>
+</div>
+</main>
+</body>
+</html>

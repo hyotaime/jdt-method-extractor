@@ -1,0 +1,82 @@
+@options
+@packages
+-classpath
+'/home/jwsong/.m2/repository/org/apache/commons/commons-text/1.10.0/commons-text-1.10.0.jar:/home/jwsong/.m2/repository/org/apache/commons/commons-lang3/3.12.0/commons-lang3-3.12.0.jar'
+-encoding
+'utf-8'
+-protected
+-quiet
+--release
+8
+-sourcepath
+'/home/jwsong/LogicFL/repos/commons-lang/src/main/java:/home/jwsong/LogicFL/repos/commons-lang/target/generated-sources/annotations'
+-author
+-bottom
+'Copyright &#169; 2001&#x2013;2023 <a href="https://www.apache.org/">The Apache Software Foundation</a>. All rights reserved.'
+-charset
+'utf-8'
+-d
+'/home/jwsong/LogicFL/repos/commons-lang/target/apidocs'
+-docencoding
+'utf-8'
+-Xdoclint:all
+-doctitle
+'Apache Commons Lang 3.13.0-SNAPSHOT API'
+-link
+'https://commons.apache.org/proper/commons-text/apidocs'
+-link
+'https://docs.oracle.com/javase/8/docs/api'
+-link
+'https://docs.oracle.com/javaee/6/api'
+-linkoffline
+'https://docs.oracle.com/javase/8/docs/api' '/home/jwsong/LogicFL/repos/commons-lang/target/javadoc-bundle-options'
+-linksource
+-notimestamp
+-use
+-version
+-windowtitle
+'Apache Commons Lang 3.13.0-SNAPSHOT API'
+org.apache.commons.lang3
+org.apache.commons.lang3.time
+org.apache.commons.lang3.compare
+org.apache.commons.lang3.arch
+org.apache.commons.lang3.util
+org.apache.commons.lang3.tuple
+org.apache.commons.lang3.builder
+org.apache.commons.lang3.event
+org.apache.commons.lang3.function
+org.apache.commons.lang3.exception
+org.apache.commons.lang3.stream
+org.apache.commons.lang3.text
+org.apache.commons.lang3.text.translate
+org.apache.commons.lang3.mutable
+org.apache.commons.lang3.concurrent
+org.apache.commons.lang3.concurrent.locks
+org.apache.commons.lang3.reflect
+org.apache.commons.lang3.math
+/home/jwsong/.m2/repository/org/apache/commons/commons-text/1.10.0/commons-text-1.10.0.jar = 1693836736397
+/home/jwsong/.m2/repository/org/apache/commons/commons-lang3/3.12.0/commons-lang3-3.12.0.jar = 1693836725537
+/home/jwsong/LogicFL/repos/commons-lang/src/main/java = 1698979404918
+/home/jwsong/LogicFL/repos/commons-lang/target/generated-sources/annotations = 1698980073402
+/home/jwsong/LogicFL/repos/commons-lang/target/apidocs/member-search-index.zip = 1698980099258
+/home/jwsong/LogicFL/repos/commons-lang/target/apidocs/stylesheet.css = 1698980099322
+/home/jwsong/LogicFL/repos/commons-lang/target/apidocs/member-search-index.js = 1698980099254
+/home/jwsong/LogicFL/repos/commons-lang/target/apidocs/allpackages-index.html = 1698980099298
+/home/jwsong/LogicFL/repos/commons-lang/target/apidocs/script.js = 1698980099322
+/home/jwsong/LogicFL/repos/commons-lang/target/apidocs/element-list = 1698980098222
+/home/jwsong/LogicFL/repos/commons-lang/target/apidocs/jquery-ui.overrides.css = 1698980099326
+/home/jwsong/LogicFL/repos/commons-lang/target/apidocs/index-all.html = 1698980099278
+/home/jwsong/LogicFL/repos/commons-lang/target/apidocs/allclasses.html = 1698980099314
+/home/jwsong/LogicFL/repos/commons-lang/target/apidocs/allclasses-index.html = 1698980099294
+/home/jwsong/LogicFL/repos/commons-lang/target/apidocs/index.html = 1698980099318
+/home/jwsong/LogicFL/repos/commons-lang/target/apidocs/serialized-form.html = 1698980098386
+/home/jwsong/LogicFL/repos/commons-lang/target/apidocs/help-doc.html = 1698980099322
+/home/jwsong/LogicFL/repos/commons-lang/target/apidocs/type-search-index.js = 1698980099246
+/home/jwsong/LogicFL/repos/commons-lang/target/apidocs/overview-tree.html = 1698980099046
+/home/jwsong/LogicFL/repos/commons-lang/target/apidocs/package-search-index.zip = 1698980099246
+/home/jwsong/LogicFL/repos/commons-lang/target/apidocs/deprecated-list.html = 1698980099310
+/home/jwsong/LogicFL/repos/commons-lang/target/apidocs/constant-values.html = 1698980098338
+/home/jwsong/LogicFL/repos/commons-lang/target/apidocs/search.js = 1698980099322
+/home/jwsong/LogicFL/repos/commons-lang/target/apidocs/overview-summary.html = 1698980099318
+/home/jwsong/LogicFL/repos/commons-lang/target/apidocs/type-search-index.zip = 1698980099246
+/home/jwsong/LogicFL/repos/commons-lang/target/apidocs/package-search-index.js = 1698980099246
