@@ -4,7 +4,7 @@ build/
 !**/src/test/**/build/
 
 ### Ignore resources/A and resources/B directories ###
-resources
+resources/lang_npe_2/
 
 ### IntelliJ IDEA ###
 .idea/
