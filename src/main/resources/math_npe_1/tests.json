@@ -1,0 +1,15 @@
+{
+ "buggy.hash": "bce28db65",
+ "fixed.hash": "1ae0c8095",
+ "passed.classes": [],
+ "failed.classes": [
+  "org.apache.commons.math.util.MathUtilsTest"
+ ],
+ "failed.tests": [
+  {
+   "class": "org.apache.commons.math.util.MathUtilsTest",
+   "name": "testSortInPlaceFaliures",
+   "message": "Cannot read the array length because \"y\" is null"
+  }
+ ]
+}
