@@ -1,28 +1,52 @@
 package kr.ac.seoultech.selab;
 
 import org.eclipse.jdt.core.dom.*;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
-import java.util.Map;
+import java.nio.file.StandardOpenOption;
+
 
 public class JDTMethodExtractor {
 
+    private static String bugName = "";
+
     public static void main(String[] args) {
 
-        /* lang_npe_1 */
-        String jsonFilePath = "lang_npe_1/npe.traces.json"; // JSON 파일 경로
-        String sourceRootPath = "lang_npe_1/buggy/src/main/java"; // Java 소스 코드 루트 경로
-        String testRootPath = "lang_npe_1/fixed/src/test/java"; // Java 테스트 코드 루트 경로*/
+        bugName = "math_npe_1";
+
+        /* ConfigReader를 사용하여 설정 파일을 읽음 */
+        ConfigReader configReader = new ConfigReader(bugName + "/config.properties");
+        String baseDir = configReader.getProperty("base.dir");
+//        서버가 아닌 로컬에서 실행하기때문에 base.dir를 현재 테스트에 사용 불가
+//        String jsonFilePath = baseDir + "/npe.traces.json";
+//        String sourceRootPath = baseDir + configReader.getProperty("source.path");
+
+        String jsonFilePath = bugName + "/npe.traces.json";
+        String sourceRootPath = bugName + "/" + configReader.getProperty("source.path");
+        String testRootPath = bugName + "/fixed/src/test/java"; // 테스트 경로는 config.properties에 없음. 하드코딩말고 다른 방법?
+//        String testRootPath = bugName + "/fixed/tests";
+
+
+        /* lang_npe_1
+        String bugName = "lang_npe_1";
+        String jsonFilePath = bugName + "/npe.traces.json"; // JSON 파일 경로
+        String sourceRootPath = bugName + "/" + "buggy/src/main/java"; // Java 소스 코드 루트 경로
+        String testRootPath = bugName + "/fixed/src/test/java"; // Java 테스트 코드 루트 경로
+        */
 
 
         /* Chart-14
-        String jsonFilePath = "Chart-14/npe.traces.json"; // JSON 파일 경로
-        String sourceRootPath = "Chart-14/buggy/source"; // Java 소스 코드 루트 경로
-        String testRootPath = "Chart-14/fixed/tests"; // Java 테스트 코드 루트 경로
+        String bugName = "Chart-14";
+        String jsonFilePath = bugName + "/npe.traces.json"; // JSON 파일 경로
+        String sourceRootPath = bugName + "/buggy/source"; // Java 소스 코드 루트 경로
+        String testRootPath = bugName + "/fixed/tests"; // Java 테스트 코드 루트 경로
         */
 
 
@@ -36,7 +60,7 @@ public class JDTMethodExtractor {
         //System.out.println("Absolute Source Root Path: " + absoluteSourceRootPath);
 
         // JSON 파일을 파싱하여 타겟 메소드 정보를 가져옵니다.
-         List<TestDTO> targetTest = TraceParser.parseJson(jsonFilePath); //<methodName , <source, Line>>
+        List<TestDTO> targetTest = TraceParser.parseJson(jsonFilePath); //<methodName , <source, Line>>
 
         targetTest.forEach((testDTO) -> {
             List<SourceDTO> targetSource = testDTO.getSource();
@@ -53,9 +77,6 @@ public class JDTMethodExtractor {
                 System.out.println("Processing file: " + filePath);
                 try {
                     String source = new String(Files.readAllBytes(Paths.get(filePath)));
-/*                    methods.forEach((methodName, lineNumber) -> {
-                        extractMethodCode(source, className, methodName, lineNumber);
-                    });*/
                     extractMethodCode(source, sourceDTO.getSourceClass(), sourceDTO.getSourceMethod(), sourceDTO.getSourceLine().get(0));
                 } catch (IOException e) {
                     System.err.println("파일을 읽는 동안 오류가 발생했습니다: " + filePath);
@@ -79,7 +100,41 @@ public class JDTMethodExtractor {
                     int endLine = cu.getLineNumber(node.getStartPosition() + node.getLength());
                     if (startLine <= lineNumber && lineNumber <= endLine) {
                         System.out.println("Class: " + className + ", Method: " + methodName + ", Line: " + lineNumber);
-                        System.out.println(node.toString());
+                        System.out.println(node);
+                        // JSON 객체 생성
+                        JSONObject jsonObject = new JSONObject();
+                        jsonObject.put("class", className);
+                        jsonObject.put("method", methodName);
+                        jsonObject.put("line", lineNumber);
+                        jsonObject.put("snippet", node.toString());
+                        // 파일 경로 설정
+                        String dirPath = "rst";
+                        String filePath = dirPath + "/" + bugName + ".json";
+                        Path path = Paths.get(filePath);
+                        JSONArray jsonArray = new JSONArray();
+                        // 디렉토리 생성
+                        try {
+                            Files.createDirectories(Paths.get(dirPath));
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        // 파일이 존재하는 경우 기존 내용을 읽어들임
+                        if (Files.exists(path)) {
+                            try {
+                                String content = new String(Files.readAllBytes(path));
+                                jsonArray = new JSONArray(content);
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        // 새로운 JSON 객체를 배열에 추가
+                        jsonArray.put(jsonObject);
+                        // JSON 배열을 파일에 기록
+                        try {
+                            Files.write(path, jsonArray.toString(4).getBytes(), StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                     }
                 }
                 return super.visit(node);
@@ -87,7 +142,7 @@ public class JDTMethodExtractor {
         });
     }
 
-    public static boolean isContainTest(String str){
+    public static boolean isContainTest(String str) {
         return str.contains("Test");
     }
 }

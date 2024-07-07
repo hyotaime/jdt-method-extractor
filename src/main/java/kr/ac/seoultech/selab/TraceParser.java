@@ -8,9 +8,7 @@ import com.google.gson.JsonParser;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class TraceParser {
 
@@ -47,19 +45,17 @@ public class TraceParser {
                         String methodName = detailObject.get("method").getAsString();
                         int lineNumber = detailObject.get("line").getAsInt();
                         //className에 "Test"있는지 확인하고
-                        if(JDTMethodExtractor.isContainTest(className)){
+                        if (JDTMethodExtractor.isContainTest(className)) {
                             //"Test" 있으면 기존 TestDTO에 line 필드 추가 (npe.trace.json에 각각 객체에는 Test 클래스가 하나씩밖에 없음)
                             testDTO.setTestLine(lineNumber);
-                        }
-                        else {
+                        } else {
                             //"Test" 없으면 TestDTO의 source에 기존 class와 method 동시에 겹치는게 있는지 확인하고
-                            if(testDTO.isDuplicate(className, methodName)){
+                            if (testDTO.isDuplicate(className, methodName)) {
                                 //있다면 SourceDTO 안의 sourceLine 리스트에 해당 라인값만 추가
                                 SourceDTO sourceDTO = testDTO.findSourceDTO(className, methodName);
                                 //sourceDTO.getSourceLine().get(lineNumber);
                                 sourceDTO.addSourceLine(lineNumber);
-                            }
-                            else{
+                            } else {
                                 //없다면 source 필드에 list.add(new SourceDTO(class,method,line))
                                 testDTO.getSource().add(new SourceDTO(className, methodName, lineNumber));
                             }
