@@ -17,6 +17,7 @@ public class JDTMethodExtractor {
     public static void main(String[] args) throws IOException {
         PathAssembler pathAssembler = new PathAssembler();
         ClassLoader classLoader = JDTMethodExtractor.class.getClassLoader();
+        Prompting prompting = new Prompting();
 
         for (String path : pathAssembler.defects4j) { //여기만 바꿔끼우기
             List<StringBuilder> templateArgsList = new ArrayList<>();
@@ -38,6 +39,7 @@ public class JDTMethodExtractor {
             templateArgsList.add(testFailedLine);
             templateArgsList.add(stackTraces);
 
+            System.out.println(prompting.getKey("hyun_api_key"));
 
 
             // JSON 파일을 파싱하여 타겟 메소드 정보를 가져옵니다.
@@ -54,7 +56,9 @@ public class JDTMethodExtractor {
                 testFailedLine.append(absolutePath(testDTO,classLoader,testRootPath,2));
 
                 try {
-                    System.out.println(fuseTemplateAssemlber("FuseTemplate.txt",classLoader, templateArgsList, testDTO));
+                    /*System.out.println(fuseTemplateAssemlber("FuseTemplate.txt",classLoader, templateArgsList, testDTO));*/
+                    String templateResult = fuseTemplateAssemlber("FuseTemplate.txt", classLoader, templateArgsList, testDTO);
+                    prompting.printConsole(prompting.callAPI(templateResult));
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
