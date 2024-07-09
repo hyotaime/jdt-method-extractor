@@ -9,7 +9,7 @@ Task Description:
 
 Test Results:
 The provided code is producing incorrect results. For examples:
-- Running the function as follows %s  generate a `NullPointerException` in line %s
+- Running the function as follows %s
 ```
 %s
 ```
