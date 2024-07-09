@@ -4,9 +4,19 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import okhttp3.*;
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVParser;
+import org.apache.commons.csv.CSVPrinter;
+import org.apache.commons.csv.CSVRecord;
 
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Reader;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
@@ -79,6 +89,44 @@ public class Prompting {
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    public static void updateCsvWithQuestionOrAnswer(String filePath, String value, int rowIndex, String columnName) {
+        try (
+                Reader reader = Files.newBufferedReader(Paths.get(filePath));
+                CSVParser csvParser = new CSVParser(reader, CSVFormat.DEFAULT.withHeader())
+        ) {
+            List<CSVRecord> records = csvParser.getRecords();
+            List<String[]> updatedRecords = new ArrayList<>();
+            int columnIndex = csvParser.getHeaderMap().get(columnName);
+
+            for (int i = 0; i < records.size(); i++) {
+                CSVRecord record = records.get(i);
+                String[] newRow = new String[record.size()];
+
+                for (int j = 0; j < record.size(); j++) {
+                    newRow[j] = record.get(j);
+                }
+
+                if (i == rowIndex) {
+                    newRow[columnIndex] = value;
+                }
+
+                updatedRecords.add(newRow);
+            }
+
+            try (
+                    BufferedWriter writer = Files.newBufferedWriter(Paths.get(filePath));
+                    CSVPrinter csvPrinter = new CSVPrinter(writer, CSVFormat.DEFAULT.withHeader(csvParser.getHeaderMap().keySet().toArray(new String[0])))
+            ) {
+                for (String[] record : updatedRecords) {
+                    csvPrinter.printRecord((Object[]) record);
+                }
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
