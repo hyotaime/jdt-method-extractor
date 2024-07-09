@@ -18,7 +18,7 @@ public class JDTMethodExtractor {
         ClassLoader classLoader = JDTMethodExtractor.class.getClassLoader();
         Prompting prompting = new Prompting();
         String csvFilePath = "src/main/resources/result.csv"; // CSV 파일 경로
-        int rowIndex =0 ;
+        int rowIndex = 0;
 
         for (String path : pathAssembler.googleSheet) { //여기만 바꿔끼우기
             List<StringBuilder> templateArgsList = new ArrayList<>();
@@ -26,7 +26,7 @@ public class JDTMethodExtractor {
 
             String jsonFilePath = pathMap.get("jsonFilePath");
             String sourceRootPath = pathMap.get("sourceRootPath");
-            String testRootPath =pathMap.get("testRootPath");
+            String testRootPath = pathMap.get("testRootPath");
             String stackTracesPath = pathMap.get("stackTraces");
 
             StringBuilder faultyCode = new StringBuilder();
@@ -43,28 +43,26 @@ public class JDTMethodExtractor {
 
             System.out.println(prompting.getKey("hyun_api_key"));
 
-
             // JSON 파일을 파싱하여 타겟 메소드 정보를 가져옵니다.
             List<TestDTO> targetTest = TraceParser.parseJson(jsonFilePath); //<methodName , <source, Line>>
 
+            // FuseFL
             targetTest.forEach((testDTO) -> {
                 List<SourceDTO> targetSource = testDTO.getSource();
                 // ClassLoader를 사용하여 소스 코드 루트 경로를 절대 경로로 변환합니다
                 targetSource.forEach((sourceDTO) -> {
-                    faultyCode.append(absolutePath(sourceDTO, classLoader, sourceRootPath,0));
-                    taskDescription.append(absolutePath(sourceDTO, classLoader, sourceRootPath,1));
+                    faultyCode.append(absolutePath(sourceDTO, classLoader, sourceRootPath, 0));
+                    taskDescription.append(absolutePath(sourceDTO, classLoader, sourceRootPath, 1));
                 });
-                testCode.append(absolutePath(testDTO,classLoader,testRootPath,0));
-                testFailedLine.append(absolutePath(testDTO,classLoader,testRootPath,2));
+                testCode.append(absolutePath(testDTO, classLoader, testRootPath, 0));
+                testFailedLine.append(absolutePath(testDTO, classLoader, testRootPath, 2));
 
             });
             try {
                 //템플릿 매핑값 출력
-                String templateResult = fuseTemplateAssemlber("FuseTemplate.txt",classLoader, templateArgsList);
+                String templateResult = fuseTemplateAssemlber("FuseTemplate.txt", classLoader, templateArgsList);
                 System.out.println(templateResult);
-                Prompting.updateCsvWithQuestionOrAnswer(csvFilePath, templateResult, rowIndex++,"Question");
-
-
+                Prompting.updateCsvWithQuestionOrAnswer(csvFilePath, templateResult, rowIndex++, "Question");
                 //API 호출 결과 출력
                 //String templateResult = fuseTemplateAssemlber("FuseTemplate.txt", classLoader, templateArgsList);
                 //String templateAns = prompting.callAPI(templateResult);
@@ -76,6 +74,25 @@ public class JDTMethodExtractor {
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
+
+            // LLM in FL, Wu et. al
+            targetTest.forEach((testDTO) -> {
+                List<SourceDTO> targetSource = testDTO.getSource();
+                // ClassLoader를 사용하여 소스 코드 루트 경로를 절대 경로로 변환합니다
+                targetSource.forEach((sourceDTO) -> {
+                    try {
+                        System.out.println("Prompt1 ========================================================================");
+                        System.out.println(prompt1Assemlber("Prompt1Template.txt", classLoader, absolutePath(sourceDTO, classLoader, sourceRootPath, 0)));
+                        if (!readStackTraces(classLoader, stackTracesPath).equals("Stack Traces Path Wrong")) {
+                            System.out.println("Prompt2 ------------------------------------------------------------------------");
+                            System.out.println(prompt2Assemlber("Prompt2Template.txt", classLoader, readStackTraces(classLoader, stackTracesPath), absolutePath(testDTO, classLoader, testRootPath, 0)));
+                        }
+                        System.out.println("================================================================================");
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                });
+            });
         }
     }
 
@@ -85,20 +102,18 @@ public class JDTMethodExtractor {
     private static String absolutePath(SourceDTO sourceDTO, ClassLoader classLoader, String sourceRootPath, int index) { //Source 출력
         File rootDir = new File(classLoader.getResource(sourceRootPath).getFile());
 
-        System.out.println("rootDir: " + rootDir.getPath());
+//        System.out.println("rootDir: " + rootDir.getPath());
         String absoluteSourceRootPath = rootDir.getAbsolutePath();
 
         String filePath = Paths.get(absoluteSourceRootPath, sourceDTO.getSourceClass().replace('.', File.separatorChar) + ".java").toString();
-        System.out.println("Processing file: " + filePath);
+//        System.out.println("Processing file: " + filePath);
         try {
             String source = new String(Files.readAllBytes(Paths.get(filePath)));
-            if(index==0) {//Description
+            if (index == 0) {//Description
                 return extractMethodCode(source, sourceDTO.getSourceClass(), sourceDTO.getSourceMethod(), sourceDTO.getSourceLine().get(0));
-            }
-            else if(index==1){
+            } else if (index == 1) {
                 return extractMethodJavadoc(source, sourceDTO.getSourceClass(), sourceDTO.getSourceMethod(), sourceDTO.getSourceLine().get(0));
-            }
-            else{
+            } else {
                 return extractMethodCode(source, sourceDTO.getSourceClass(), sourceDTO.getSourceMethod(), sourceDTO.getSourceLine().get(0));
             }
         } catch (IOException e) {
@@ -112,22 +127,20 @@ public class JDTMethodExtractor {
     //index == 1 >> 주석 추출
     //index == 2 >> 라인만 추출
     private static String absolutePath(TestDTO testDTO, ClassLoader classLoader, String testRootPath, int index) { //Test 출력
-        File rootDir = new File(classLoader.getResource(testRootPath).getFile()) ;
+        File rootDir = new File(classLoader.getResource(testRootPath).getFile());
 
-        System.out.println("rootDir: " + rootDir.getPath());
+//        System.out.println("rootDir: " + rootDir.getPath());
         String absoluteSourceRootPath = rootDir.getAbsolutePath();
 
         String filePath = Paths.get(absoluteSourceRootPath, testDTO.getTestClass().replace('.', File.separatorChar) + ".java").toString();
-        System.out.println("Processing file: " + filePath);
+//        System.out.println("Processing file: " + filePath);
         try {
             String source = new String(Files.readAllBytes(Paths.get(filePath)));
-            if(index==0) {
+            if (index == 0) {
                 return extractMethodCode(source, testDTO.getTestClass(), testDTO.getTestMethod(), testDTO.getTestLine());
-            }
-            else if(index==1){
+            } else if (index == 1) {
                 return extractMethodJavadoc(source, testDTO.getTestClass(), testDTO.getTestMethod(), testDTO.getTestLine());
-            }
-            else{
+            } else {
                 return extractMethodLine(source, testDTO.getTestClass(), testDTO.getTestMethod(), testDTO.getTestLine());
             }
         } catch (IOException e) {
@@ -151,7 +164,7 @@ public class JDTMethodExtractor {
                     int startLine = cu.getLineNumber(node.getStartPosition());
                     int endLine = cu.getLineNumber(node.getStartPosition() + node.getLength());
                     if (startLine <= lineNumber && lineNumber <= endLine) {
-                        methodCode.append("ClassName: "+className+" ,Start Line: "+startLine+" ,End Line: "+endLine+"\n");
+                        methodCode.append("ClassName: " + className + " ,Start Line: " + startLine + " ,End Line: " + endLine + "\n");
                         methodCode.append(node.toString());
                         methodCode.append("\n");
 
@@ -188,8 +201,8 @@ public class JDTMethodExtractor {
                             }
                         }
                         if (startOffset >= 0 && endOffset >= 0 && endOffset > startOffset) {
-                            methodLine.append("className: " + className +", Statement:");
-                            methodLine.append("generate a \'NullPointerException\' in line "+lineNumber);
+                            methodLine.append("className: " + className + ", Statement:");
+                            methodLine.append("generate a \'NullPointerException\' in line " + lineNumber);
                             methodLine.append(source, startOffset, endOffset).append("\n");
                         } else {
                             methodLine.append("Line number out of bounds or empty line.\n");
@@ -220,7 +233,7 @@ public class JDTMethodExtractor {
                     if (startLine <= lineNumber && lineNumber <= endLine) {
                         Javadoc javadoc = node.getJavadoc();
                         if (javadoc != null) {
-                            javadocCode.append("className: "+ className+ "\n"+javadoc.toString()).append("\n");
+                            javadocCode.append("className: " + className + "\n" + javadoc.toString()).append("\n");
                         } else {
                             javadocCode.append("No Javadoc found.\n");
                         }
@@ -235,25 +248,23 @@ public class JDTMethodExtractor {
 
     public static String readStackTraces(ClassLoader classLoader, String path) throws IOException {
         URL resource = classLoader.getResource(path); //defect4J에서 Stack Traces 저장 파일 없어서 파일 없을때 예외처리
-        if(resource!=null){
+        if (resource != null) {
             File rootDir = new File(resource.getFile());
             String absoluteStackTracesRootPath = rootDir.getAbsolutePath();
             String stackTraces = new String(Files.readAllBytes(Paths.get(absoluteStackTracesRootPath)));
             return stackTraces;
-        }
-        else{
+        } else {
             return "Stack Traces Path Wrong";
         }
 
     }
 
 
-
-    public static boolean isContainTest(String str){
+    public static boolean isContainTest(String str) {
         return str.contains("Test");
     }
 
-    public static String fuseTemplateAssemlber(String templatePath,ClassLoader classLoader , List<StringBuilder> list) throws IOException {
+    public static String fuseTemplateAssemlber(String templatePath, ClassLoader classLoader, List<StringBuilder> list) throws IOException {
         File rootDir = new File(classLoader.getResource(templatePath).getFile());
         String absoluteTemplatePath = rootDir.getAbsolutePath();
         String template = new String(Files.readAllBytes(Paths.get(absoluteTemplatePath)));
@@ -265,4 +276,18 @@ public class JDTMethodExtractor {
                 list.get(4).toString());
     }
 
+    public static String prompt1Assemlber(String templatePath, ClassLoader classLoader, String faultyCode) throws IOException {
+        File rootDir = new File(classLoader.getResource(templatePath).getFile());
+        String absoluteTemplatePath = rootDir.getAbsolutePath();
+        String template = new String(Files.readAllBytes(Paths.get(absoluteTemplatePath)));
+        return String.format(template, faultyCode);
+
+    }
+
+    public static String prompt2Assemlber(String templatePath, ClassLoader classLoader, String errorMsg, String testCode) throws IOException {
+        File rootDir = new File(classLoader.getResource(templatePath).getFile());
+        String absoluteTemplatePath = rootDir.getAbsolutePath();
+        String template = new String(Files.readAllBytes(Paths.get(absoluteTemplatePath)));
+        return String.format(template, errorMsg, testCode);
+    }
 }

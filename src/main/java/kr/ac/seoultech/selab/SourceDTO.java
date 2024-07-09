@@ -38,7 +38,7 @@ public class SourceDTO {
         this.sourceLine = sourceLine;
     }
 
-    public void addSourceLine(Integer sourceLine){
+    public void addSourceLine(Integer sourceLine) {
         this.sourceLine.add(sourceLine);
     }
 }

@@ -1,10 +1,7 @@
 package kr.ac.seoultech.selab;
 
-import org.apache.commons.collections4.MultiValuedMap;
-
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class TestDTO {
     private String testClass; //이건 같게 나올수도 있는데
@@ -51,18 +48,18 @@ public class TestDTO {
         this.source = source;
     }
 
-    public boolean isDuplicate(String className , String methodName){
-        for(SourceDTO temp : source){
-            if(temp.getSourceClass().equals(className) && temp.getSourceMethod().equals(methodName)){
+    public boolean isDuplicate(String className, String methodName) {
+        for (SourceDTO temp : source) {
+            if (temp.getSourceClass().equals(className) && temp.getSourceMethod().equals(methodName)) {
                 return true;
             }
         }
         return false;
     }
 
-    public SourceDTO findSourceDTO(String className, String methodName){
-        for(SourceDTO temp : source){
-            if(temp.getSourceClass().equals(className) && temp.getSourceMethod().equals(methodName)) {
+    public SourceDTO findSourceDTO(String className, String methodName) {
+        for (SourceDTO temp : source) {
+            if (temp.getSourceClass().equals(className) && temp.getSourceMethod().equals(methodName)) {
                 return temp;
             }
         }
