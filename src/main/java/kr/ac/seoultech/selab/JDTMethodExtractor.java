@@ -16,10 +16,14 @@ public class JDTMethodExtractor {
     public static void main(String[] args) throws IOException {
         PathAssembler pathAssembler = new PathAssembler();
         ClassLoader classLoader = JDTMethodExtractor.class.getClassLoader();
+        Prompting prompting = new Prompting();
+        String csvFilePath = "src/main/resources/result.csv"; // CSV 파일 경로
+        int rowIndex = 0;
 
         for (String path : pathAssembler.googleSheet) { //여기만 바꿔끼우기
             List<StringBuilder> templateArgsList = new ArrayList<>();
             Map<String, String> pathMap = pathAssembler.assembler(path);
+
             String jsonFilePath = pathMap.get("jsonFilePath");
             String sourceRootPath = pathMap.get("sourceRootPath");
             String testRootPath = pathMap.get("testRootPath");
@@ -37,6 +41,8 @@ public class JDTMethodExtractor {
             templateArgsList.add(testFailedLine);
             templateArgsList.add(stackTraces);
 
+            System.out.println(prompting.getKey("hyun_api_key"));
+
             // JSON 파일을 파싱하여 타겟 메소드 정보를 가져옵니다.
             List<TestDTO> targetTest = TraceParser.parseJson(jsonFilePath); //<methodName , <source, Line>>
 
@@ -51,13 +57,23 @@ public class JDTMethodExtractor {
                 testCode.append(absolutePath(testDTO, classLoader, testRootPath, 0));
                 testFailedLine.append(absolutePath(testDTO, classLoader, testRootPath, 2));
 
-                try {
-                    System.out.println(fuseTemplateAssemlber("FuseTemplate.txt", classLoader, templateArgsList, testDTO));
-                    System.out.println("--------------------------------------------------------------------------------");
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
             });
+            try {
+                //템플릿 매핑값 출력
+                String templateResult = fuseTemplateAssemlber("FuseTemplate.txt", classLoader, templateArgsList);
+                System.out.println(templateResult);
+                Prompting.updateCsvWithQuestionOrAnswer(csvFilePath, templateResult, rowIndex++, "Question");
+                //API 호출 결과 출력
+                //String templateResult = fuseTemplateAssemlber("FuseTemplate.txt", classLoader, templateArgsList);
+                //String templateAns = prompting.callAPI(templateResult);
+                //prompting.printConsole(prompting.callAPI(templateResult));
+
+
+                //Csv 출력
+                //Prompting.updateCsvWithQuestionOrAnswer(csvFilePath, templateAns, rowIndex++,"Answer");
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
 
             // LLM in FL, Wu et. al
             targetTest.forEach((testDTO) -> {
@@ -185,6 +201,8 @@ public class JDTMethodExtractor {
                             }
                         }
                         if (startOffset >= 0 && endOffset >= 0 && endOffset > startOffset) {
+                            methodLine.append("className: " + className + ", Statement:");
+                            methodLine.append("generate a \'NullPointerException\' in line " + lineNumber);
                             methodLine.append(source, startOffset, endOffset).append("\n");
                         } else {
                             methodLine.append("Line number out of bounds or empty line.\n");
@@ -246,7 +264,7 @@ public class JDTMethodExtractor {
         return str.contains("Test");
     }
 
-    public static String fuseTemplateAssemlber(String templatePath, ClassLoader classLoader, List<StringBuilder> list, TestDTO testDTO) throws IOException {
+    public static String fuseTemplateAssemlber(String templatePath, ClassLoader classLoader, List<StringBuilder> list) throws IOException {
         File rootDir = new File(classLoader.getResource(templatePath).getFile());
         String absoluteTemplatePath = rootDir.getAbsolutePath();
         String template = new String(Files.readAllBytes(Paths.get(absoluteTemplatePath)));
@@ -254,7 +272,6 @@ public class JDTMethodExtractor {
                 list.get(0).toString(),
                 list.get(1).toString(),
                 list.get(3).toString(),
-                String.valueOf(testDTO.getTestLine()),
                 list.get(2).toString(),
                 list.get(4).toString());
     }
