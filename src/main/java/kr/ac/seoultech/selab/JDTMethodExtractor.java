@@ -152,7 +152,7 @@ public class JDTMethodExtractor {
 
     private static String extractMethodCode(String source, String className, String methodName, int lineNumber) { //Source와 Test 메서드를 Body와 시작,끝 라인 넘버 리턴
         StringBuilder methodCode = new StringBuilder();
-        ASTParser parser = ASTParser.newParser(AST.JLS8);
+        ASTParser parser = ASTParser.newParser(AST.getJLSLatest());
         parser.setSource(source.toCharArray());
         parser.setKind(ASTParser.K_COMPILATION_UNIT);
 
@@ -179,7 +179,7 @@ public class JDTMethodExtractor {
 
     public static String extractMethodLine(String source, String className, String methodName, int lineNumber) {
         StringBuilder methodLine = new StringBuilder();
-        ASTParser parser = ASTParser.newParser(AST.JLS8);
+        ASTParser parser = ASTParser.newParser(AST.getJLSLatest());
         parser.setSource(source.toCharArray());
         parser.setKind(ASTParser.K_COMPILATION_UNIT);
 
@@ -219,7 +219,7 @@ public class JDTMethodExtractor {
     public static String extractMethodJavadoc(String source, String className, String methodName, int lineNumber) { //해당 코드 주석
         StringBuilder javadocCode = new StringBuilder();
 
-        ASTParser parser = ASTParser.newParser(AST.JLS8);
+        ASTParser parser = ASTParser.newParser(AST.getJLSLatest());
         parser.setSource(source.toCharArray());
         parser.setKind(ASTParser.K_COMPILATION_UNIT);
 
