@@ -9,6 +9,7 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class TraceParser {
 
@@ -36,16 +37,18 @@ public class TraceParser {
 
                 JsonArray traceDetails = traceObject.getAsJsonArray("traces");             // [ {class method line is_target}. {class method line is_target} , ... ]
 
-
                 for (JsonElement detailElement : traceDetails) {
                     JsonObject detailObject = detailElement.getAsJsonObject();
                     boolean isTarget = detailObject.get("is_target").getAsBoolean();
                     if (isTarget) {
                         String className = detailObject.get("class").getAsString();
+                        if (className.contains("$")) {
+                            className = className.substring(0, className.indexOf("$"));
+                        }
                         String methodName = detailObject.get("method").getAsString();
                         int lineNumber = detailObject.get("line").getAsInt();
                         //className에 "Test"있는지 확인하고
-                        if (JDTMethodExtractor.isContainTest(className)) {
+                        if (isContainTest(className)) {
                             //"Test" 있으면 기존 TestDTO에 line 필드 추가 (npe.trace.json에 각각 객체에는 Test 클래스가 하나씩밖에 없음)
                             testDTO.setTestLine(lineNumber);
                         } else {
@@ -68,5 +71,9 @@ public class TraceParser {
         }
 
         return target;
+    }
+
+    public static boolean isContainTest(String str) {
+        return str.contains("Test") || str.contains("Tests");
     }
 }
