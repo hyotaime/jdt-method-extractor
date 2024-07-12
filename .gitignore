@@ -42,26 +42,8 @@ bin/
 .DS_Store
 /gradle/
 
-### DataSet ###
-src/main/resources/key.properties
-src/main/resources/math_npe_1
-src/main/resources/lang_npe_2
-src/main/resources/commons-io_npe_1
-src/main/resources/commons-io_npe_2
-src/main/resources/commons-io_npe_3
-src/main/resources/commons-io_npe_4
-src/main/resources/commons-io_npe_5
-src/main/resources/commons-io_npe_6
-src/main/resources/commons-io_npe_7
-src/main/resources/commons-io_npe_8
-src/main/resources/commons-io_npe_9
-src/main/resources/commons-io_npe_10
-src/main/resources/commons-io_npe_11
-src/main/resources/commons-io_npe_12
-src/main/resources/commons-io_npe_13
-src/main/resources/commons-io_npe_14
-src/main/resources/commons-io_npe_15
-src/main/resources/commons-io_npe_16
-src/main/resources/commons-io_npe_17
-src/main/resources/commons-io_npe_18
-src/main/resources/commons-io_npe_19
+### resources ###
+!src/main/resources/FuseTemplate.txt
+!src/main/resources/Prompt1Template.txt
+!src/main/resources/Prompt2Template.txt
+src/main/resources/
