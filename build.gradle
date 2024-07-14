@@ -23,16 +23,6 @@ dependencies {
 sourceCompatibility = '1.8'
 targetCompatibility = '1.8'
 
-<<<<<<< HEAD
-task run(type: JavaExec) {
-    main = 'kr.ac.seoultech.selab.JDTMethodExtractor'
-    classpath = sourceSets.main.runtimeClasspath
-}
-tasks.withType(JavaCompile) {
-    options.compilerArgs << '-Xlint:deprecation'
-}
-=======
->>>>>>> 1753aa0 (fix: Prompt 에러)
 
 test {
     useJUnitPlatform()
