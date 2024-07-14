@@ -50,7 +50,7 @@ public class Prompting {
 
         JsonObject requestBody = new JsonObject();
         // Set the model
-        requestBody.addProperty("model", "gpt-4");
+        requestBody.addProperty("model", "gpt-4-turbo");
 
         // Create the messages array
         JsonArray messages = new JsonArray();
@@ -136,7 +136,4 @@ public class Prompting {
     }
 
 }
-
-
-
 

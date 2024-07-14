@@ -6,7 +6,8 @@ import java.util.List;
 public class TestDTO {
     private String testClass; //이건 같게 나올수도 있는데
     private String testMethod; //이건 다 다르게 나옴
-    private int testLine;
+    private List<Integer> testLine = new ArrayList<>();
+
 
     //MultiValuedMap<String, List<SourceDTO>> source;
     List<SourceDTO> source = new ArrayList<>();
@@ -31,13 +32,13 @@ public class TestDTO {
     public void setTestMethod(String testMethod) {
         this.testMethod = testMethod;
     }
-
-    public int getTestLine() {
+    public List<Integer> getTestLine() {
         return testLine;
     }
 
-    public void setTestLine(int testLine) {
-        this.testLine = testLine;
+
+    public void addTestLine(int testLine) {
+        this.testLine.add(testLine);
     }
 
     public List<SourceDTO> getSource() {
