@@ -3,6 +3,17 @@ build/
 !**/src/main/**/build/
 !**/src/test/**/build/
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+
+resources/lang_npe_2/
+resources/key.properties
+resources/
+
+=======
+>>>>>>> 103d3f883f6c1728a866e3b2806c2af0a2cecd97
+>>>>>>> 1753aa0 (fix: Prompt 에러)
 ### IntelliJ IDEA ###
 .idea/
 .idea/modules.xml

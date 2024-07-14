@@ -47,7 +47,7 @@ public class TraceParser {
                         //className에 "Test"있는지 확인하고
                         if (JDTMethodExtractor.isContainTest(className)) {
                             //"Test" 있으면 기존 TestDTO에 line 필드 추가 (npe.trace.json에 각각 객체에는 Test 클래스가 하나씩밖에 없음)
-                            testDTO.setTestLine(lineNumber);
+                            testDTO.addTestLine(lineNumber);
                         } else {
                             //"Test" 없으면 TestDTO의 source에 기존 class와 method 동시에 겹치는게 있는지 확인하고
                             if (testDTO.isDuplicate(className, methodName)) {

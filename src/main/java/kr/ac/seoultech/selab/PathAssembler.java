@@ -36,8 +36,6 @@ public class PathAssembler {
 //        googleSheet.add("collections_npe_1");
 //        googleSheet.add("collections_npe_2");
 //        googleSheet.add("collections_npe_3");
-
-        /*
         googleSheet.add("commons-io_npe_1");
         googleSheet.add("commons-io_npe_2");
         googleSheet.add("commons-io_npe_3");
@@ -56,10 +54,14 @@ public class PathAssembler {
         googleSheet.add("commons-io_npe_16");
         googleSheet.add("commons-io_npe_17");
         googleSheet.add("commons-io_npe_18");
-        googleSheet.add("commons-io_npe_19");*/
+        googleSheet.add("commons-io_npe_19");
 
 
-        // defects4j
+
+
+
+
+
         defects4j.add("Chart-2");
         defects4j.add("Chart-4");
         defects4j.add("Chart-14");
@@ -71,6 +73,7 @@ public class PathAssembler {
         defects4j.add("Codec-5");
         defects4j.add("Codec-13");
         defects4j.add("Codec-17");
+        defects4j.add("Compress-44");
         defects4j.add("Csv-4");
         defects4j.add("Csv-9");
         defects4j.add("Csv-11");
@@ -101,6 +104,7 @@ public class PathAssembler {
         defects4j.add("Mockito-4");
         defects4j.add("Mockito-18");
         defects4j.add("Mockito-29");
+        defects4j.add("Mockito-35");
         defects4j.add("Mockito-36");
         defects4j.add("Mockito-38");
     }
