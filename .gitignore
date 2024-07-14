@@ -3,12 +3,6 @@ build/
 !**/src/main/**/build/
 !**/src/test/**/build/
 
-
-resources/lang_npe_2/
-resources/key.properties
-resources/
-resources/Chart-2/
-
 ### IntelliJ IDEA ###
 .idea/
 .idea/modules.xml
