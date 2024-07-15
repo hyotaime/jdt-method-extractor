@@ -20,7 +20,7 @@ public class JDTMethodExtractor {
         ClassLoader classLoader = JDTMethodExtractor.class.getClassLoader();
         Prompting prompting = new Prompting();
         String csvFilePath = "src/main/resources/result_defect4j.csv"; // CSV 파일 경로
-//        String csvFilePath = "src/main/resources/result.csv"; // CSV 파일 경로
+        //String csvFilePath = "src/main/resources/result.csv"; // CSV 파일 경로
         int rowIndex = 0;
 
         for (String path : pathAssembler.defects4j) { //여기만 바꿔끼우기
@@ -47,20 +47,21 @@ public class JDTMethodExtractor {
             System.out.println(prompting.getKey("hyun_api_key"));
 
             // JSON 파일을 파싱하여 타겟 메소드 정보를 가져옵니다.
-            List<TestDTO> targetTest = TraceParser.parseJson(jsonFilePath); //<methodName , <source, Line>>
+            List<JsonDTO> targetTest = TraceParser.parseJson(jsonFilePath); //<methodName , <source, Line>>
 
             // FuseFL
-            targetTest.forEach((testDTO) -> {
-                List<SourceDTO> targetSource = testDTO.getSource();
+            targetTest.forEach((jsonDTO) -> {
+                List<SourceDTO> targetSource = jsonDTO.getSource();
                 // ClassLoader를 사용하여 소스 코드 루트 경로를 절대 경로로 변환합니다
                 targetSource.forEach((sourceDTO) -> {
                     sourceDTO.toString();
                     faultyCode.append(absolutePath(sourceDTO, classLoader, sourceRootPath, 0));
                     taskDescription.append(absolutePath(sourceDTO, classLoader, sourceRootPath, 1));
                 });
-                testCode.append(absolutePath(testDTO, classLoader, testRootPath, 0));
-                testFailedLine.append(absolutePath(testDTO, classLoader, testRootPath, 2));
-
+                for(TestDTO testDTO : jsonDTO.getTest()) {
+                    testCode.append(absolutePath(testDTO, classLoader, testRootPath, 0));
+                    testFailedLine.append(absolutePath(testDTO, classLoader, testRootPath, 2));
+                }
             });
             try {
                 //템플릿 매핑값 출력

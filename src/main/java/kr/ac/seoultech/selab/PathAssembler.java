@@ -62,13 +62,13 @@ public class PathAssembler {
 
 
 
-//        defects4j.add("Chart-2");
-//        defects4j.add("Chart-4");
-//        defects4j.add("Chart-14");
-//        defects4j.add("Chart-16");
-//        defects4j.add("Cli-5");
+        defects4j.add("Chart-2");
+        defects4j.add("Chart-4");
+        defects4j.add("Chart-14");
+        defects4j.add("Chart-16");
+        defects4j.add("Cli-5");
         defects4j.add("Cli-30");
-/*        defects4j.add("Closure-2");
+        defects4j.add("Closure-2");
         defects4j.add("Closure-171");
         defects4j.add("Codec-5");
         defects4j.add("Codec-13");
@@ -104,9 +104,8 @@ public class PathAssembler {
         defects4j.add("Mockito-4");
         defects4j.add("Mockito-18");
         defects4j.add("Mockito-29");
-        defects4j.add("Mockito-35");
         defects4j.add("Mockito-36");
-        defects4j.add("Mockito-38");*/
+        defects4j.add("Mockito-38");
     }
 
 

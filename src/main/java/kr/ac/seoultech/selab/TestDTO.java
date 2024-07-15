@@ -8,13 +8,10 @@ public class TestDTO {
     private String testMethod; //이건 다 다르게 나옴
     private List<Integer> testLine = new ArrayList<>();
 
-
-    //MultiValuedMap<String, List<SourceDTO>> source;
-    List<SourceDTO> source = new ArrayList<>();
-
-    public TestDTO(String testClass, String testMethod) {
+    public TestDTO(String testClass, String testMethod,int lineNumber) {
         this.testClass = testClass;
         this.testMethod = testMethod;
+        this.testLine.add(lineNumber);
     }
 
     public String getTestClass() {
@@ -32,39 +29,17 @@ public class TestDTO {
     public void setTestMethod(String testMethod) {
         this.testMethod = testMethod;
     }
+
     public List<Integer> getTestLine() {
         return testLine;
     }
 
-
-    public void addTestLine(int testLine) {
-        this.testLine.add(testLine);
+    public void setTestLine(List<Integer> testLine) {
+        this.testLine = testLine;
     }
 
-    public List<SourceDTO> getSource() {
-        return source;
+    public void addTestLine(int lineNumber){
+        this.testLine.add(lineNumber);
     }
-
-    public void setSource(List<SourceDTO> source) {
-        this.source = source;
-    }
-
-    public boolean isDuplicate(String className, String methodName) {
-        for (SourceDTO temp : source) {
-            if (temp.getSourceClass().equals(className) && temp.getSourceMethod().equals(methodName)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public SourceDTO findSourceDTO(String className, String methodName) {
-        for (SourceDTO temp : source) {
-            if (temp.getSourceClass().equals(className) && temp.getSourceMethod().equals(methodName)) {
-                return temp;
-            }
-        }
-        return null;
-    }
-
 }
+

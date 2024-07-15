@@ -60,7 +60,7 @@ public class Prompting {
         messages.add(message);
 
         requestBody.add("messages", messages);
-        requestBody.addProperty("max_tokens", 4096); // 프롬프트 토큰 최댓값
+        requestBody.addProperty("max_tokens", 8192); // 프롬프트 토큰 최댓값
 
 
         String jsonBody = requestBody.toString();
