@@ -43,6 +43,10 @@ public class TraceParser {
                     if (isTarget) {
                         String className = detailObject.get("class").getAsString();
                         String methodName = detailObject.get("method").getAsString();
+                        if (methodName.equals("<init>")) {
+                            String[] paths = className.split("\\.");
+                            methodName = paths[paths.length - 1];
+                        }
                         int lineNumber = detailObject.get("line").getAsInt();
                         //className에 "Test"있는지 확인하고
                         if (JDTMethodExtractor.isContainTest(className)) {
