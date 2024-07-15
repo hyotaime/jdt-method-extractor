@@ -80,11 +80,11 @@ public class JDTMethodExtractor {
         try {
             String source = new String(Files.readAllBytes(Paths.get(filePath)));
             if (index == 0) {//Description
-                return extractMethodCode(source, sourceDTO.getSourceClass(), sourceDTO.getSourceMethod(), sourceDTO.getSourceLine().get(0));
+                return extractMethodCode(source, sourceDTO.getSourceClass(), sourceDTO.getSourceMethod(), sourceDTO.getSourceLine());
             } else if (index == 1) {
-                return extractMethodJavadoc(source, sourceDTO.getSourceClass(), sourceDTO.getSourceMethod(), sourceDTO.getSourceLine().get(0));
+                return extractMethodJavadoc(source, sourceDTO.getSourceClass(), sourceDTO.getSourceMethod(), sourceDTO.getSourceLine());
             } else {
-                return extractMethodCode(source, sourceDTO.getSourceClass(), sourceDTO.getSourceMethod(), sourceDTO.getSourceLine().get(0));
+                return extractMethodCode(source, sourceDTO.getSourceClass(), sourceDTO.getSourceMethod(), sourceDTO.getSourceLine());
             }
         } catch (IOException e) {
             String errorMessage = new String("파일을 읽는 동안 오류가 발생했습니다: " + filePath);
