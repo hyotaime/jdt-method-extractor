@@ -6,12 +6,12 @@ import java.util.List;
 public class SourceDTO {
     private String sourceClass;
     private String sourceMethod;
-    private List<Integer> sourceLine = new ArrayList<>();
+    private Integer sourceLine;
 
     public SourceDTO(String sourceClass, String sourceMethod, Integer sourceLine) {
         this.sourceClass = sourceClass;
         this.sourceMethod = sourceMethod;
-        addSourceLine(sourceLine);
+        this.sourceLine = sourceLine;
     }
 
     public String getSourceClass() {
@@ -30,15 +30,12 @@ public class SourceDTO {
         this.sourceMethod = sourceMethod;
     }
 
-    public List<Integer> getSourceLine() {
+    public Integer getSourceLine() {
         return sourceLine;
     }
 
-    public void setSourceLine(List<Integer> sourceLine) {
+    public void setSourceLine(Integer sourceLine) {
         this.sourceLine = sourceLine;
     }
 
-    public void addSourceLine(Integer sourceLine) {
-        this.sourceLine.add(sourceLine);
-    }
 }
