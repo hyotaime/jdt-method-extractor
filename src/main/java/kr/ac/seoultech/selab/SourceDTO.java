@@ -41,4 +41,10 @@ public class SourceDTO {
     public void addSourceLine(Integer sourceLine) {
         this.sourceLine.add(sourceLine);
     }
+
+    @Override
+    public String toString() {
+        String str = "sourceClass: "+ sourceClass + "sourceMethod: " + sourceMethod + sourceLine.toString();
+        return str;
+    }
 }
