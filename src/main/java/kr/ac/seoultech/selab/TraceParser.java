@@ -45,12 +45,17 @@ public class TraceParser {
                             className = className.substring(0, className.indexOf("$"));
                         }
                         String methodName = detailObject.get("method").getAsString();
+                        if (methodName.equals("<init>")) {
+                            String[] paths = className.split("\\.");
+                            methodName = paths[paths.length - 1];
+                        }
                         int lineNumber = detailObject.get("line").getAsInt();
                         //className에 "Test"있는지 확인하고
                         if (isContainTest(className)) {
                             //"Test" 있으면 기존 TestDTO에 line 필드 추가 (npe.trace.json에 각각 객체에는 Test 클래스가 하나씩밖에 없음)
                             testDTO.setTestLine(lineNumber);
                         } else {
+//                            System.out.println(className + " " + methodName + " " + lineNumber);
                             testDTO.getSource().add(new SourceDTO(className, methodName, lineNumber));
                         }
                     }
