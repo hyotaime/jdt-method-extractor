@@ -214,7 +214,7 @@ public class JDTMethodExtractor {
                 if (currentMethodName.equals(methodName) || isConstructor) {
                     int startLine = cu.getLineNumber(node.getStartPosition());
                     int endLine = cu.getLineNumber(node.getStartPosition() + node.getLength());
-                    if (startLine <= lineNumber.get(0) && lineNumber.get(0) <= endLine) {
+                    if (!lineNumber.isEmpty() && startLine <= lineNumber.get(0) && lineNumber.get(0) <= endLine) {
                         methodCode.append("ClassName: " + className + " ,Start Line: " + startLine + " ,End Line: " + endLine + " Error Line number: " + lineNumber.toString() + "\n");
 
                         methodCode.append(node.toString());
