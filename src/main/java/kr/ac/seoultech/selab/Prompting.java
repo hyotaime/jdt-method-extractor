@@ -9,10 +9,7 @@ import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVPrinter;
 import org.apache.commons.csv.CSVRecord;
 
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.Reader;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -35,11 +32,12 @@ public class Prompting {
     public String getKey(String key) {
         return properties.getProperty(key);
     }
-    public String getURL(){
+
+    public String getURL() {
         return properties.getProperty("api_url");
     }
 
-    public String callAPI(String prompt){
+    public String callAPI(String prompt) {
         OkHttpClient client = new OkHttpClient.Builder()
                 .connectTimeout(30, TimeUnit.SECONDS)
                 .writeTimeout(30, TimeUnit.SECONDS)
@@ -130,9 +128,35 @@ public class Prompting {
         }
     }
 
-    public void printConsole(String str){
+    public void printConsole(String str) {
         System.out.println("====================API 호출 결과=====================");
         System.out.println(str);
+    }
+
+    public void updateCsv(String csvFileName, String[] csvData) {
+        File csvFile = new File(csvFileName + ".csv");
+        boolean fileExists = csvFile.exists();
+        // Update CSV data to file
+        try (FileWriter csvWriter = new FileWriter(csvFile, true)) {
+            // Write header only if the file does not exist
+            if (!fileExists) {
+                csvWriter.append(String.join(",", new String[]{"bug_name", "prompt1", "prompt2"}));
+                csvWriter.append("\n");
+            }
+            csvWriter.append(String.join(",", csvData));
+            csvWriter.append("\n");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    // Method to escape CSV special characters
+    public String escapeCSV(String value) {
+        if (value.contains(",") || value.contains("\"") || value.contains("\n")) {
+            value = value.replace("\"", "\"\"");
+            value = "\"" + value + "\"";
+        }
+        return value;
     }
 
 }

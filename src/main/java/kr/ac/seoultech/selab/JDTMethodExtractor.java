@@ -19,10 +19,19 @@ public class JDTMethodExtractor {
         PathAssembler pathAssembler = new PathAssembler();
         ClassLoader classLoader = JDTMethodExtractor.class.getClassLoader();
         Prompting prompting = new Prompting();
-        String csvFilePath = "src/main/resources/result.csv"; // CSV 파일 경로
+        String fuseFLCsvFilePath = "src/main/resources/result.csv"; // FuseFL CSV 파일 경로
+        String wuCsvFileName = "prompt-d4j"; // Wu et. al CSV 파일 이름
         int rowIndex = 0;
 
-        for (String path : pathAssembler.googleSheet) { //여기만 바꿔끼우기
+        for (String path : pathAssembler.defects4j) { //여기만 바꿔끼우기
+            /*
+            templateArgsList
+            0: faultyCode
+            1: taskDescription
+            2: testCode
+            3: testFailedLine
+            4: stackTraces
+            */
             List<StringBuilder> templateArgsList = new ArrayList<>();
             Map<String, String> pathMap = pathAssembler.assembler(path);
 
@@ -43,12 +52,11 @@ public class JDTMethodExtractor {
             templateArgsList.add(testFailedLine);
             templateArgsList.add(stackTraces);
 
-            System.out.println(prompting.getKey("hyun_api_key"));
-
             // JSON 파일을 파싱하여 타겟 메소드 정보를 가져옵니다.
             List<TestDTO> targetTest = TraceParser.parseJson(jsonFilePath); //<methodName , <source, Line>>
 
             // FuseFL
+            System.out.println(prompting.getKey("hyun_api_key"));
             targetTest.forEach((testDTO) -> {
                 List<SourceDTO> targetSource = testDTO.getSource();
                 // ClassLoader를 사용하여 소스 코드 루트 경로를 절대 경로로 변환합니다
@@ -58,23 +66,20 @@ public class JDTMethodExtractor {
                 });
                 testCode.append(absolutePath(testDTO, classLoader, testRootPath, 0));
                 testFailedLine.append(absolutePath(testDTO, classLoader, testRootPath, 2));
-
             });
             try {
                 //템플릿 매핑값 출력
-
                 String templateResult = fuseTemplateAssemlber("FuseTemplate.txt", classLoader, templateArgsList);
                 System.out.println(templateResult);
-                Prompting.updateCsvWithQuestionOrAnswer(csvFilePath, templateResult, rowIndex++, "Question");
+                Prompting.updateCsvWithQuestionOrAnswer(fuseFLCsvFilePath, templateResult, rowIndex++, "Question");
 
                 //API 호출 결과 출력
-                //String templateResult = fuseTemplateAssemlber("FuseTemplate.txt", classLoader, templateArgsList);
-                //String templateAns = prompting.callAPI(templateResult);
-                //prompting.printConsole(prompting.callAPI(templateResult));
-
+//                String templateResult = fuseTemplateAssemlber("FuseTemplate.txt", classLoader, templateArgsList);
+//                String templateAns = prompting.callAPI(templateResult);
+//                prompting.printConsole(prompting.callAPI(templateResult));
 
                 //Csv 출력
-                //Prompting.updateCsvWithQuestionOrAnswer(csvFilePath, templateAns, rowIndex++,"Answer");
+//                Prompting.updateCsvWithQuestionOrAnswer(fuseFLCsvFilePath, templateAns, rowIndex++,"Answer");
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -84,19 +89,17 @@ public class JDTMethodExtractor {
                 List<SourceDTO> targetSource = testDTO.getSource();
                 // ClassLoader를 사용하여 소스 코드 루트 경로를 절대 경로로 변환합니다
                 targetSource.forEach((sourceDTO) -> {
-                    try {
-                        System.out.println("Prompt1 ========================================================================");
-                        System.out.println(prompt1Assemlber("Prompt1Template.txt", classLoader, absolutePath(sourceDTO, classLoader, sourceRootPath, 0)));
-                        if (!readStackTraces(classLoader, stackTracesPath).equals("Stack Traces Path Wrong")) {
-                            System.out.println("Prompt2 ------------------------------------------------------------------------");
-                            System.out.println(prompt2Assemlber("Prompt2Template.txt", classLoader, readStackTraces(classLoader, stackTracesPath), absolutePath(testDTO, classLoader, testRootPath, 0)));
-                        }
-                        System.out.println("================================================================================");
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    }
+                    faultyCode.append(absolutePath(sourceDTO, classLoader, sourceRootPath, 0));
                 });
+                testCode.append(absolutePath(testDTO, classLoader, testRootPath, 0));
             });
+            try {
+                String prompt1Rst = prompt1Assemlber("Prompt1Template.txt", classLoader, templateArgsList.get(0).toString());
+                String prompt2Rst = prompt2Assemlber("Prompt2Template.txt", classLoader, templateArgsList.get(4).toString(), templateArgsList.get(2).toString());
+                prompting.updateCsv(wuCsvFileName, new String[]{path, prompting.escapeCSV(prompt1Rst), prompting.escapeCSV(prompt2Rst)});
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 
@@ -117,17 +120,15 @@ public class JDTMethodExtractor {
         }
 
         String filePath = Paths.get(absoluteSourceRootPath, sourceClassPath).toString();
-        System.out.println("=======================================" +sourceDTO.getSourceLine().toString());
+//        System.out.println("=======================================" + sourceDTO.getSourceLine().toString());
         //System.out.println("Processing file: " + filePath);
         try {
             String source = new String(Files.readAllBytes(Paths.get(filePath)));
-            if(index==0) {//Description
+            if (index == 0) {//Description
                 return extractMethodCode(source, sourceDTO.getSourceClass(), sourceDTO.getSourceMethod(), sourceDTO.getSourceLine());
-            }
-            else if(index==1){
+            } else if (index == 1) {
                 return extractMethodJavadoc(source, sourceDTO.getSourceClass(), sourceDTO.getSourceMethod(), sourceDTO.getSourceLine());
-            }
-            else{
+            } else {
                 return extractMethodCode(source, sourceDTO.getSourceClass(), sourceDTO.getSourceMethod(), sourceDTO.getSourceLine());
             }
         } catch (IOException e) {
@@ -164,125 +165,11 @@ public class JDTMethodExtractor {
         }
     }
 
-
-
-//    private static String extractMethodCode(String source, String className, String methodName, int lineNumber) {
-//        StringBuilder methodCode = new StringBuilder();
-//        ASTParser parser = ASTParser.newParser(AST.getJLSLatest());
-//        parser.setSource(source.toCharArray());
-//        parser.setKind(ASTParser.K_COMPILATION_UNIT);
-//
-//        // 파싱 옵션 설정
-//        Map<String, String> options = JavaCore.getOptions();
-//        JavaCore.setComplianceOptions(JavaCore.VERSION_1_8, options);
-//        parser.setCompilerOptions(options);
-//
-//        CompilationUnit cu = (CompilationUnit) parser.createAST(null);
-//
-//
-//        cu.accept(new ASTVisitor() {
-//            @Override
-//            public boolean visit(MethodDeclaration node) {
-//                if (node.getName().getIdentifier().equals(methodName)) {
-//                    int startLine = cu.getLineNumber(node.getStartPosition());
-//                    int endLine = cu.getLineNumber(node.getStartPosition() + node.getLength());
-//                    if (startLine <= lineNumber && lineNumber <= endLine) {
-//                        methodCode.append("ClassName: " + className + " ,Start Line: " + startLine + " ,End Line: " + endLine + "Error Line number: "+lineNumber +"\n");
-//                        methodCode.append(node.toString());
-//                        methodCode.append("\n");
-//                    }
-//                }
-//                return super.visit(node);
-//            }
-//        });
-//        return methodCode.toString();
-//    }
-//
-//    public static String extractMethodLine(String source, String className, String methodName, int lineNumber) {
-//        StringBuilder methodLine = new StringBuilder();
-//        ASTParser parser = ASTParser.newParser(AST.getJLSLatest());
-//        parser.setSource(source.toCharArray());
-//        parser.setKind(ASTParser.K_COMPILATION_UNIT);
-//
-//        // 파싱 옵션 설정
-//        Map<String, String> options = JavaCore.getOptions();
-//        JavaCore.setComplianceOptions(JavaCore.VERSION_1_8, options);
-//        parser.setCompilerOptions(options);
-//
-//        CompilationUnit cu = (CompilationUnit) parser.createAST(null);
-//        cu.accept(new ASTVisitor() {
-//            @Override
-//            public boolean visit(MethodDeclaration node) {
-//                if (node.getName().getIdentifier().equals(methodName)) {
-//                    int startLine = cu.getLineNumber(node.getStartPosition());
-//                    int endLine = cu.getLineNumber(node.getStartPosition() + node.getLength());
-//                    if (startLine <= lineNumber && lineNumber <= endLine) {
-//                        // Get the specific line from the source code
-//                        int startOffset = cu.getPosition(lineNumber, 0);
-//                        int endOffset = startOffset;
-//                        for (int i = startOffset; i < source.length(); i++) {
-//                            if (source.charAt(i) == '\n') {
-//                                endOffset = i;
-//                                break;
-//                            }
-//                        }
-//                        if (startOffset >= 0 && endOffset >= 0 && endOffset > startOffset) {
-//                            methodLine.append("className: " + className +", Statement:");
-//                            methodLine.append("generate a \'NullPointerException\' in line "+lineNumber);
-//                            methodLine.append(source, startOffset, endOffset).append("\n");
-//                        } else {
-//                            methodLine.append("Line number out of bounds or empty line.\n");
-//                        }
-//                    }
-//                }
-//                return super.visit(node);
-//            }
-//        });
-//
-//        return methodLine.toString();
-//    }
-//
-//    public static String extractMethodJavadoc(String source, String className, String methodName, int lineNumber) { //해당 코드 주석
-//        StringBuilder javadocCode = new StringBuilder();
-//
-//        ASTParser parser = ASTParser.newParser(AST.getJLSLatest());
-//        parser.setSource(source.toCharArray());
-//        parser.setKind(ASTParser.K_COMPILATION_UNIT);
-//
-//        // 파싱 옵션 설정
-//        Map<String, String> options = JavaCore.getOptions();
-//        JavaCore.setComplianceOptions(JavaCore.VERSION_1_8, options);
-//        parser.setCompilerOptions(options);
-//
-//        CompilationUnit cu = (CompilationUnit) parser.createAST(null);
-//        cu.accept(new ASTVisitor() {
-//            @Override
-//            public boolean visit(MethodDeclaration node) {
-//                if (node.getName().getIdentifier().equals(methodName)) {
-//                    int startLine = cu.getLineNumber(node.getStartPosition());
-//                    int endLine = cu.getLineNumber(node.getStartPosition() + node.getLength());
-//                    if (startLine <= lineNumber && lineNumber <= endLine) {
-//                        Javadoc javadoc = node.getJavadoc();
-//                        if (javadoc != null) {
-//                            javadocCode.append("className: "+ className+ "\n"+javadoc.toString()).append("\n");
-//                        } else {
-//                            javadocCode.append("No Javadoc found.\n");
-//                        }
-//                    }
-//                }
-//                return super.visit(node);
-//            }
-//        });
-//
-//        return javadocCode.toString();
-//    }
-
     private static String extractMethodCode(String source, String className, String methodName, List<Integer> lineNumber) {
         StringBuilder methodCode = new StringBuilder();
         ASTParser parser = ASTParser.newParser(AST.getJLSLatest());
         parser.setSource(source.toCharArray());
         parser.setKind(ASTParser.K_COMPILATION_UNIT);
-
 
 
         // 파싱 옵션 설정
@@ -465,7 +352,7 @@ public class JDTMethodExtractor {
                     if (startLine <= lineNumber.get(0) && lineNumber.get(0) <= endLine) {
                         Javadoc javadoc = node.getJavadoc();
                         if (javadoc != null) {
-                            javadocCode.append("className: " + currentClassName + ", methodName: "+ methodName + "\n" + javadoc.toString()).append("\n");
+                            javadocCode.append("className: " + currentClassName + ", methodName: " + methodName + "\n" + javadoc.toString()).append("\n");
                         } else {
                             javadocCode.append("No Javadoc found.\n");
                         }

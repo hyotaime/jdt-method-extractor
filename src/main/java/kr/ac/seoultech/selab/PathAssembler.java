@@ -36,30 +36,25 @@ public class PathAssembler {
 //        googleSheet.add("collections_npe_1");
 //        googleSheet.add("collections_npe_2");
 //        googleSheet.add("collections_npe_3");
-        googleSheet.add("commons-io_npe_1");
-        googleSheet.add("commons-io_npe_2");
-        googleSheet.add("commons-io_npe_3");
-        googleSheet.add("commons-io_npe_4");
-        googleSheet.add("commons-io_npe_5");
-        googleSheet.add("commons-io_npe_6");
-        googleSheet.add("commons-io_npe_7");
-        googleSheet.add("commons-io_npe_8");
-        googleSheet.add("commons-io_npe_9");
-        googleSheet.add("commons-io_npe_10");
-        googleSheet.add("commons-io_npe_11");
-        googleSheet.add("commons-io_npe_12");
-        googleSheet.add("commons-io_npe_13");
-        googleSheet.add("commons-io_npe_14");
-        googleSheet.add("commons-io_npe_15");
-        googleSheet.add("commons-io_npe_16");
-        googleSheet.add("commons-io_npe_17");
-        googleSheet.add("commons-io_npe_18");
-        googleSheet.add("commons-io_npe_19");
-
-
-
-
-
+//        googleSheet.add("commons-io_npe_1");
+//        googleSheet.add("commons-io_npe_2");
+//        googleSheet.add("commons-io_npe_3");
+//        googleSheet.add("commons-io_npe_4");
+//        googleSheet.add("commons-io_npe_5");
+//        googleSheet.add("commons-io_npe_6");
+//        googleSheet.add("commons-io_npe_7");
+//        googleSheet.add("commons-io_npe_8");
+//        googleSheet.add("commons-io_npe_9");
+//        googleSheet.add("commons-io_npe_10");
+//        googleSheet.add("commons-io_npe_11");
+//        googleSheet.add("commons-io_npe_12");
+//        googleSheet.add("commons-io_npe_13");
+//        googleSheet.add("commons-io_npe_14");
+//        googleSheet.add("commons-io_npe_15");
+//        googleSheet.add("commons-io_npe_16");
+//        googleSheet.add("commons-io_npe_17");
+//        googleSheet.add("commons-io_npe_18");
+//        googleSheet.add("commons-io_npe_19");
 
         // defects4j
         defects4j.add("Chart-2");
