@@ -5,16 +5,22 @@ import java.util.List;
 
 public class JsonDTO {
 
-    private String testClassName;
-    private String testMethodName;
+    private String bugName;
 
     List<TestDTO> test = new ArrayList<>();
 
     List<SourceDTO> source = new ArrayList<>();
 
-    public JsonDTO(String testClassName, String testMethodName) {
-        this.testClassName = testClassName;
-        this.testMethodName = testMethodName;
+    public JsonDTO(String bugName) {
+        this.bugName=bugName;
+    }
+
+    public String getBugName() {
+        return bugName;
+    }
+
+    public void setBugName(String bugName) {
+        this.bugName = bugName;
     }
 
     public List<TestDTO> getTest() {
@@ -25,22 +31,6 @@ public class JsonDTO {
         this.test = test;
     }
 
-    public String getTestClassName() {
-        return testClassName;
-    }
-
-    public void setTestClassName(String testClassName) {
-        this.testClassName = testClassName;
-    }
-
-    public String getTestMethodName() {
-        return testMethodName;
-    }
-
-    public void setTestMethodName(String testMethodName) {
-        this.testMethodName = testMethodName;
-    }
-
     public List<SourceDTO> getSource() {
         return source;
     }
@@ -49,41 +39,62 @@ public class JsonDTO {
         this.source = source;
     }
 
-    public boolean isSourceDuplicate(String className, String methodName) {
+    public boolean isSourceDuplicate(int line) {
         for (SourceDTO temp : source) {
-            if (temp.getSourceClass().equals(className) && temp.getSourceMethod().equals(methodName)) {
+            if (temp.getStartLine()<=line && temp.getEndLine()>=line) {
                 return true;
             }
         }
         return false;
     }
 
-    public boolean isTestDuplicate(String className, String methodName) {
+    public boolean isTestDuplicate(int line) { //여기서 오버로딩도 판단해야될듯
         for (TestDTO temp : test) {
-            if (temp.getTestClass().equals(className) && temp.getTestMethod().equals(methodName)) {
+            if (temp.getStartLine()<=line && temp.getEndLine()>=line) {
                 return true;
             }
         }
         return false;
     }
 
-    public SourceDTO findSourceDTO(String className, String methodName) {
+    public SourceDTO findSourceDTO(int line) {
         for (SourceDTO temp : source) {
-            if (temp.getSourceClass().equals(className) && temp.getSourceMethod().equals(methodName)) {
+            if (temp.getStartLine()<=line && temp.getEndLine()>=line) {
                 return temp;
             }
         }
         return null;
     }
 
-    public TestDTO findTestDTO(String testClassName,String testMethodName){
+    public TestDTO findTestDTO(int line){
         for(TestDTO temp: test){
-            if (temp.getTestClass().equals(testClassName) && temp.getTestMethod().equals(testMethodName)) {
+            if (temp.getStartLine()<=line && temp.getEndLine()>=line) {
                 return temp;
             }
         }
         return null;
     }
 
+    public boolean isSourceSameLine(int line){
+        for (SourceDTO temp : source) {
+            for(int l : temp.getSourceLine()) {
+                if (l==line) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public boolean isTestSameLine(int line) {
+        for (TestDTO temp : test) {
+            for (int l : temp.getTestLine()) {
+                if (l == line) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 
 }

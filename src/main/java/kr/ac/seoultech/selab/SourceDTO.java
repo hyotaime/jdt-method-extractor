@@ -8,11 +8,17 @@ public class SourceDTO {
     private String sourceMethod;
     private List<Integer> sourceLine = new ArrayList<>();
 
+
+    //오버로딩 판단 기준
+    private int startLine;
+    private int endLine;
+
     public SourceDTO(String sourceClass, String sourceMethod, Integer sourceLine) {
         this.sourceClass = sourceClass;
         this.sourceMethod = sourceMethod;
         addSourceLine(sourceLine);
     }
+
 
     public String getSourceClass() {
         return sourceClass;
@@ -40,6 +46,22 @@ public class SourceDTO {
 
     public void addSourceLine(Integer sourceLine) {
         this.sourceLine.add(sourceLine);
+    }
+
+    public int getStartLine() {
+        return startLine;
+    }
+
+    public void setStartLine(int startLine) {
+        this.startLine = startLine;
+    }
+
+    public int getEndLine() {
+        return endLine;
+    }
+
+    public void setEndLine(int endLine) {
+        this.endLine = endLine;
     }
 
     @Override

@@ -8,6 +8,9 @@ public class TestDTO {
     private String testMethod; //이건 다 다르게 나옴
     private List<Integer> testLine = new ArrayList<>();
 
+    private int startLine;
+    private int endLine;
+
     public TestDTO(String testClass, String testMethod,int lineNumber) {
         this.testClass = testClass;
         this.testMethod = testMethod;
@@ -40,6 +43,22 @@ public class TestDTO {
 
     public void addTestLine(int lineNumber){
         this.testLine.add(lineNumber);
+    }
+
+    public int getStartLine() {
+        return startLine;
+    }
+
+    public void setStartLine(int startLine) {
+        this.startLine = startLine;
+    }
+
+    public int getEndLine() {
+        return endLine;
+    }
+
+    public void setEndLine(int endLine) {
+        this.endLine = endLine;
     }
 }
 

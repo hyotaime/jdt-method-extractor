@@ -3,15 +3,16 @@ package kr.ac.seoultech.selab;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.opencsv.CSVReader;
+import com.opencsv.CSVWriter;
+import com.opencsv.exceptions.CsvException;
 import okhttp3.*;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVPrinter;
 import org.apache.commons.csv.CSVRecord;
 
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.io.Reader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -94,43 +95,88 @@ public class Prompting {
         }
     }
 
-    public static void updateCsvWithQuestionOrAnswer(String filePath, String value, int rowIndex, String columnName) {
-        try (
-                Reader reader = Files.newBufferedReader(Paths.get(filePath));
-                CSVParser csvParser = new CSVParser(reader, CSVFormat.DEFAULT.withHeader())
-        ) {
-            List<CSVRecord> records = csvParser.getRecords();
-            List<String[]> updatedRecords = new ArrayList<>();
-            int columnIndex = csvParser.getHeaderMap().get(columnName);
+//    public static void updateCsvWithQuestionOrAnswer(String filePath, String value, int rowIndex, String columnName) {
+//        try (
+//                Reader reader = Files.newBufferedReader(Paths.get(filePath));
+//                CSVParser csvParser = new CSVParser(reader, CSVFormat.DEFAULT.withHeader())
+//        ) {
+//            List<CSVRecord> records = csvParser.getRecords();
+//            List<String[]> updatedRecords = new ArrayList<>();
+//            int columnIndex = csvParser.getHeaderMap().get(columnName);
+//
+//            for (int i = 0; i < records.size(); i++) {
+//                CSVRecord record = records.get(i);
+//                String[] newRow = new String[record.size()];
+//
+//                for (int j = 0; j < record.size(); j++) {
+//                    newRow[j] = record.get(j);
+//                }
+//
+//                if (i == rowIndex) {
+//                    newRow[columnIndex] = value;
+//                }
+//
+//                updatedRecords.add(newRow);
+//            }
+//
+//            try (
+//                    BufferedWriter writer = Files.newBufferedWriter(Paths.get(filePath));
+//                    CSVPrinter csvPrinter = new CSVPrinter(writer, CSVFormat.DEFAULT.withHeader(csvParser.getHeaderMap().keySet().toArray(new String[0])))
+//            ) {
+//                for (String[] record : updatedRecords) {
+//                    csvPrinter.printRecord((Object[]) record);
+//                }
+//            }
+//
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//    }
 
-            for (int i = 0; i < records.size(); i++) {
-                CSVRecord record = records.get(i);
-                String[] newRow = new String[record.size()];
-
-                for (int j = 0; j < record.size(); j++) {
-                    newRow[j] = record.get(j);
-                }
-
-                if (i == rowIndex) {
-                    newRow[columnIndex] = value;
-                }
-
-                updatedRecords.add(newRow);
-            }
-
-            try (
-                    BufferedWriter writer = Files.newBufferedWriter(Paths.get(filePath));
-                    CSVPrinter csvPrinter = new CSVPrinter(writer, CSVFormat.DEFAULT.withHeader(csvParser.getHeaderMap().keySet().toArray(new String[0])))
-            ) {
-                for (String[] record : updatedRecords) {
-                    csvPrinter.printRecord((Object[]) record);
-                }
-            }
-
+    public static void writeBugNameAndFaultyCode(String path,String bugName, String faultyCode) {
+        try (CSVWriter writer = new CSVWriter(new FileWriter(path, true))) {
+            String[] record = { bugName, faultyCode };
+            writer.writeNext(record);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
+    public static void updateAnswerForBug(String path,String targetString, String systemValue) {
+        List<String[]> allData = new ArrayList<>();
+
+        // Read existing data
+        try (CSVReader reader = new CSVReader(new FileReader(path))) {
+            allData = reader.readAll();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (CsvException e) {
+            throw new RuntimeException(e);
+        }
+
+        // Update data
+        for (String[] row : allData) {
+            if (row[0].equals(targetString)) {
+                if (row.length >= 3) {
+                    row[2] = systemValue;
+                } else {
+                    String[] newRow = new String[3];
+                    System.arraycopy(row, 0, newRow, 0, row.length);
+                    newRow[2] = systemValue;
+                    row = newRow;
+                }
+            }
+        }
+
+        // Write updated data back to CSV
+        try (CSVWriter writer = new CSVWriter(new FileWriter(path))) {
+            writer.writeAll(allData);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
 
     public void printConsole(String str){
         System.out.println("====================API 호출 결과=====================");
