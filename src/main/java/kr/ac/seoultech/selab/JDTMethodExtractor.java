@@ -66,18 +66,19 @@ public class JDTMethodExtractor {
             try {
                 //템플릿 매핑값 출력
 
-                String templateResult = fuseTemplateAssemlber("FuseTemplate.txt", classLoader, templateArgsList);
-                System.out.println(templateResult);
-                Prompting.updateCsvWithQuestionOrAnswer(csvFilePath, templateResult, rowIndex++, "Question");
+//                String templateResult = fuseTemplateAssemlber("FuseTemplate.txt", classLoader, templateArgsList);
+//                System.out.println("======================PATH: ================="+path);
+//                System.out.println(templateResult);
+//                Prompting.updateCsvWithQuestionOrAnswer(csvFilePath, templateResult, rowIndex++, "Question");
 
                 //API 호출 결과 출력
-//                String templateResult = fuseTemplateAssemlber("FuseTemplate.txt", classLoader, templateArgsList);
-//                String templateAns = prompting.callAPI(templateResult);
-//                prompting.printConsole(prompting.callAPI(templateResult));
+                String templateResult = fuseTemplateAssemlber("FuseTemplate.txt", classLoader, templateArgsList);
+                String templateAns = prompting.callAPI(templateResult);
+                prompting.printConsole(prompting.callAPI(templateResult));
 
 
                 //Csv 출력
-                //Prompting.updateCsvWithQuestionOrAnswer(csvFilePath, templateAns, rowIndex++,"Answer");
+                Prompting.updateCsvWithQuestionOrAnswer(csvFilePath, templateAns, rowIndex++,"Answer");
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -166,119 +167,6 @@ public class JDTMethodExtractor {
             return errorMessage;
         }
     }
-
-
-
-//    private static String extractMethodCode(String source, String className, String methodName, int lineNumber) {
-//        StringBuilder methodCode = new StringBuilder();
-//        ASTParser parser = ASTParser.newParser(AST.getJLSLatest());
-//        parser.setSource(source.toCharArray());
-//        parser.setKind(ASTParser.K_COMPILATION_UNIT);
-//
-//        // 파싱 옵션 설정
-//        Map<String, String> options = JavaCore.getOptions();
-//        JavaCore.setComplianceOptions(JavaCore.VERSION_1_8, options);
-//        parser.setCompilerOptions(options);
-//
-//        CompilationUnit cu = (CompilationUnit) parser.createAST(null);
-//
-//
-//        cu.accept(new ASTVisitor() {
-//            @Override
-//            public boolean visit(MethodDeclaration node) {
-//                if (node.getName().getIdentifier().equals(methodName)) {
-//                    int startLine = cu.getLineNumber(node.getStartPosition());
-//                    int endLine = cu.getLineNumber(node.getStartPosition() + node.getLength());
-//                    if (startLine <= lineNumber && lineNumber <= endLine) {
-//                        methodCode.append("ClassName: " + className + " ,Start Line: " + startLine + " ,End Line: " + endLine + "Error Line number: "+lineNumber +"\n");
-//                        methodCode.append(node.toString());
-//                        methodCode.append("\n");
-//                    }
-//                }
-//                return super.visit(node);
-//            }
-//        });
-//        return methodCode.toString();
-//    }
-//
-//    public static String extractMethodLine(String source, String className, String methodName, int lineNumber) {
-//        StringBuilder methodLine = new StringBuilder();
-//        ASTParser parser = ASTParser.newParser(AST.getJLSLatest());
-//        parser.setSource(source.toCharArray());
-//        parser.setKind(ASTParser.K_COMPILATION_UNIT);
-//
-//        // 파싱 옵션 설정
-//        Map<String, String> options = JavaCore.getOptions();
-//        JavaCore.setComplianceOptions(JavaCore.VERSION_1_8, options);
-//        parser.setCompilerOptions(options);
-//
-//        CompilationUnit cu = (CompilationUnit) parser.createAST(null);
-//        cu.accept(new ASTVisitor() {
-//            @Override
-//            public boolean visit(MethodDeclaration node) {
-//                if (node.getName().getIdentifier().equals(methodName)) {
-//                    int startLine = cu.getLineNumber(node.getStartPosition());
-//                    int endLine = cu.getLineNumber(node.getStartPosition() + node.getLength());
-//                    if (startLine <= lineNumber && lineNumber <= endLine) {
-//                        // Get the specific line from the source code
-//                        int startOffset = cu.getPosition(lineNumber, 0);
-//                        int endOffset = startOffset;
-//                        for (int i = startOffset; i < source.length(); i++) {
-//                            if (source.charAt(i) == '\n') {
-//                                endOffset = i;
-//                                break;
-//                            }
-//                        }
-//                        if (startOffset >= 0 && endOffset >= 0 && endOffset > startOffset) {
-//                            methodLine.append("className: " + className +", Statement:");
-//                            methodLine.append("generate a \'NullPointerException\' in line "+lineNumber);
-//                            methodLine.append(source, startOffset, endOffset).append("\n");
-//                        } else {
-//                            methodLine.append("Line number out of bounds or empty line.\n");
-//                        }
-//                    }
-//                }
-//                return super.visit(node);
-//            }
-//        });
-//
-//        return methodLine.toString();
-//    }
-//
-//    public static String extractMethodJavadoc(String source, String className, String methodName, int lineNumber) { //해당 코드 주석
-//        StringBuilder javadocCode = new StringBuilder();
-//
-//        ASTParser parser = ASTParser.newParser(AST.getJLSLatest());
-//        parser.setSource(source.toCharArray());
-//        parser.setKind(ASTParser.K_COMPILATION_UNIT);
-//
-//        // 파싱 옵션 설정
-//        Map<String, String> options = JavaCore.getOptions();
-//        JavaCore.setComplianceOptions(JavaCore.VERSION_1_8, options);
-//        parser.setCompilerOptions(options);
-//
-//        CompilationUnit cu = (CompilationUnit) parser.createAST(null);
-//        cu.accept(new ASTVisitor() {
-//            @Override
-//            public boolean visit(MethodDeclaration node) {
-//                if (node.getName().getIdentifier().equals(methodName)) {
-//                    int startLine = cu.getLineNumber(node.getStartPosition());
-//                    int endLine = cu.getLineNumber(node.getStartPosition() + node.getLength());
-//                    if (startLine <= lineNumber && lineNumber <= endLine) {
-//                        Javadoc javadoc = node.getJavadoc();
-//                        if (javadoc != null) {
-//                            javadocCode.append("className: "+ className+ "\n"+javadoc.toString()).append("\n");
-//                        } else {
-//                            javadocCode.append("No Javadoc found.\n");
-//                        }
-//                    }
-//                }
-//                return super.visit(node);
-//            }
-//        });
-//
-//        return javadocCode.toString();
-//    }
 
     private static String extractMethodCode(String source, String className, String methodName, List<Integer> lineNumber) {
 
