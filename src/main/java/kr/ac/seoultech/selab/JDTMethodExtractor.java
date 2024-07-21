@@ -19,10 +19,12 @@ public class JDTMethodExtractor {
         PathAssembler pathAssembler = new PathAssembler();
         ClassLoader classLoader = JDTMethodExtractor.class.getClassLoader();
         Prompting prompting = new Prompting();
-        //String csvFilePath = "src/main/resources/googleSheet.csv"; // CSV 파일 경로
-        String csvFilePath = "src/main/resources/defects4j.csv"; // CSV 파일 경로
+        String csvFilePath = "src/main/resources/googleSheet.csv"; // CSV 파일 경로
+        String csvFixedPath = "src/main/resources/googleSheet_devFixed.csv";
+        String csvResultPath = "src/main/resources/googleSheetResult.csv";
+        //String csvFilePath = "src/main/resources/defects4j.csv"; // CSV 파일 경로
 
-        for (String path : pathAssembler.defects4j) { //여기만 바꿔끼우기
+        for (String path : pathAssembler.googleSheet) { //여기만 바꿔끼우기
             List<StringBuilder> templateArgsList = new ArrayList<>();
             Map<String, String> pathMap = pathAssembler.assembler(path);
 
@@ -65,18 +67,27 @@ public class JDTMethodExtractor {
                 //템플릿 매핑값 출력
 
                 String templateResult = fuseTemplateAssemlber("FuseTemplate.txt", classLoader, templateArgsList);
-                System.out.println("======================PATH: ================="+path);
-                System.out.println(templateResult);
-                Prompting.writeBugNameAndFaultyCode(csvFilePath, jsonDTO.getBugName(), templateResult);
+                //System.out.println("======================PATH: ================="+path);
+                String templateAns = prompting.callAPI(templateResult);
+                //System.out.println(templateResult);
+                //System.out.println("templateAns = " + templateAns);
+                //System.out.println("getcellAnswerData************************" +Prompting.getCellData(csvFilePath,jsonDTO.getBugName(),2));
+                //String cellData = Prompting.getCellData(csvFixedPath, jsonDTO.getBugName(), 2);
+                System.out.println("======================파싱 PATH: ================="+path);
+                //String matchedType = TopCounter.doCount(cellData, templateAns);
+                //System.out.println("getcellJsonData************************"+cellData);
 
+
+
+                Prompting.writeBugNameAndFaultyCode(csvFilePath, jsonDTO.getBugName(), templateResult,templateAns);
                 //API 호출 결과 출력
-                //String templateResult = fuseTemplateAssemlber("FuseTemplate.txt", classLoader, templateArgsList);
-                //String templateAns = prompting.callAPI(templateResult);
-                //prompting.printConsole(prompting.callAPI(templateResult));
+//                String templateResult = fuseTemplateAssemlber("FuseTemplate.txt", classLoader, templateArgsList);
+//                String templateAns = prompting.callAPI(templateResult);
+//                prompting.printConsole(prompting.callAPI(templateResult));
 
 
                 //Csv 출력
-                ///Prompting.updateCsvWithQuestionOrAnswer(csvFilePath, templateAns, rowIndex++,"Answer");
+                //Prompting.updateAnswerForBug(csvFilePath,templateAns,jsonDTO.getBugName());
             } catch (IOException e) {
                 System.out.println(path+"  RunTime Error: "+e.toString());
                 throw new RuntimeException(e);

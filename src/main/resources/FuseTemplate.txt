@@ -24,6 +24,16 @@ We have used Stack Traces to identify potentially faulty lines. Here are the res
 Analyze the provided code and utilize task description, test results, and StackTraces techniques results to help in identifying potentially faulty lines. Provide the results following this JSON template:
 ```json
 {{
-  "faultLoc": [    {{      "faultyLine": (indicating the line number of the suspicious code),      "code": (displaying the actual code),      "explanation": (step by step reasoning on why this location is considered potentially faulty)    }},    ...  ]
+  "faultLoc": [
+    {{
+      "faultyLine": "(indicating the line number of the suspicious code)",
+      "ClassName": "(name of the class containing the faulty line)",
+      "code": "(displaying the actual code)",
+      "explanation": "(step by step reasoning on why this location is considered potentially faulty)"
+    }},
+    ...
+  ]
 }}
 ```
+
+

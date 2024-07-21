@@ -133,16 +133,25 @@ public class Prompting {
 //        }
 //    }
 
-    public static void writeBugNameAndFaultyCode(String path,String bugName, String faultyCode) {
+    public static void writeBugNameAndFaultyCode(String path,String bugName, String faultyCode,String answer) {
         try (CSVWriter writer = new CSVWriter(new FileWriter(path, true))) {
-            String[] record = { bugName, faultyCode };
+            String[] record = { bugName, faultyCode, answer};
             writer.writeNext(record);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public static void updateAnswerForBug(String path,String targetString, String systemValue) {
+    public static void writeMatchedType(String path,String matched) {
+        try (CSVWriter writer = new CSVWriter(new FileWriter(path, true))) {
+            String[] record = { matched };
+            writer.writeNext(record);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void updateAnswerForBug(String path,String targetString, String systemValue, int targetCell) {
         List<String[]> allData = new ArrayList<>();
 
         // Read existing data
@@ -157,12 +166,12 @@ public class Prompting {
         // Update data
         for (String[] row : allData) {
             if (row[0].equals(targetString)) {
-                if (row.length >= 3) {
-                    row[2] = systemValue;
+                if (row.length >= 5) {
+                    row[targetCell] = systemValue;
                 } else {
-                    String[] newRow = new String[3];
+                    String[] newRow = new String[5];
                     System.arraycopy(row, 0, newRow, 0, row.length);
-                    newRow[2] = systemValue;
+                    newRow[targetCell] = systemValue;
                     row = newRow;
                 }
             }
@@ -176,6 +185,52 @@ public class Prompting {
         }
     }
 
+    public static String getCellData(String path, String targetString,int targetCell) {
+        List<String[]> allData = new ArrayList<>();
+
+        // Read existing data
+        try (CSVReader reader = new CSVReader(new FileReader(path))) {
+            allData = reader.readAll();
+        } catch (IOException | CsvException e) {
+            e.printStackTrace();
+        }
+
+        // Retrieve specific cell data
+        for (String[] row : allData) {
+            if (row[0].equals(targetString)) {
+                if (row.length > 1) {
+                    return row[targetCell];  // Return the data in the second column
+                } else {
+                    return null; // Return null if the second column is out of bounds
+                }
+            }
+        }
+        return null; // Return null if the target string is not found
+    }
+
+    public static List<String> getThirdColumnData(String path) {
+        List<String[]> allData = new ArrayList<>();
+        List<String> thirdColumnData = new ArrayList<>();
+
+        // Read existing data
+        try (CSVReader reader = new CSVReader(new FileReader(path))) {
+            allData = reader.readAll();
+        } catch (IOException | CsvException e) {
+            e.printStackTrace();
+        }
+
+        // Retrieve the third column data, excluding the header
+        for (int i = 1; i < allData.size(); i++) { // Start from 1 to skip the header
+            String[] row = allData.get(i);
+            if (row.length >= 3) {
+                thirdColumnData.add(row[2]);  // Add the data in the third column to the list
+            } else {
+                thirdColumnData.add(null); // Add null if the third column is out of bounds
+            }
+        }
+
+        return thirdColumnData;
+    }
 
 
     public void printConsole(String str){
