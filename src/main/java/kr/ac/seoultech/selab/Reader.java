@@ -34,19 +34,23 @@ public class Reader {
         }
 
         String filePath = Paths.get(absoluteSourceRootPath, sourceClassPath).toString();
-        System.out.println("=======================================" + sourceDTO.getSourceLine().toString());
         //System.out.println("Processing file: " + filePath);
         try {
             String source = new String(Files.readAllBytes(Paths.get(filePath)));
             if (index == 0) {//Description
+                System.out.println("=========absolutePath 넘어온 Source/CodeSnippet============" + sourceDTO.getSourceLine().toString());
                 return extractMethodCode(source, sourceDTO.getSourceClass(), sourceDTO.getSourceMethod(), sourceDTO.getSourceLine());
             } else if (index == 1) {
+                System.out.println("=========absolutePath 넘어온 Source/Desc============" + sourceDTO.getSourceLine().toString());
                 return extractMethodJavadoc(source, sourceDTO.getSourceClass(), sourceDTO.getSourceMethod(), sourceDTO.getSourceLine());
             } else if (index ==2){
+                System.out.println("=========absolutePath 넘어온 Source/Line============" + sourceDTO.getSourceLine().toString());
                 return extractMethodCode(source, sourceDTO.getSourceClass(), sourceDTO.getSourceMethod(), sourceDTO.getSourceLine());
             } else if(index==3){
+                System.out.println("=========absolutePath 넘어온 Source/StartLine============" + sourceDTO.getSourceLine().toString());
                 return extractMethodStartLine(source, sourceDTO.getSourceClass(), sourceDTO.getSourceMethod(), sourceDTO.getSourceLine());
             } else{
+                System.out.println("=========absolutePath 넘어온 Source/EndLine============" + sourceDTO.getSourceLine().toString());
                 return extractMethodEndLine(source, sourceDTO.getSourceClass(), sourceDTO.getSourceMethod(), sourceDTO.getSourceLine());
             }
         } catch (IOException e) {

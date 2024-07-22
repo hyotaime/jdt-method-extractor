@@ -4,27 +4,34 @@ import java.util.List;
 
 public class DoMatched {
     public static void main(String[] args) {
-        String csvFilePath = "src/main/resources/googleSheet.csv"; // CSV 파일 경로
-        String csvFixedPath = "src/main/resources/googleSheet_devFixed.csv"; // Dev.fixed Json
-        String csvResultPath = "src/main/resources/googleSheetResult.csv"; //매치 정도 기록 파일
+//        String csvFilePath = "src/main/resources/googleSheet.csv"; // CSV 파일 경로
+//        String csvFixedPath = "src/main/resources/googleSheet_devFixed.csv"; // Dev.fixed Json
+//        String csvResultPath = "src/main/resources/googleSheetResult.csv"; //매치 정도 기록 파일
+
+        String csvFilePath = "src/main/resources/defects4j.csv"; // CSV 파일 경로
+        String csvFixedPath = "src/main/resources/defects4j_devFixed2.csv";
+        String csvResultPath = "src/main/resources/defects4jResult.csv";
         int iter=0;
 
         List<String> answerStringJsonList = Prompting.getThirdColumnData(csvFixedPath);
         List<String> promptStringJsonList = Prompting.getThirdColumnData(csvFilePath);
-        for(String str : promptStringJsonList){
-            System.out.println("iter = " + iter);
-            String answerStringJson = answerStringJsonList.get(iter);
-            String matchedType = TopCounter.doCount(answerStringJson, str);
-            Prompting.writeMatchedType(csvResultPath,matchedType);
+
+
+        for (String str : promptStringJsonList) {
+            try {
+                System.out.println("iter = " + iter);
+                String answerStringJson = answerStringJsonList.get(iter);
+                if (answerStringJson == null || answerStringJson.trim().isEmpty()) {
+                    Prompting.writeMatchedType(csvResultPath, "null");
+                } else {
+                    String matchedType = TopCounter.doCount(answerStringJson, str, iter);
+                    Prompting.writeMatchedType(csvResultPath, matchedType);
+                }
+            } catch (IndexOutOfBoundsException e){
+                System.out.println(iter+"에서 발생!!!!!!!!!!!!!!");
+            }
             iter++;
         }
-//        printAllStrings(answerStringJsonList);
-//        System.out.println("============");
-//        printAllStrings(promptStringJsonList);
-//        for(int i =0; i<promptStringJsonList.size(); i++){
-//            String matchedType = TopCounter.doCount(answerStringJsonList.get(i),promptStringJsonList.get(i));
-//            Prompting.writeMatchedType(csvResultPath,matchedType);
-//        }
     }
 
     public static void printAllStrings(List<String> stringList) {

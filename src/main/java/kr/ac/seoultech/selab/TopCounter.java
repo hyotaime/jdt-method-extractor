@@ -13,12 +13,14 @@ public class TopCounter {
     static int[] topCount = new int[3];
 
     //반환으로 matched 여부의 String값
-    public static String doCount(String jsonString, String prompt) {
+    public static String doCount(String jsonString, String prompt,int iter) {
         String csvFile = "googleSheet_devFixed.csv";
+        System.out.println("prompt   "+prompt);
+        System.out.println("jsonString   "+jsonString);
         //String csvFile = "defects4j.csv";
         //String outputCsvFile = "prompt-googleSheet.csv";
-        Map<String, Set<Integer>> devFixedJsonMap = parseDevFixedJson(jsonString);
-        List<PromptDTO> promptDtoList = parsePromptJson(prompt);
+        Map<String, Set<Integer>> devFixedJsonMap = parseDevFixedJson(jsonString,iter);
+        List<PromptDTO> promptDtoList = parsePromptJson(prompt,iter);
 
         System.out.println("devFixedJsonMap = " + devFixedJsonMap.toString());
         System.out.println("devFixedJsonMap = " + promptDtoList.toString());
@@ -68,7 +70,7 @@ public class TopCounter {
 
     }
 
-    public static Map<String, Set<Integer>> parseDevFixedJson(String jsonString) {  //<클래스 이름 , set<해당 라인들>>
+    public static Map<String, Set<Integer>> parseDevFixedJson(String jsonString,int iter) {  //<클래스 이름 , set<해당 라인들>>
         Map<String, Set<Integer>> resultMap = new HashMap<>();
         try {
             JsonObject jsonObject = JsonParser.parseString(jsonString).getAsJsonObject();
@@ -85,6 +87,7 @@ public class TopCounter {
                 resultMap.put(className, faultyLines);
             });
         } catch (JsonParseException e) {
+            System.out.println("iter에서 Devfixed 문제" + iter);
             System.err.println("Failed to parse devFixed JSON: " + e.getMessage());
         }
         return resultMap;
@@ -138,7 +141,7 @@ public class TopCounter {
 //        }
 //        return promptDtoList;
 //    }
-public static List<PromptDTO> parsePromptJson(String prompt) {
+public static List<PromptDTO> parsePromptJson(String prompt,int iter) {
     ArrayList<PromptDTO> promptDtoList = new ArrayList<>();
     try {
         // JSON 문자열에서 올바른 JSON 객체 부분만 추출
@@ -159,12 +162,14 @@ public static List<PromptDTO> parsePromptJson(String prompt) {
         // 각 요소를 순회하며 PromptDTO 리스트에 추가
         faultLocArray.forEach(element -> {
             JsonObject obj = element.getAsJsonObject();
+            //String classFullName = obj.get("className").getAsString(); //googleSheet에선
             String classFullName = obj.get("ClassName").getAsString();
             String className = parseClassName(classFullName);
             int faultyLine = Integer.parseInt(obj.get("faultyLine").getAsString());
             promptDtoList.add(new PromptDTO(className, faultyLine));
         });
     } catch (JsonParseException e) {
+        System.out.println("iter에서 PromptJson 문제" + iter);
         System.err.println("Failed to parse prompt JSON: " + e.getMessage());
     }
     return promptDtoList;

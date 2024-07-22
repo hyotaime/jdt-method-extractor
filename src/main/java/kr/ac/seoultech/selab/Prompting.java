@@ -216,6 +216,7 @@ public class Prompting {
         try (CSVReader reader = new CSVReader(new FileReader(path))) {
             allData = reader.readAll();
         } catch (IOException | CsvException e) {
+            System.out.println("3번째 가져오기에서 문제발생 path = " +path);
             e.printStackTrace();
         }
 
