@@ -95,44 +95,6 @@ public class Prompting {
         }
     }
 
-//    public static void updateCsvWithQuestionOrAnswer(String filePath, String value, int rowIndex, String columnName) {
-//        try (
-//                Reader reader = Files.newBufferedReader(Paths.get(filePath));
-//                CSVParser csvParser = new CSVParser(reader, CSVFormat.DEFAULT.withHeader())
-//        ) {
-//            List<CSVRecord> records = csvParser.getRecords();
-//            List<String[]> updatedRecords = new ArrayList<>();
-//            int columnIndex = csvParser.getHeaderMap().get(columnName);
-//
-//            for (int i = 0; i < records.size(); i++) {
-//                CSVRecord record = records.get(i);
-//                String[] newRow = new String[record.size()];
-//
-//                for (int j = 0; j < record.size(); j++) {
-//                    newRow[j] = record.get(j);
-//                }
-//
-//                if (i == rowIndex) {
-//                    newRow[columnIndex] = value;
-//                }
-//
-//                updatedRecords.add(newRow);
-//            }
-//
-//            try (
-//                    BufferedWriter writer = Files.newBufferedWriter(Paths.get(filePath));
-//                    CSVPrinter csvPrinter = new CSVPrinter(writer, CSVFormat.DEFAULT.withHeader(csvParser.getHeaderMap().keySet().toArray(new String[0])))
-//            ) {
-//                for (String[] record : updatedRecords) {
-//                    csvPrinter.printRecord((Object[]) record);
-//                }
-//            }
-//
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//    }
-
     public static void writeBugNameAndFaultyCode(String path,String bugName, String faultyCode,String answer) {
         try (CSVWriter writer = new CSVWriter(new FileWriter(path, true))) {
             String[] record = { bugName, faultyCode, answer};
@@ -149,63 +111,6 @@ public class Prompting {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    public static void updateAnswerForBug(String path,String targetString, String systemValue, int targetCell) {
-        List<String[]> allData = new ArrayList<>();
-
-        // Read existing data
-        try (CSVReader reader = new CSVReader(new FileReader(path))) {
-            allData = reader.readAll();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (CsvException e) {
-            throw new RuntimeException(e);
-        }
-
-        // Update data
-        for (String[] row : allData) {
-            if (row[0].equals(targetString)) {
-                if (row.length >= 5) {
-                    row[targetCell] = systemValue;
-                } else {
-                    String[] newRow = new String[5];
-                    System.arraycopy(row, 0, newRow, 0, row.length);
-                    newRow[targetCell] = systemValue;
-                    row = newRow;
-                }
-            }
-        }
-
-        // Write updated data back to CSV
-        try (CSVWriter writer = new CSVWriter(new FileWriter(path))) {
-            writer.writeAll(allData);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public static String getCellData(String path, String targetString,int targetCell) {
-        List<String[]> allData = new ArrayList<>();
-
-        // Read existing data
-        try (CSVReader reader = new CSVReader(new FileReader(path))) {
-            allData = reader.readAll();
-        } catch (IOException | CsvException e) {
-            e.printStackTrace();
-        }
-
-        // Retrieve specific cell data
-        for (String[] row : allData) {
-            if (row[0].equals(targetString)) {
-                if (row.length > 1) {
-                    return row[targetCell];  // Return the data in the second column
-                } else {
-                    return null; // Return null if the second column is out of bounds
-                }
-            }
-        }
-        return null; // Return null if the target string is not found
     }
 
     public static List<String> getThirdColumnData(String path) {

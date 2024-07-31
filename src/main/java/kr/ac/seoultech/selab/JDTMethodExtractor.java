@@ -22,6 +22,8 @@ public class JDTMethodExtractor {
         //String csvFilePath = "src/main/resources/googleSheet.csv"; // CSV 파일 경로
         String csvFilePath = "src/main/resources/defects4j.csv"; // CSV 파일 경로
 
+        //String csvFilePath = "src/main/resources/defects4j_test.csv"; // CSV 파일 경로
+
 
         for (String path : pathAssembler.defects4j) { //여기만 바꿔끼우기
             List<StringBuilder> templateArgsList = new ArrayList<>();
@@ -67,15 +69,10 @@ public class JDTMethodExtractor {
             try {
                 //템플릿 매핑값 출력
                 System.out.println("======================파싱 PATH 끝 : ================="+path);
-                String templateResult = fuseTemplateAssemlber("FuseTemplate.txt", classLoader, templateArgsList);
+                //String templateResult = fuseTemplateAssemlber("FuseTemplate.txt", classLoader, templateArgsList);
+                String templateResult = fuseTemplateAssemlber("FuseTemplateWithoutDoc.txt", classLoader, templateArgsList);
                 String templateAns = prompting.callAPI(templateResult);
                 System.out.println("======================API Call 및 템플릿 끝 : ================="+path);
-                //System.out.println(templateResult);
-                //System.out.println("templateAns = " + templateAns);
-                //System.out.println("getcellAnswerData************************" +Prompting.getCellData(csvFilePath,jsonDTO.getBugName(),2));
-                //String cellData = Prompting.getCellData(csvFixedPath, jsonDTO.getBugName(), 2);
-                //String matchedType = TopCounter.doCount(cellData, templateAns);
-                //System.out.println("getcellJsonData************************"+cellData);
 
                 System.out.println("=====================결과 csv쓰기 시작 : ================="+path);
                 Prompting.writeBugNameAndFaultyCode(csvFilePath, jsonDTO.getBugName(), templateResult,templateAns);
@@ -92,25 +89,6 @@ public class JDTMethodExtractor {
                 System.out.println(path+"  RunTime Error: "+e.toString());
                 throw new RuntimeException(e);
             }
-
-//            // LLM in FL, Wu et. al
-//            jsonDTO.forEach((testDTO) -> {
-//                List<SourceDTO> targetSource = testDTO.getSource();
-//                // ClassLoader를 사용하여 소스 코드 루트 경로를 절대 경로로 변환합니다
-//                targetSource.forEach((sourceDTO) -> {
-//                    try {
-//                        System.out.println("Prompt1 ========================================================================");
-//                        System.out.println(prompt1Assemlber("Prompt1Template.txt", classLoader, absolutePath(sourceDTO, classLoader, sourceRootPath, 0)));
-//                        if (!readStackTraces(classLoader, stackTracesPath).equals("Stack Traces Path Wrong")) {
-//                            System.out.println("Prompt2 ------------------------------------------------------------------------");
-//                            System.out.println(prompt2Assemlber("Prompt2Template.txt", classLoader, readStackTraces(classLoader, stackTracesPath), absolutePath(testDTO, classLoader, testRootPath, 0)));
-//                        }
-//                        System.out.println("================================================================================");
-//                    } catch (IOException e) {
-//                        throw new RuntimeException(e);
-//                    }
-//                });
-//            });
         }
     }
 
@@ -125,13 +103,13 @@ public class JDTMethodExtractor {
         String absoluteTemplatePath = rootDir.getAbsolutePath();
         String template = new String(Files.readAllBytes(Paths.get(absoluteTemplatePath)));
         System.out.println("0>>"+list.get(0).toString());
-        System.out.println("1>>"+list.get(1).toString());
+        //System.out.println("1>>"+list.get(1).toString());
         System.out.println("3>>"+list.get(3).toString());
         System.out.println("2>>"+list.get(2).toString());
         System.out.println("4>>"+list.get(4).toString());
         return String.format(template,
                 list.get(0).toString(),
-                list.get(1).toString(),
+                //list.get(1).toString(),
                 list.get(3).toString(),
                 list.get(2).toString(),
                 list.get(4).toString());
