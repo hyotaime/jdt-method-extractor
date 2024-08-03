@@ -40,7 +40,9 @@ public class Prompting {
         return properties.getProperty("api_url");
     }
 
-    public String callAPI(String prompt){
+    public String callAPI(String prompt,String path){
+        int inputToken=0;
+        int outputToken=0;
         OkHttpClient client = new OkHttpClient.Builder()
                 .connectTimeout(120, TimeUnit.SECONDS)
                 .writeTimeout(120, TimeUnit.SECONDS)
@@ -84,6 +86,13 @@ public class Prompting {
             if (choices != null && choices.size() > 0) {
                 JsonObject firstChoice = choices.get(0).getAsJsonObject();
                 JsonObject messageObject = firstChoice.getAsJsonObject("message");
+                // Extract and set token usage
+                JsonObject usage = responseJson.getAsJsonObject("usage");
+                if (usage != null) {
+                    inputToken = usage.get("prompt_tokens").getAsInt();
+                    outputToken = usage.get("completion_tokens").getAsInt();
+                    System.out.println("Input Token: "+inputToken+" Output Token: "+outputToken+" "+" "+path+ " Total Price: "+(inputToken*0.00001+outputToken*0.03));
+                }
                 return messageObject.get("content").getAsString();
             } else {
                 throw new IOException("No text found in the response");
@@ -95,6 +104,8 @@ public class Prompting {
         }
     }
 
+
+
     public static void writeBugNameAndFaultyCode(String path,String bugName, String faultyCode,String answer) {
         try (CSVWriter writer = new CSVWriter(new FileWriter(path, true))) {
             String[] record = { bugName, faultyCode, answer};
@@ -104,9 +115,19 @@ public class Prompting {
         }
     }
 
-    public static void writeMatchedType(String path,String matched) {
+    public static void writeBugAndPrice(String path,String bugName, double price) {
         try (CSVWriter writer = new CSVWriter(new FileWriter(path, true))) {
-            String[] record = { matched };
+            String[] record = { bugName, String.valueOf(price)};
+            writer.writeNext(record);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void writeMatchedType(String path,List<String> matchedTypeList) {
+        try (CSVWriter writer = new CSVWriter(new FileWriter(path, true))) {
+            String[] record = { matchedTypeList.get(0),matchedTypeList.get(1),matchedTypeList.get(2),matchedTypeList.get(3),matchedTypeList.get(4),matchedTypeList.get(5),matchedTypeList.get(6),matchedTypeList.get(7),matchedTypeList.get(8),
+                    matchedTypeList.get(9),matchedTypeList.get(10),matchedTypeList.get(11),matchedTypeList.get(12),matchedTypeList.get(13),matchedTypeList.get(14)};
             writer.writeNext(record);
         } catch (IOException e) {
             e.printStackTrace();
@@ -130,6 +151,31 @@ public class Prompting {
             String[] row = allData.get(i);
             if (row.length >= 3) {
                 thirdColumnData.add(row[2]);  // Add the data in the third column to the list
+            } else {
+                thirdColumnData.add(null); // Add null if the third column is out of bounds
+            }
+        }
+
+        return thirdColumnData;
+    }
+
+    public static List<String> getBugName(String path) {
+        List<String[]> allData = new ArrayList<>();
+        List<String> thirdColumnData = new ArrayList<>();
+
+        // Read existing data
+        try (CSVReader reader = new CSVReader(new FileReader(path))) {
+            allData = reader.readAll();
+        } catch (IOException | CsvException e) {
+            System.out.println("버그 이름 가져오기에서 문제발생 path = " +path);
+            e.printStackTrace();
+        }
+
+        // Retrieve the third column data, excluding the header
+        for (int i = 1; i < allData.size(); i++) { // Start from 1 to skip the header
+            String[] row = allData.get(i);
+            if (row.length >= 3) {
+                thirdColumnData.add(row[0]);  // Add the data in the third column to the list
             } else {
                 thirdColumnData.add(null); // Add null if the third column is out of bounds
             }

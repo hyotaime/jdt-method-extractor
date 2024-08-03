@@ -46,9 +46,7 @@ public class JDTMethodExtractor {
             templateArgsList.add(testFailedLine);
             templateArgsList.add(stackTraces);
 
-            System.out.println(prompting.getKey("hyun_api_key"));
-
-
+            //System.out.println(prompting.getKey("hyun_api_key"));
 
 
             // JSON 파일을 파싱하여 타겟 메소드 정보를 가져옵니다.
@@ -57,7 +55,7 @@ public class JDTMethodExtractor {
             // FuseFL
             List<SourceDTO> targetSource = jsonDTO.getSource();
 
-            System.out.println("======================파싱 PATH 시작 : ================="+path);
+            //System.out.println("======================파싱 PATH 시작 : ================="+path);
             // ClassLoader를 사용하여 소스 코드 루트 경로를 절대 경로로 변환합니다
             targetSource.forEach((sourceDTO) -> {
                 faultyCode.append(Reader.absolutePath(sourceDTO, classLoader, sourceRootPath, 0));
@@ -68,15 +66,15 @@ public class JDTMethodExtractor {
             }
             try {
                 //템플릿 매핑값 출력
-                System.out.println("======================파싱 PATH 끝 : ================="+path);
+                //System.out.println("======================파싱 PATH 끝 : ================="+path);
                 //String templateResult = fuseTemplateAssemlber("FuseTemplate.txt", classLoader, templateArgsList);
                 String templateResult = fuseTemplateAssemlber("FuseTemplateWithoutDoc.txt", classLoader, templateArgsList);
-                String templateAns = prompting.callAPI(templateResult);
-                System.out.println("======================API Call 및 템플릿 끝 : ================="+path);
+                String templateAns = prompting.callAPI(templateResult,path);
+                //System.out.println("======================API Call 및 템플릿 끝 : ================="+path);
 
-                System.out.println("=====================결과 csv쓰기 시작 : ================="+path);
+                //System.out.println("=====================결과 csv쓰기 시작 : ================="+path);
                 Prompting.writeBugNameAndFaultyCode(csvFilePath, jsonDTO.getBugName(), templateResult,templateAns);
-                System.out.println("=====================결과 csv쓰기 끝 : ================="+path);
+                //System.out.println("=====================결과 csv쓰기 끝 : ================="+path);
                 //API 호출 결과 출력
 //                String templateResult = fuseTemplateAssemlber("FuseTemplate.txt", classLoader, templateArgsList);
 //                String templateAns = prompting.callAPI(templateResult);
