@@ -91,7 +91,7 @@ public class Prompting {
                 if (usage != null) {
                     inputToken = usage.get("prompt_tokens").getAsInt();
                     outputToken = usage.get("completion_tokens").getAsInt();
-                    System.out.println("Input Token: "+inputToken+" Output Token: "+outputToken+" "+" "+path+ " Total Price: "+(inputToken*0.00001+outputToken*0.03));
+                    System.out.println("Input Token: "+inputToken+" Output Token: "+outputToken+" "+" "+path+ " Total Price: "+(inputToken*0.00001+outputToken*0.00003));
                 }
                 return messageObject.get("content").getAsString();
             } else {

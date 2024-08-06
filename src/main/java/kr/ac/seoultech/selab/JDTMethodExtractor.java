@@ -19,13 +19,13 @@ public class JDTMethodExtractor {
         PathAssembler pathAssembler = new PathAssembler();
         ClassLoader classLoader = JDTMethodExtractor.class.getClassLoader();
         Prompting prompting = new Prompting();
-        //String csvFilePath = "src/main/resources/googleSheet.csv"; // CSV 파일 경로
-        String csvFilePath = "src/main/resources/defects4j.csv"; // CSV 파일 경로
+        String csvFilePath = "src/main/resources/googleSheet.csv"; // CSV 파일 경로
+        //String csvFilePath = "src/main/resources/defects4j.csv"; // CSV 파일 경로
 
         //String csvFilePath = "src/main/resources/defects4j_test.csv"; // CSV 파일 경로
 
 
-        for (String path : pathAssembler.defects4j) { //여기만 바꿔끼우기
+        for (String path : pathAssembler.googleSheet) { //여기만 바꿔끼우기
             List<StringBuilder> templateArgsList = new ArrayList<>();
             Map<String, String> pathMap = pathAssembler.assembler(path);
 
@@ -68,7 +68,7 @@ public class JDTMethodExtractor {
                 //템플릿 매핑값 출력
                 //System.out.println("======================파싱 PATH 끝 : ================="+path);
                 //String templateResult = fuseTemplateAssemlber("FuseTemplate.txt", classLoader, templateArgsList);
-                String templateResult = fuseTemplateAssemlber("FuseTemplateWithoutDoc.txt", classLoader, templateArgsList);
+                String templateResult = fuseTemplateAssemlber("FuseTemplate.txt", classLoader, templateArgsList);
                 String templateAns = prompting.callAPI(templateResult,path);
                 //System.out.println("======================API Call 및 템플릿 끝 : ================="+path);
 
@@ -107,7 +107,7 @@ public class JDTMethodExtractor {
         System.out.println("4>>"+list.get(4).toString());
         return String.format(template,
                 list.get(0).toString(),
-                //list.get(1).toString(),
+                list.get(1).toString(),
                 list.get(3).toString(),
                 list.get(2).toString(),
                 list.get(4).toString());
