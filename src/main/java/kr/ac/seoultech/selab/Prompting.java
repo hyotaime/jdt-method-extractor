@@ -52,8 +52,11 @@ public class Prompting {
         String apiUrl = getURL();
 
         JsonObject requestBody = new JsonObject();
+
         // Set the model
-        requestBody.addProperty("model", "gpt-4-turbo");
+        //requestBody.addProperty("model", "gpt-4-turbo");
+        requestBody.addProperty("model", "gpt-4o");// 또는 "gpt-4-mini"로 변경 가능
+        //requestBody.addProperty("model", "gpt-4o-mini");
 
         // Create the messages array
         JsonArray messages = new JsonArray();
@@ -91,6 +94,9 @@ public class Prompting {
                 if (usage != null) {
                     inputToken = usage.get("prompt_tokens").getAsInt();
                     outputToken = usage.get("completion_tokens").getAsInt();
+                    if(inputToken > 15000){
+                        System.out.println("토큰 제한");
+                    }
                     System.out.println("Input Token: "+inputToken+" Output Token: "+outputToken+" "+" "+path+ " Total Price: "+(inputToken*0.00001+outputToken*0.00003));
                 }
                 return messageObject.get("content").getAsString();

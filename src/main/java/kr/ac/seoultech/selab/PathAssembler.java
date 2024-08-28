@@ -7,54 +7,50 @@ import java.util.Map;
 
 public class PathAssembler {
 
-    List<String> googleSheet = new ArrayList<>();
+    List<String> apache = new ArrayList<>();
 
     List<String> defects4j = new ArrayList<>();
 
     //일단 하드코딩으로... 경로 주기
     public PathAssembler() {
-        googleSheet.add("lang_npe_1");
-        googleSheet.add("lang_npe_2");
-        googleSheet.add("lang_npe_3");
-        googleSheet.add("lang_npe_4");
-        googleSheet.add("lang_npe_5");
-        googleSheet.add("lang_npe_6");
-        googleSheet.add("lang_npe_7");
-        googleSheet.add("lang_npe_8");
-        googleSheet.add("lang_npe_9");
-        googleSheet.add("lang_npe_10");
-        googleSheet.add("lang_npe_11");
-        googleSheet.add("lang_npe_12");
-        googleSheet.add("lang_npe_13");
-        googleSheet.add("lang_npe_14");
-        googleSheet.add("math_npe_1");
-        googleSheet.add("math_npe_2");
-        googleSheet.add("math_npe_3");
-        googleSheet.add("math_npe_4");
-        googleSheet.add("math_npe_5");
-        googleSheet.add("math_npe_6");
-        googleSheet.add("collections_npe_1");
-        googleSheet.add("collections_npe_2");
-        googleSheet.add("collections_npe_3");
-        googleSheet.add("commons-io_npe_1");
-        googleSheet.add("commons-io_npe_2");
-        googleSheet.add("commons-io_npe_3");
-        googleSheet.add("commons-io_npe_4");
-        googleSheet.add("commons-io_npe_5");
-        googleSheet.add("commons-io_npe_6");
-        googleSheet.add("commons-io_npe_7");
-        googleSheet.add("commons-io_npe_8");
-        googleSheet.add("commons-io_npe_9");
-        googleSheet.add("commons-io_npe_10");
-        googleSheet.add("commons-io_npe_11");
-        googleSheet.add("commons-io_npe_12");
-        googleSheet.add("commons-io_npe_13");
-        googleSheet.add("commons-io_npe_14");
-        googleSheet.add("commons-io_npe_15");
-        googleSheet.add("commons-io_npe_16");
-        googleSheet.add("commons-io_npe_17");
-        googleSheet.add("commons-io_npe_18");
-        googleSheet.add("commons-io_npe_19");
+        apache.add("lang_npe_1");
+        apache.add("lang_npe_2");
+        apache.add("lang_npe_3");
+        apache.add("lang_npe_4");
+        apache.add("lang_npe_5");
+        apache.add("lang_npe_6");
+        apache.add("lang_npe_7");
+        apache.add("lang_npe_8");
+        apache.add("lang_npe_9");
+        apache.add("lang_npe_10");
+        apache.add("lang_npe_11");
+        apache.add("lang_npe_12");
+        apache.add("lang_npe_13");
+        apache.add("math_npe_1");
+        apache.add("math_npe_2");
+        apache.add("math_npe_3");
+        apache.add("collections_npe_1");
+        apache.add("collections_npe_2");
+        apache.add("collections_npe_3");
+        apache.add("commons-io_npe_1");
+        apache.add("commons-io_npe_2");
+        apache.add("commons-io_npe_3");
+        apache.add("commons-io_npe_4");
+        apache.add("commons-io_npe_5");
+        apache.add("commons-io_npe_6");
+        apache.add("commons-io_npe_7");
+        apache.add("commons-io_npe_8");
+        apache.add("commons-io_npe_9");
+        apache.add("commons-io_npe_10");
+        apache.add("commons-io_npe_11");
+        apache.add("commons-io_npe_12");
+        apache.add("commons-io_npe_13");
+        apache.add("commons-io_npe_14");
+        apache.add("commons-io_npe_15");
+        apache.add("commons-io_npe_16");
+        apache.add("commons-io_npe_17");
+        apache.add("commons-io_npe_18");
+        apache.add("commons-io_npe_19");
 
 
 
@@ -81,7 +77,6 @@ public class PathAssembler {
         defects4j.add("JacksonCore-8");
         defects4j.add("JacksonDatabind-3");
         defects4j.add("JacksonDatabind-13");
-        defects4j.add("JacksonDatabind-36");
         defects4j.add("JacksonDatabind-80");
         defects4j.add("JacksonDatabind-93");
         defects4j.add("JacksonDatabind-95");
@@ -91,7 +86,6 @@ public class PathAssembler {
         defects4j.add("Jsoup-26");
         defects4j.add("Jsoup-66");
         defects4j.add("Jsoup-89");
-        defects4j.add("JxPath-1");
         defects4j.add("Lang-20");
         defects4j.add("Lang-33");
         defects4j.add("Lang-39");
@@ -100,17 +94,14 @@ public class PathAssembler {
         defects4j.add("Math-4");
         defects4j.add("Math-70");
         defects4j.add("Math-79");
-        defects4j.add("Mockito-4");
         defects4j.add("Mockito-18");
-        defects4j.add("Mockito-29");
-        defects4j.add("Mockito-36");
         defects4j.add("Mockito-38");
     }
 
 
     public Map<String, String> assembler(String name) {
         Map<String, String> fullPath = new HashMap<>(); //jsonFilePath , sourceRootPath , testRootPath
-        if (googleSheet.contains(name)) {
+        if (apache.contains(name)) {
             fullPath.put("jsonFilePath", name + "/npe.traces.json");
             fullPath.put("sourceRootPath", name + "/buggy/src/main/java");
             fullPath.put("testRootPath", name + "/fixed/src/test/java");

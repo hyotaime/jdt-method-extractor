@@ -3,37 +3,25 @@ package kr.ac.seoultech.selab;
 import java.util.ArrayList;
 import java.util.List;
 
+//JDTMethodExtractor에서 만들었던 프롬프트와 이에 대한 gpt API 응답으로 해당 gpt의 응답이 얼마나 기존 답과 Matched , Partially Mathed, Not Mathed, Error 4가지 중 무엇인지
+//WARNING ! : 현재 gpt 응답이 기록된 csv 상에서 3열이 각각의 버그에 대한 gpt 응답이 기록된 열임. 이 열에서 DoMatched를 실행하기 전에 \"" 를 모두 지워줘야 함. Json 형식 안인 "" ~ "" 에서 내용에 \"" 가 있을경우
+// DoMatched에서 Json을 올바른 형태로 파싱하지 못함. 따라서 \""를 꼭 수동으로 제거 후 DoMatched를 수행해야 함.
+// 정답여부를 확인할때 응답 csv 파일과 {버그이름}_devFixed_new.csv 의 3열을 기준으로 검사함. 이때 각 행의 버그이름으로 두 csv를 매핑시키는 것이 아닌 단순 순서로 매핑시키므로 두 csv의 버그 순서를 동일시 시켜야함.
 public class DoMatched {
     public static void main(String[] args) {
-        //String csvFilePath = "src/main/resources/googleSheet.csv"; // CSV 파일 경로
-        //String csvFixedPath = "src/main/resources/googleSheet_devFixed.csv"; // Dev.fixed Json
-        //String csvResultPath = "src/main/resources/googleSheetResult.csv"; //매치 정도 기록 파일
-
 
         for(int j =1 ; j<=10; j++) {
 
 
-//            String csvFilePath = "src/main/resources/defects4j_try/Doc/Defects4J with Doc - Try1.csv"; // CSV n회 파일 경로
-//            String csvFixedPath = "src/main/resources/defects4j_devFixed2.csv";
-//            String csvResultPath = "src/main/resources/defects4j_try/Doc/Matched_try1.csv"; //n회 Top 결과 파일 경로
-//
-//            String csvFilePath = "src/main/resources/defects4j_try/NotDoc/Defects4J without Doc - Try";
-//            String csvResultPath = "src/main/resources/defects4j_try/NotDoc/Matched_try"; //n회 Top 결과 파일 경로
+            //BugType.APACHE , BugType.DEFECTS4J
+            String csvFixedPath=settingFixedPath(BugType.DEFECTS4J);
+            String csvFilePath=settingFilePath(BugType.DEFECTS4J);
+            String csvResultPath=settingResultPath(BugType.DEFECTS4J);
 
-
-
-            String csvFixedPath = "src/main/resources/googleSheet_devFixed.csv";
-            //String csvResultPath = "src/main/resources/defects4j_try/Doc/Matched_try1.csv"; //n회 Top 결과 파일 경로
-
-            String csvFilePath = "src/main/resources/NPE_try/NotDoc/Commons NPE without Doc - try";
-            String csvResultPath = "src/main/resources/NPE_try/NotDoc/Matched_try"; //n회 Top 결과 파일 경로
 
             csvFilePath = csvFilePath+String.valueOf(j)+".csv";
             csvResultPath = csvResultPath+String.valueOf(j)+".csv";
 
-//        String csvFilePath = "src/main/resources/defects4j_test.csv"; // CSV 파일 경로
-//        String csvFixedPath = "src/main/resources/defects4j_devFixed_test.csv";
-//        String csvResultPath = "src/main/resources/defects4jResult_test.csv";
             int iter = 0;
 
             List<String> bugNameList = Prompting.getBugName(csvFixedPath);
@@ -69,6 +57,34 @@ public class DoMatched {
 
     }
 
+
+
+    public static String settingFixedPath(BugType type) {
+        if (type == BugType.DEFECTS4J) {
+            return "src/main/resources/defects4j_devFixed_new.csv"; // defects4 Json 답안
+        } else if (type == BugType.APACHE) {
+            return "src/main/resources/apache_devFixed_new.csv"; // Apache Json 답안
+        }
+        return null;
+    }
+
+    public static String settingFilePath(BugType type) {
+        if (type == BugType.DEFECTS4J) {
+            return "src/main/resources/defects4j_try/Doc/Defects4J with Doc - Try"; // n회차 프롬프트 작성경로
+        } else if (type == BugType.APACHE) {
+            return "src/main/resources/NPE_try/Doc/Commons NPE with Doc - try"; // n회차 프롬프트 작성경로
+        }
+        return null;
+    }
+
+    public static String settingResultPath(BugType type) {
+        if (type == BugType.DEFECTS4J) {
+            return "src/main/resources/defects4j_try/Doc/Matched_try"; // n회 Matched와 Top 결과 파일 경로
+        } else if (type == BugType.APACHE) {
+            return "src/main/resources/NPE_try/Doc/Matched_try"; // n회 Matched와 Top 결과 파일 경로
+        }
+        return null;
+    }
 
 
     public static void printAllStrings(List<String> stringList) {

@@ -40,7 +40,16 @@ public class TraceParser {
                         JsonObject detailObject = detailElement.getAsJsonObject();
                         boolean isTarget = detailObject.get("is_target").getAsBoolean();
                         if (isTarget) {
-                            String className = detailObject.get("class").getAsString(); //여기서 중첩클래스 가능성 있음
+                            //String className = detailObject.get("class").getAsString(); //여기서 중첩클래스 가능성 있음
+                            String className;
+                            String classNameTemp = detailObject.get("class").getAsString();
+                            int dollarIndex = classNameTemp.indexOf('$');
+                            if(dollarIndex ==-1){
+                                className = classNameTemp;
+                            }
+                            else{
+                                className = classNameTemp.substring(0,dollarIndex);
+                            }
                             String methodName = detailObject.get("method").getAsString(); //여기서 <init> 가능성 있음
                             int lineNumber = detailObject.get("line").getAsInt();
                             //className에 "Test"있는지 확인하고
@@ -101,7 +110,7 @@ public class TraceParser {
                         System.out.println("index 하나 올림.");
                         index++;
                     } catch (Exception e) {
-                        System.out.println("catch실행");
+                        System.out.println("catch실행, npe.json에서 해당 라인 못찾음");
                         e.printStackTrace();
                     }
                 }
