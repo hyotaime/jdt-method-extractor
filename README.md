@@ -15,7 +15,7 @@ JDTMethodExtractor 수행 이후 작성된 csv 파일들 내부에 이스케이�
 
 
 
-# Explanation)
+# Explanation
 jar가 아닌 ide 내에서 JDTMethodExtractor 클래스와 DoMatched 클래스의 main메서드를 각각 실행시켜 주세요
 2개의 클래스 모두 main 메서드로 따로 실행시키셔야 합니다.
 
@@ -42,7 +42,7 @@ JDTMethodExtractor에서는 27,28,32 라인을 바꿔주셔야 합니다.
 
 
 
-#Project Directory Structure
+# Project Directory Structure
 
  resources 하위의 NPE_try 가  gpt-4o 의 모델에 대한 응답 디렉토리입니다.
  defects4j_try 도 마찬가지입니다.
@@ -55,8 +55,7 @@ Matched_tryN.csv 로 각 회차(N)에 맞게 들어갑니다.
 
 기존 제가 뽑아낸 것들은 fusefl/result/NPE_try/Doc , fusefl/result/defects4j_try/Doc 에 위치해있습니다.
 
-
-#Caution
+# Warning
 
 현재 각각의 gpt 응답 json 구조 안에 이스케이프 \ 가 있다면 제대로 이스케이프가 되지 않아 DoMatched를 실행할때 파싱에러가 발생합니다. 따라서 JDTMethodExtractor로 gpt 응답을 뽑고 난 후 각 디렉토리에서 gpt 응답 csv의 이스케이프 부분을 모두 지우시고 DoMatched를 돌려야합니다. 
 DoMatched에서 devFixed_new.csv로 gpt와 비교할때 버그 이름으로 답안 json과 gpt 의 답 행을 매핑하는 것이 아닌 단순 순서로 비교하고 있어서 두 csv파일의 행 순서를 동일한 버그가 될 수 있게 잘 맞춰야합니다.
