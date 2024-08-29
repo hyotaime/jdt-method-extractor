@@ -4,6 +4,8 @@
 
 github: https://github.com/HYH0804/jdt-method-extractor
 
+main branch : hyun
+
 # How to Start
 gitHub에서 코드 클론 이후 ide로 열고
 서버 FuseFL/resources 디렉토리 하위파일들을 모두 프로젝트 resources 디렉토리 아래에 넣으시면 됩니다.
