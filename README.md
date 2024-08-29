@@ -6,6 +6,11 @@ github: https://github.com/HYH0804/jdt-method-extractor
 
 main branch : hyun
 
+# Warning
+
+현재 각각의 gpt 응답 json 구조 안에 이스케이프 \ 가 있다면 제대로 이스케이프가 되지 않아 DoMatched를 실행할때 파싱에러가 발생합니다. 따라서 JDTMethodExtractor로 gpt 응답을 뽑고 난 후 각 디렉토리에서 gpt 응답 csv의 이스케이프 부분을 모두 지우시고 DoMatched를 돌려야합니다. 
+DoMatched에서 devFixed_new.csv로 gpt와 비교할때 버그 이름으로 답안 json과 gpt 의 답 행을 매핑하는 것이 아닌 단순 순서로 비교하고 있어서 두 csv파일의 행 순서를 동일한 버그가 될 수 있게 잘 맞춰야합니다.
+
 # How to Start
 gitHub에서 코드 클론 이후 ide로 열고
 서버 FuseFL/resources 디렉토리 하위파일들을 모두 프로젝트 resources 디렉토리 아래에 넣으시면 됩니다.
@@ -13,8 +18,11 @@ jar가 아닌 ide 내에서 JDTMethodExtractor 클래스와 DoMatched 클래스�
 
 JDTMethodExtractor 수행 이후 작성된 csv 파일들 내부에 이스케이프 관련 \ 을 수동으로 지워주셔야 DoMatched에서 json을 파싱할때 정상적으로 동작합니다.
 
-
-
+추가 확장시에는 아래의 절차를 따릅니다.
+1) devFixed_new.csv에 추가할려는 버그의 답을 json 구조로 만들어야합니다.
+{"devFixed": [{"className": "CategoryPlot", "faultyLine": [2166, 2448]}, {"className": "XYPlot", "faultyLine": [2293, 2529]}]}
+2) PathAssembler 클래스에서 추가할려는 버그에 따라 알맞는 위치에 Apache , Defects4j 리스트에 추가해줍니다.
+3) DoMatched의 main 메서드 실행으로 Matched 여부를 판단할때는 각 버그의 행 순서가 매우 중요하므로 순서를 맞춰주셔야 합니다. 
 
 
 # Explanation
@@ -57,8 +65,4 @@ Matched_tryN.csv 로 각 회차(N)에 맞게 들어갑니다.
 
 기존 제가 뽑아낸 것들은 fusefl/result/NPE_try/Doc , fusefl/result/defects4j_try/Doc 에 위치해있습니다.
 
-# Warning
-
-현재 각각의 gpt 응답 json 구조 안에 이스케이프 \ 가 있다면 제대로 이스케이프가 되지 않아 DoMatched를 실행할때 파싱에러가 발생합니다. 따라서 JDTMethodExtractor로 gpt 응답을 뽑고 난 후 각 디렉토리에서 gpt 응답 csv의 이스케이프 부분을 모두 지우시고 DoMatched를 돌려야합니다. 
-DoMatched에서 devFixed_new.csv로 gpt와 비교할때 버그 이름으로 답안 json과 gpt 의 답 행을 매핑하는 것이 아닌 단순 순서로 비교하고 있어서 두 csv파일의 행 순서를 동일한 버그가 될 수 있게 잘 맞춰야합니다.
 
