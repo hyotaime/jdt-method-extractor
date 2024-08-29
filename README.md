@@ -4,7 +4,7 @@
 
 github: https://github.com/HYH0804/jdt-method-extractor
 
-#How to Start
+# How to Start
 gitHub에서 코드 클론 이후 ide로 열고
 서버 FuseFL/resources 디렉토리 하위파일들을 모두 프로젝트 resources 디렉토리 아래에 넣으시면 됩니다.
 jar가 아닌 ide 내에서 JDTMethodExtractor 클래스와 DoMatched 클래스의 main메서드를 각각 실행시켜 주세요
